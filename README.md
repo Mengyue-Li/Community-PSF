@@ -58,7 +58,7 @@ Note: ggepi & patchwork can be installed via devtools
 The package should take approximately 50-60 seconds to install with vignettes on a recommended computer.
 
 # Demo
-## Instructions to run on data: example-Fig3 code
+## Instructions to run on data: example-Fig.3 code
 ~~~
 ##################################################################################
 #####                                                                        ##### 
@@ -102,3 +102,6 @@ p.adjust(p, "bonferroni")
 ## Note: 
 The dataset stored in this repository is same to the dataset in figshare(https://doi.org/10.6084/m9.figshare.28395707).
 Running each line of code on a recommended computer takes about 1-5 seconds, except for "Step 2: Predictability comparison among random forest models" in Fig.2's code, which takes 20-30 minutes.
+
+# License
+This project is covered under the GNU GENERAL PUBLIC LICENSE Version 2 (GPL-2).
