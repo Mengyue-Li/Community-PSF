@@ -12,6 +12,7 @@ R package requires only a standard computer with enough RAM to support the in-me
 ## Software Requirements
 ### OS Requirements
 The package development version is tested on Windows and Mac systems. 
+
 R version 4.2.2 or higher. 
 
 # Installation Guide
@@ -22,7 +23,7 @@ Rstudio: https://www.rstudio.com/
 
 ## Note: 
 
-Install from Windows: follow the default path and click Next.
+Install from Windows: follow the default path and click "Next".
 
 Rstudio and R associated Settings (Rstudio->Tools->Global options)
 
@@ -41,8 +42,23 @@ from https://developer.apple.com/cn/xcode/, please download and install.
 
 The package should take approximately 40-60 seconds to install with vignettes on a recommended computer.
 
+## Package Installation
+Users should install the following packages prior to library.
+~~~
+install.packages(c('openxlsx', 'ggfortify', 'ggforce', 'dplyr', 'ggrepel', 'ggpubr', 'export', 'ggspatial', 'ggplot2','cowplot', 'sf', 'multcomp', 'tidyverse',
+ 'car', 'lme4', 'vegan', 'FUNGuildR', 'lmerTest', 'ggbeeswarm', 'reshape2', 'DHARMa', 'glmmTMB', 'emmeans', 'broom.mixed', 'MuMIn', 'ggridges', 'party', 'caret', 'pheatmap'))
+~~~
+
+Note: ggepi & patchwork can be installed via devtools 
+~~~
+ devtools::install_github("lwjohnst86/ggepi")
+ devtools::install_github("thomasp85/patchwork")
+~~~
+
+The package should take approximately 50-60 seconds to install with vignettes on a recommended computer.
+
 # Demo
-## Instructions to run on data: example
+## Instructions to run on data: example-Fig3 code
 ~~~
 ##################################################################################
 #####                                                                        ##### 
