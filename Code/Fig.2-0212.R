@@ -140,6 +140,8 @@ f.print.message <- function(x) { cat("=== ", format(Sys.time(), "%Y %b %d %X"), 
 
 # Applying the function
 taxMod <- f.modify.utax.taxon.table(tax, onlyConfident = TRUE)
+## taxMod_with_guilds <- funguild_assign(seqDat_full, db = get_funguild_db(), tax_col = "Taxonomy");rownames(taxMod_with_guilds) <- rownames(seqDat) #FUNGuild database:2025.01.27
+## If FUNGuild database is updated, please use the following line of code
 taxMod_with_guilds <-read_excel("data_Fig.2.xlsx",sheet=3);taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- taxMod_with_guilds[,1] 
 taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
 
