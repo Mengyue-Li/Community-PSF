@@ -2,9 +2,9 @@
 The following files allow one to reproduce analyses in the manuscript entitled "Species-level studies do not upscale to community-wide plant-soil feedbacks".
 # Repo Contents
 ## Code: R code
-This script contains all the data analysis and visualization code of Fig.1, Fig.2, Fig.3 and Fig.S1&2.
+This script contains all the data analysis and visualization code of Fig.1, Fig.2&Table S3 S4 S8, Fig.3&Table S5-S7 S9 and Fig.S1&2.
 ## Data  
-This script contains all the data of Fig.1, Fig.2, Fig.3 and Fig.S1&2.
+This script contains all the data of Fig.1, Fig.2&Table S3 S4 S8, Fig.3&Table S5-S7 S9 and Fig.S1&2.
 
 # System Requirements
 ## Hardware Requirements
