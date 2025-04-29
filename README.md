@@ -65,9 +65,7 @@ The package should take approximately 50-60 seconds to install with vignettes on
 #####           Part1---effect of home vs away:PSF                           #####
 #####                                                                        #####  
 ##################################################################################
-
 setwd('C:/Users/MY/Desktop/CODE/Fig.2')
-
 #--------------------------------------
 ### Table S9
 #--------------------------------------
@@ -81,7 +79,7 @@ p.adjust(p, "bonferroni")
 ~~~
 ## Expected output
 ~~~
- > #--------------------------------------
+> #--------------------------------------
 > ### Table S9
 > #--------------------------------------
 > dat <- read_excel("data_Fig.2.xlsx",sheet=1);head(dat)
