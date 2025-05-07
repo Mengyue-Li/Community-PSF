@@ -10,17 +10,17 @@ library(forcats)
 library(ggforce)
 library(RColorBrewer)
 
-mytheme= theme(legend.position = "none",
-               panel.grid=element_blank(), 
-               legend.title = element_text(colour='black', size=11), 
-               legend.text = element_text(size = 10),  
-               legend.background = element_rect(fill = NA),  
-               axis.ticks = element_line(color='black'),
-               axis.line = element_line(colour = "black"), 
-               axis.title.x = element_text(colour='black', size=16),
-               axis.title.y = element_text(colour='black', size=16),
-               axis.text = element_text(colour='black',size=14),
-               plot.tag = element_text(size = 18, face = "bold"))
+mytheme= theme(legend.position = "right",
+               panel.grid=element_blank(),
+               legend.background = element_rect(fill = NA),
+               line = element_line(linewidth = 0.28), 
+               axis.line = element_line(colour = "black",linewidth = 0.28),
+               axis.ticks = element_line(colour = "black",linewidth = 0.28), 
+               legend.title = element_text(colour='black', size=8), 
+               legend.text = element_text(size = 7.5, lineheight = 1.33),  
+               axis.title = element_text(colour='black', size=8),
+               axis.text = element_text(colour='black',size=7),
+               plot.tag = element_text(size = 9, face = "bold"))
 
 ###########################################################################################
 #####                                       Fig.1                                     #####
