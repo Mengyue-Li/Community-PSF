@@ -51,17 +51,17 @@ responses <- "TG"
 n_iter <- 1000
 target <- c("CK", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b","1", "2", "4", "6", "12")
 set.seed(123)
-mytheme= theme(legend.position = "none",
-               panel.grid=element_blank(), 
-               legend.title = element_blank(),
-               legend.text = element_text(size = 14), 
-               legend.background = element_rect(fill = NA),  
-               axis.ticks = element_line(color='black'),
-               axis.line = element_line(colour = "black"), 
-               axis.title.x = element_text(colour='black', size=14),
-               axis.title.y = element_text(colour='black', size=14),
-               axis.text = element_text(colour='black',size=11),
-               plot.tag = element_text(size = 0))
+mytheme= theme(legend.position = "right",
+               panel.grid=element_blank(),
+               legend.background = element_rect(fill = NA),
+               line = element_line(linewidth = 0.28), 
+               axis.line = element_line(colour = "black",linewidth = 0.28),
+               axis.ticks = element_line(colour = "black",linewidth = 0.28), 
+               legend.title = element_text(colour='black', size=8), 
+               legend.text = element_text(size = 7.5, lineheight = 1.33),  
+               axis.title = element_text(colour='black', size=8),
+               axis.text = element_text(colour='black',size=7),
+               plot.tag = element_text(size = 9, face = "bold"))
 #----------------------------------------------
 # Estimating mean and its 95% confidence interval
 #----------------------------------------------
