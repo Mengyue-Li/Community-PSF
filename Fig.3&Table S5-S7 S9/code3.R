@@ -26,14 +26,14 @@ library(MuMIn)
 library(ggplot2)
 library(patchwork)
 
-mytheme= theme(legend.position = "right",
+mytheme= theme(legend.position = "none",
                panel.grid=element_blank(),
                legend.background = element_rect(fill = NA),
                line = element_line(linewidth = 0.28), 
                axis.line = element_line(colour = "black",linewidth = 0.28),
                axis.ticks = element_line(colour = "black",linewidth = 0.28), 
                legend.title = element_text(colour='black', size=8), 
-               legend.text = element_text(size = 7.5, lineheight = 1.33),  
+               legend.text = element_text(size = 7.5, lineheight = 1.33),#10 pt leading-7.5 pt  
                axis.title = element_text(colour='black', size=8),
                axis.text = element_text(colour='black',size=7),
                plot.tag = element_text(size = 9, face = "bold"))
@@ -142,14 +142,13 @@ taxMod <- f.modify.utax.taxon.table(tax, onlyConfident = TRUE)
 taxMod_with_guilds <- funguild_assign(seqDat_full, db = get_funguild_db(), tax_col = "Taxonomy");rownames(taxMod_with_guilds) <- rownames(seqDat)
 taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
 ## If FUNGuild database is updated, please use the following line of code: directly load the data
-taxMod_with_guilds <-read_excel("data3.xlsx",sheet=3);taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
+taxMod_with_guilds <-read_excel("data3.xlsx",sheet="taxMod_with_guilds");taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
 taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
 
 # extract pathogen and AMF 
 seqDat_plantPathogen <- taxMod_all[taxMod_all$guild == "Plant Pathogen"| taxMod_all$genus == "Fusarium", c(3:282)]; seqDat_plantPathogen <- na.omit(seqDat_plantPathogen)
 seqDat_AMF <- taxMod_all[taxMod_all$guild == "Arbuscular Mycorrhizal",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
-
-
+ 
 #--------------------------------------------------------------------
 # Step 2:  Shannon diversity and inverse Simpson diversity 
 #--------------------------------------------------------------------
@@ -480,7 +479,7 @@ results_AMF <- bind_rows(results_AMF);head(results_AMF)
 
 
 #-------------------------------------- 
-# index_Visualization: Fig_3a,b
+# index_Visualization: Fig_3A,B
 #--------------------------------------
 ### Fig_3a  
 div_dat_long_overall <- div_dat_long_overall %>% left_join(results_overall %>% dplyr::select(FS, variable, NR.trend, SE, p.value),
@@ -572,10 +571,10 @@ ggplot(data_richness_invsimp_pathogen, aes(x = NR, y = value, color = as.factor(
   facet_wrap(vars(variable), scales = "free", nrow = 2, ncol = 1, labeller = labeller(.multi_line = FALSE)) +
   guides(color = guide_legend(override.aes = list(size = 2)), shape = guide_legend(override.aes = list(size = 2)), alpha = guide_legend(override.aes = list(size = 2))) +
   theme_bw() + mytheme + theme(legend.position = "none") + 
-  labs(x = "Neighbour plant species richness", y = NULL, tag = "a") -> Fig_3a; Fig_3a
+  labs(x = "Neighbour plant species richness", y = NULL, tag = "A") -> Fig_3A; Fig_3A
 
 
-### Fig_3b
+### Fig_3B
 # Define the critical t-value for 95% confidence intervals
 t_critical_AMF<- qt(0.975, df = max(results_AMF$df)) # Use the maximum degrees of freedom from the results
 
@@ -659,13 +658,13 @@ ggplot(data_richness_invsimp_AMF, aes(x = NR, y = value, color = as.factor(FS)))
   facet_wrap(vars(variable), scales = "free", nrow = 2, ncol = 1, labeller = labeller(.multi_line = FALSE)) +
   guides(color = guide_legend(override.aes = list(size = 2)), shape = guide_legend(override.aes = list(size = 2)), alpha = guide_legend(override.aes = list(size = 2))) +
   theme_bw() + mytheme + theme(legend.position = "none") + 
-  labs(x = "Neighbour plant species richness", y = NULL, tag = "b") -> Fig_3b; Fig_3b
+  labs(x = "Neighbour plant species richness", y = NULL, tag = "B") -> Fig_3B; Fig_3B
 
 Fig_3a + Fig_3b
 
 
 #--------------------------------------
-### RDA_Visualization:Fig.3c & d 
+### RDA_Visualization:Fig.3C & D 
 #--------------------------------------
 ### Fig.3c
 RDA2 <- rda(t(normData_pathogen) ~ Treat, subSampleTab_pathogen)
@@ -699,13 +698,13 @@ ggplot(pathogen_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
                                                       group=interaction(NR, FS), color = FS,linetype=NR),
                type="norm",geom = "polygon",fill = NA) + 
   labs(x=paste("RDA1 (", format(100 * temp$importance[2,1], digits=3), "%)", sep=""),
-       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "c") +
+       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "C") +
   theme_bw() + mytheme +  
   scale_linetype_manual(values = c('solid', 'dashed', 'dotted'))+
-  scale_color_manual(values = c(alpha("#2D4452",0.5),alpha("#4E9A8E",0.5),alpha("#E2C577",0.5))) -> Fig_3c; Fig_3c
+  scale_color_manual(values = c(alpha("#2D4452",0.5),alpha("#4E9A8E",0.5),alpha("#E2C577",0.5))) -> Fig_3C; Fig_3C
 
 
-### Fig.3d 
+### Fig.3D 
 RDA2 <- rda(t(normData_AMF) ~ Treat, subSampleTab_AMF)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -737,11 +736,11 @@ ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
                                                  group=interaction(NR, FS), color = FS,linetype=NR),
                type="norm",geom = "polygon",fill = NA) + 
   labs(x=paste("RDA1 (", format(100 * temp$importance[2,1], digits=3), "%)", sep=""),
-       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "d") +
+       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "D") +
   theme_bw() + mytheme +  
   scale_linetype_manual(values = c('solid', 'dashed', 'dotted'))+
   theme_bw() + mytheme + theme(legend.position.inside = c(0.2,0.76)) +
-  scale_color_manual(values = c(alpha("#2D4452",0.5),alpha("#4E9A8E",0.5),alpha("#E2C577",0.5))) -> Fig_3d; Fig_3d
+  scale_color_manual(values = c(alpha("#2D4452",0.5),alpha("#4E9A8E",0.5),alpha("#E2C577",0.5))) -> Fig_3D; Fig_3D
 
 
 
@@ -960,9 +959,9 @@ Top_bar <- na.omit(c(#R2_full2[1],R2_full3[1],Total_percent1,
 
 
 #--------------------------------------
-### Visualization:  Fig.3e & f & g
+### Visualization:  Fig.3E & F & G
 #--------------------------------------
-### Fig.3e 
+### Fig.3E 
 variance_pathogen = data.frame(factor = rep(c("Focal species", "Neighbouring species richness", "Interaction"), 3),
                                group = c(rep(c("Composition"), 3), rep(c("Shannon"), 3), rep(c("Inverse Simpson"), 3)),
                                value =c(variance_pathogen_com, variance_pathogen_Shannon, variance_pathogen_Invsimp));variance_pathogen
@@ -978,10 +977,10 @@ ggplot(variance_pathogen, aes(fill=factor, y=value, x=group)) +
         legend.position = c(0.4,0.88)) +
   scale_y_continuous(expand = c(0,1), limits = c(0,130),breaks = seq(0, 130,50)) + 
   geom_vline(aes(xintercept = 2.5), linetype = "dashed") + 
-  labs(x = NULL, y = "Percentage contribution (%)", tag = "e")  -> Fig_3e; Fig_3e
+  labs(x = NULL, y = "Percentage contribution (%)", tag = "E")  -> Fig_3E; Fig_3E
 
 
-### Fig.3f
+### Fig.3F
 variance_AMF = data.frame(factor = rep(c("Focal species", "Neighbouring species richness", "Interaction"), 3),
                           group = c(rep(c("Composition"), 3), rep(c("Shannon"), 3), rep(c("Inverse Simpson"), 3)),
                           value =c(variance_AMF_com, variance_AMF_Shannon, variance_AMF_Invsimp));variance_AMF
@@ -997,7 +996,7 @@ ggplot(variance_AMF, aes(fill=factor, y=value, x=group)) +
         legend.position = c(0.3,0.91)) +
   scale_y_continuous(expand = c(0,1), limits = c(0,130),breaks = seq(0, 130,50)) + 
   geom_vline(aes(xintercept = 2.5), linetype = "dashed") + 
-  labs(x = NULL, y = NULL, tag = "f")  -> Fig_3f; Fig_3f
+  labs(x = NULL, y = NULL, tag = "F")  -> Fig_3F; Fig_3F
 
 
 ### for each species
@@ -1239,12 +1238,13 @@ my_cols <- c("Focal species"       = "#70A7C3",
              "Neighbour richness"  = "#A67C2A",
              "Interaction"         = "#D2BEA2")
 
+### Fig.3G
 plot_dat$Metric <- factor(plot_dat$Metric,levels = c("Pathogen_Shannon", "Biomass"))
 ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
   geom_col(width = 0.7, color= "black") +
   geom_text(data = label_dat,
             aes(x = Metric, y = 100, label = Total_Explained_Percent),
-            vjust = -0.4, size = 4, inherit.aes = FALSE) +
+            vjust = -0.4, size = 6, inherit.aes = FALSE) +
   scale_fill_manual(values = my_cols, guide = "none") +
   facet_grid(. ~ Focal_Species, switch = "x") +
   scale_x_discrete(labels = c(Biomass = "Biomass",
@@ -1252,12 +1252,11 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
   scale_y_continuous(expand = c(0,1), limits = c(0,130),
                      breaks = seq(0,130,50)) +
   theme_bw() + mytheme +
-  theme(axis.text.x = element_text(colour = "black", size = 14,
+  theme(axis.text.x = element_text(colour = "black", size = 6,
                                    angle = 25, hjust = 1, vjust = 1),
         legend.position = c(0.3, 0.91)) +
-  labs(x = NULL, y = NULL, tag = "g")  -> Fig_3g; Fig_3g
+  labs(x = NULL, y = NULL, tag = "G")  -> Fig_3G; Fig_3G
 
-(Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)->Fig.3;Fig.3
+(Fig_3A|Fig_3B)/(Fig_3C|Fig_3D)/(Fig_3E|Fig_3F|Fig_3G)->Fig.3;Fig.3
+ggsave("Fig.3.pdf",plot = Fig.3,width = 14.4, height = 20.5, units = "cm",  dpi = 600) 
 
-ggsave("~/Downloads/fig3.tiff", plot = Fig.3, width=3500, height=4500,units="px",dpi=300, compression = 'lzw',bg = "white")
-save.image("~/Downloads/figure3.RData")
