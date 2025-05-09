@@ -640,7 +640,7 @@ print(var_importance_df)
 # Step 8: Save outputs
 #----------------------------------------------
 # Save Panel C to a file (uncomment to save)
-ggsave("panel_c.png",  c, width = 5, height = 4, dpi = 300)
+ggsave("panel_c.png",  C, width = 5, height = 4, dpi = 300)
 
 # Save results to CSV (uncomment to save)
 # write.csv(rf_summary, "R2_summary.csv", row.names = FALSE)
@@ -651,7 +651,7 @@ results_list <- list(
   summary_stats = rf_summary,
   variable_importance = var_importance_df,
   all_iterations = results_rf,
-  panel_c_plot =  c,
+  panel_c_plot =  C,
   final_models = list(
     Species_richness = final_model_Lv,
     Species_identity = final_model_LvID,
