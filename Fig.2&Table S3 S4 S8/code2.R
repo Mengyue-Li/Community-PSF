@@ -661,8 +661,8 @@ results_list <- list(
 
  
 # Create the combined plot layout
-P = a / (b + c + plot_layout(widths = c(2, 1))) +plot_layout(heights = c(1.2, 1));P
-ggsave("Fig.02.pdf",plot = P,width = 12, height = 11, units = "cm",  dpi = 600)           
+P = A / (B + C + plot_layout(widths = c(2, 1))) +plot_layout(heights = c(1.2, 1));P
+ggsave("Fig.2.pdf",plot = P,width = 12, height = 11, units = "cm",  dpi = 600)           
 
 
 
