@@ -79,7 +79,7 @@ ggplot()+
 
 #visualization-Fig.1
 P + annotation_custom(grob=ggplotGrob(pie),ymin = 25, ymax =48, xmin=1992, xmax=2008) -> p1;p1
-
+ggsave("Fig.1.pdf", plot = p1,width = 9, height = 7,  units = "cm", dpi = 600)  
  
 
 
