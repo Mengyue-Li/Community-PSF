@@ -16,6 +16,18 @@ library(tidyr)
 library(tidyverse)
 library(randomForest)
 
+mytheme= theme(legend.position = "none",
+               panel.grid=element_blank(),
+               legend.background = element_rect(fill = NA),
+               line = element_line(linewidth = 0.28), 
+               axis.line = element_line(colour = "black",linewidth = 0.28),
+               axis.ticks = element_line(colour = "black",linewidth = 0.28), 
+               legend.title = element_text(colour='black', size=8), 
+               legend.text = element_text(size = 7.5, lineheight = 1.33),#10 pt leading-7.5 pt  
+               axis.title = element_text(colour='black', size=8),
+               axis.text = element_text(colour='black',size=7),
+               plot.tag = element_text(size = 9, face = "bold"))
+
 ##################################################################################
 #####                                                                        ##### 
 #####           Part1---effect of home vs away:PSF                           #####
@@ -47,21 +59,12 @@ df <- as.data.frame(df); rownames(df) <- df[, 1]
 # Define constants
 stressors <- c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b")
 levels <- c("1", "2", "4", "6", "12")
+treatment = as.vector(unique(df$remark))
 responses <- "TG"
 n_iter <- 1000
 target <- c("CK", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b","1", "2", "4", "6", "12")
 set.seed(123)
-mytheme= theme(legend.position = "right",
-               panel.grid=element_blank(),
-               legend.background = element_rect(fill = NA),
-               line = element_line(linewidth = 0.28), 
-               axis.line = element_line(colour = "black",linewidth = 0.28),
-               axis.ticks = element_line(colour = "black",linewidth = 0.28), 
-               legend.title = element_text(colour='black', size=8), 
-               legend.text = element_text(size = 7.5, lineheight = 1.33),  
-               axis.title = element_text(colour='black', size=8),
-               axis.text = element_text(colour='black',size=7),
-               plot.tag = element_text(size = 9, face = "bold"))
+ 
 #----------------------------------------------
 # Estimating mean and its 95% confidence interval
 #----------------------------------------------
@@ -97,12 +100,77 @@ BootStrap_mean <- function(response, data = df, n_perm = n_iter) {  # Removed ta
   return(summary)
 }
 response_mean <- BootStrap_mean("TG")
-
-
 response_mean$target <- factor(response_mean$target,levels = c("CK", LETTERS,"a","b", "1", "2", "4", "6", "12"))
 df$remark <- factor(df$remark,levels = levels(response_mean$target)  # Inherit the same order
 )
-Pa <- ggplot() +
+
+ 
+BootStrap_ES_rep = function(response, data=df, target = treatment, n_perm = n_iter){
+  resampled = list()
+  
+  population_CT = data[data$remark=="CK", response]
+  
+  for(treatment in target){
+    bs = numeric(0)
+    if(treatment=="1") population_TR = data[data$remark%in%stressors, response]
+    if(treatment!="1") population_TR = data[data$remark==treatment, response]
+    size_CT = length(population_CT)
+    size_TR = length(population_TR)
+    
+    for(id in c(1:n_perm)){
+      k_CT = mean(sample(population_CT, size_CT, replace = T))
+      k_TR = mean(sample(population_TR, size_TR, replace = T))
+      bs = append(bs, k_TR - k_CT)
+    }
+    resampled[[treatment]] = bs
+  }
+  resampled[["CK"]] = rep(0, n_perm)
+  return(resampled)
+}
+
+BootStrap_ES_summary = function(data){
+  summary = list()
+  p = 0
+  summary[["CK"]] = c(0,0,0,1)
+  target = names(data)
+  for(treatment in target[-1]){
+    bs = data[[treatment]]
+    p = length(which(bs>0))/length(bs)
+    p = min(p, 1-p)
+    summary[[treatment]] = c(quantile(bs, .025), mean(bs), quantile(bs, .975), p)
+  }
+  summary = t(data.frame(summary))
+  colnames(summary) = c("2.5%", "mean", "97.5%", "p_value")
+  summary = data.frame(target, summary); row.names(summary) = c()
+  
+  return(summary)
+}
+
+
+#Effect size estimate and null hypothesis significance testing
+set.seed(123)
+response_mean_all = list()
+response_ES_all   = list()
+
+for(i_response in responses){
+  # Bootstrap estimate: single stressors
+  response_mean   = BootStrap_mean(i_response)
+  response_ES_bs  = BootStrap_ES_rep(i_response)
+  response_ES     = BootStrap_ES_summary(response_ES_bs)
+  # Summary table combining the information from all response variables
+  response_mean_all[[i_response]] = response_mean
+  response_ES_all[[i_response]]   = response_ES
+}
+
+#-------------------------------------
+### Table S3
+#-------------------------------------
+response_mean 
+response_ES_all
+#-------------------------------------
+# Visualization: Fig_2A
+#-------------------------------------
+A <- ggplot() +
   theme_bw() +
   theme(legend.position = "none", axis.title.x = element_blank()) +
   # Highlight region for levels 1 to 12
@@ -148,18 +216,13 @@ Pa <- ggplot() +
   geom_errorbar(data = subset(response_mean, target %in% c("1", "2", "4", "6", "12")), 
                 aes(xmin = X2.5., xmax = X97.5., y = target), width = 0, color = "#000000", linewidth = 0.5) +
   
-  labs(x = "Total biomass of responding community (g)", y = "Single plant species    Species richness ", tag = "a") +
+  labs(x = "Total biomass of responding community (g)", y = "Single plant species Richness", tag = "A") +
   mytheme +  # Assuming mytheme is defined; remove if not
   scale_x_continuous(limits = c(25, 123), expand = c(0, 0), breaks = seq(40, 120, 20))
-Pa
+A
 
 
-##################################################################################
-#####                                                                        ##### 
-#####                           Part3---psf prediction                       #####
-#####                                                                        #####  
-##################################################################################
- 
+### PSF prediction
 # Null distribution function (without Dominative)
 Null_distribution_rep_log <- function(response, data = df, n_perm = n_iter) {
   output <- list()
@@ -320,18 +383,18 @@ nhst_summary <- NHST_summary(null_dist, Actual_data)
 ES_plot_data <- NHST_summary_transform(nhst_summary)
 
 # Print results
-print(ES_plot_data)
+#--------------------------------------
+### Table S4
+#--------------------------------------
+print(ES_plot_data) #Table S4
 ES_plot_data$Lv <- factor(ES_plot_data$Lv, levels = as.numeric(levels), labels = levels)
-# Plot
-Pb <- ggplot() +
+
+#-------------------------------------
+# Visualization: Fig_2B
+#-------------------------------------
+B <- ggplot() +
   theme_bw() +
-  theme(
-    legend.position = "none",
-    axis.title.x = element_text(color = "black", size = 12), 
-    axis.title.y = element_text(color = "black", size = 12)) +
-  labs(x = "Plant-soil feedback effects
-Ln(biomass in conditioned soil / biomass in sterilized)", y = "Species richness", tag = "b") +
-  coord_flip() +
+  coord_flip() + 
   scale_y_discrete(limits = factor(c("1", "2", "4", "6", "12"), levels=c("1", "2", "4", "6", "12"))) +
   ### Mean & CI for 2 assumptions + Actual (removed Dominative)
   geom_estci(data = ES_plot_data[ES_plot_data$Model == "Additive" & ES_plot_data$Lv %in% c("1", "2", "4", "6", "12"), ], 
@@ -344,17 +407,13 @@ Ln(biomass in conditioned soil / biomass in sterilized)", y = "Species richness"
              aes(x = Mean, y = Lv, xmin = Low, xmax = High, xintercept = 0), 
              color = "#000000", size = 0.6, ci.linesize = 0.5, position = position_nudge(y = 0)) +
   scale_x_continuous(labels = scales::label_comma(accuracy = 0.01), 
-                     limits = c(-3.5, 0),  # Adjusted limits based on your data
+                     limits = c(-3.5, 0.2),  # Adjusted limits based on your data
                      expand = c(0, 0), 
-                     breaks = seq(-3.5, 0, 1)) + mytheme
-Pb
+                     breaks = seq(-3.5, 0.2, 1))  + mytheme +
+    labs(x = "Plant-soil feedback effects
+Ln(biomass in conditioned soil / biomass in sterilized)", y = " ", tag = "B") 
+B
 
-
-##################################################################################
-#####                                                                        ##### 
-#####                             Part4---explanations                       #####
-#####                                                                        #####  
-##################################################################################
 
 #### explanations - Modified to only include the three R² values requested
 set.seed(123)
@@ -524,8 +583,12 @@ model_labels <- c(
   "Effect_size" = "+ Effect size"
 )
 
+
 # Create Panel C plot (matching the original style)
-Pc <- ggplot(data = plot_data_c, aes(x = Model, y = R2, fill = Model)) +
+#-------------------------------------
+# Visualization: Fig_2C
+#-------------------------------------
+C <- ggplot(data = plot_data_c, aes(x = Model, y = R2, fill = Model)) +
   # Violin plot
   geom_violin(color = "#00000000", alpha = 0.5, position = position_dodge(width = 0.3), trim = TRUE) +
   # Point range showing mean and CI
@@ -540,15 +603,16 @@ Pc <- ggplot(data = plot_data_c, aes(x = Model, y = R2, fill = Model)) +
   mytheme +
   ylim(c(0, 1.0)) +
   theme(legend.position = "none", axis.title.x = element_blank()) +
-  labs(x = " ", y = "Variability explained (R²)", tag = "c") +
+  labs(x = " ", y = "Variability explained (R²)", tag = "C") +
   scale_x_discrete(labels = model_labels) +
-  theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1))
-Pc
+  theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1));C
 
 #----------------------------------------------
 # Step 7: Train final models on complete dataset
 #----------------------------------------------
 # Using RandomForest for final models
+#install.packages("randomForest")
+library(randomForest)
 final_model_Lv <- randomForest(fml_Lv, data = df.rf, 
                                ntree = n_tree, mtry = min(2, n_pred_Lv))
 
@@ -575,19 +639,9 @@ print(var_importance_df)
 #----------------------------------------------
 # Step 8: Save outputs
 #----------------------------------------------
-# Save Panel c to a file (uncomment to save)
-# ggsave("panel_c.png", Pc, width = 5, height = 4, dpi = 300)
+# Save Panel C to a file (uncomment to save)
+ggsave("panel_c.png",  c, width = 5, height = 4, dpi = 300)
 
-
-##################################################################################
-#####                                                                        ##### 
-#####                        Part5---Resules of Table S3 S4                  #####
-#####                                                                        #####  
-##################################################################################
-
-#--------------------------------------
-### Table S3 S4
-#--------------------------------------
 # Save results to CSV (uncomment to save)
 # write.csv(rf_summary, "R2_summary.csv", row.names = FALSE)
 # write.csv(var_importance_df, "variable_importance.csv", row.names = FALSE)
@@ -597,7 +651,7 @@ results_list <- list(
   summary_stats = rf_summary,
   variable_importance = var_importance_df,
   all_iterations = results_rf,
-  panel_c_plot = Pc,
+  panel_c_plot =  c,
   final_models = list(
     Species_richness = final_model_Lv,
     Species_identity = final_model_LvID,
@@ -605,17 +659,10 @@ results_list <- list(
   )
 )
 
-##################################################################################
-#####                                                                        ##### 
-#####                     Part6---Visualization                              #####
-#####                                                                        #####  
-##################################################################################
-
+ 
 # Create the combined plot layout
-Pa / (Pb + Pc + plot_layout(widths = c(2, 1))) + plot_layout(heights = c(1, 1))
-
-p <- wrap_plots(Pa, Pb, Pc, design = layout);p 
-ggsave("~/Downloads/fig2.tiff", plot = p, width=3500, height=3000,units="px",dpi=300, compression = 'lzw',bg = "white")
+P = a / (b + c + plot_layout(widths = c(2, 1))) +plot_layout(heights = c(1.2, 1));P
+ggsave("Fig.02.pdf",plot = P,width = 12, height = 11, units = "cm",  dpi = 600)           
 
 
 
