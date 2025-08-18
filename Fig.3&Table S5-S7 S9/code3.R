@@ -779,7 +779,7 @@ ggplot(pathogen_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
   scale_color_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) -> Fig_3c; Fig_3c
 
 
-### Fig.3(d )
+### Fig.3(d)
 RDA2 <- rda(t(normData_AMF) ~ Treat, subSampleTab_AMF)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -1024,7 +1024,7 @@ variance99 <- variance9 %>% mutate( Relative_Percentage = (`R2_AMF_Invsimp`[1:3]
 variance_AMF_Invsimp<- variance99[1:3, c("Relative_Percentage")];variance_AMF_Invsimp # Print the relative contributions
 
 
-### TableS7_results
+### TableS10_results
 # overall fungi
 variance22 
 Residual_variance2
@@ -1355,6 +1355,7 @@ cowplot::plot_grid(Fig_3e,Fig_3f,Fig_3g, align = "v", ncol = 3,rel_widths= c(1,1
  
 
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
-ggsave("Fig.3-no-removed.pdf",plot = Fig.3,width = 10, height = 14) 
+ggsave("Fig.3.pdf",plot = Fig.3,width = 10, height = 14) 
+
 
 
