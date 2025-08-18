@@ -25,6 +25,9 @@ library(glmm.hp)
 library(MuMIn)
 library(ggplot2)
 library(patchwork)
+library("DESeq2")
+library("Rtsne")
+library("RColorBrewer")
 
 mytheme= theme(legend.position = "none",
                panel.grid=element_blank(),
@@ -314,7 +317,6 @@ p.adjust(pp, "bonferroni")
 #--------------------------------------------------------------------
 #----------------------Table S8-Composition: RDA 
 ##########################################################################################
-library(openxlsx)
 sampleTab <- read.xlsx("data3_1.xlsx",sheet=3, colNames = T, rowNames = T)
 sampleTab <-sampleTab[,1:280]
 sampleTab <- as.data.frame(sampleTab)
@@ -332,10 +334,7 @@ dds <- DESeqDataSetFromMatrix(countData = (sampleTab[,rownames(sampleTab_GROUP)]
 dds <- DESeq(dds)
 normData <- log2(DESeq2::counts(dds, normalized = TRUE) + 1)
 dim(normData)
-
 write.table(normdata_noremoved, "normData-8-14-no-removed.csv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
-
-  
 
 ### RDA_result_overall
 normData <- read.xlsx("data3_1.xlsx", sheet ="normdata_noremoved", colNames = T, rowNames = T)
@@ -1357,4 +1356,5 @@ cowplot::plot_grid(Fig_3e,Fig_3f,Fig_3g, align = "v", ncol = 3,rel_widths= c(1,1
 
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
 ggsave("Fig.3-no-removed.pdf",plot = Fig.3,width = 10, height = 14) 
+
 
