@@ -142,8 +142,8 @@ taxMod <- f.modify.utax.taxon.table(tax, onlyConfident = TRUE)
 taxMod_with_guilds <- funguild_assign(seqDat_full, db = get_funguild_db(), tax_col = "Taxonomy");rownames(taxMod_with_guilds) <- rownames(seqDat)
 taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
 ## If FUNGuild database is updated, please use the following line of code: directly load the data
-taxMod_with_guilds <-read_excel("data3.xlsx",sheet="taxMod_with_guilds");taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
-taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
+#taxMod_with_guilds <-read_excel("data3.xlsx",sheet="taxMod_with_guilds");taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
+#taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
 
 # extract pathogen and AMF 
 seqDat_plantPathogen <- taxMod_all[taxMod_all$guild == "Plant Pathogen"| taxMod_all$genus == "Fusarium", c(3:282)]; seqDat_plantPathogen <- na.omit(seqDat_plantPathogen)
@@ -187,36 +187,30 @@ div_dat_AMF$Treat <- paste(div_dat_AMF$FS,div_dat_AMF$NR,sep = "_");head(div_dat
 div_dat_overall <- div_dat_overall[div_dat_overall$Monoculture == "NO",]
 # Shannon
 model <- glmmTMB(Shannon_overall ~ FS*NR*COT, data = div_dat_overall)
-qqnorm(resid(model));qqline(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 p1 <- model_result$Pr
 # Invsimp
 model <- glmmTMB(Invsimp_overall ~ FS*NR*COT, data = div_dat_overall) 
-qqnorm(resid(model));qqline(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 p2 <- model_result$Pr
 
 div_dat_pathogen <- div_dat_pathogen[div_dat_pathogen$Monoculture == "NO",]
 # Shannon
 model <- glmmTMB(Shannon_pathogen ~ FS*NR*COT, data = div_dat_pathogen)
-qqnorm(resid(model));qqline(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 p3 <- model_result$Pr
 # Invsimp
 model <- glmmTMB(Invsimp_pathogen ~ FS*NR*COT, data = div_dat_pathogen) 
-qqnorm(resid(model));qqline(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 p4 <- model_result$Pr
 
 div_dat_AMF <- div_dat_AMF[div_dat_AMF$Monoculture == "NO",]
 # Shannon
 model <- glmmTMB(Shannon_AMF ~ FS*NR*COT, data = div_dat_AMF)
-qqnorm(resid(model));qqline(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 p5 <- model_result$Pr
 # Invsimp
 model <- glmmTMB(Invsimp_AMF ~ FS*NR*COT, data = div_dat_AMF) 
-qqnorm(resid(model));qqline(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 p6 <- model_result$Pr
 
@@ -236,34 +230,28 @@ p.adjust(p, "bonferroni")
 #----------------------Table S5-1: Shannon&Invsimp
 # Shannon 
 model <- glmmTMB(Shannon_overall ~  FS*NR + (1|COT), data = div_dat_overall)
-qqnorm(resid(model));qqline(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp1 <- model_result$Pr
 # Invsimp
 model <- glmmTMB(Invsimp_overall ~ FS*NR + (1|COT), data = div_dat_overall)
-qqnorm(resid(model));qqline(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp2 <- model_result$Pr
 
 # Shannon 
 model <- glmmTMB(Shannon_pathogen ~ FS*NR + (1|COT), data = div_dat_pathogen) 
-qqnorm(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp3 <- model_result$Pr
 # Invsimp  
 model <- glmmTMB(Invsimp_pathogen ~  FS*NR + (1|COT), data = div_dat_pathogen)
-qqnorm(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp4 <- model_result$Pr
 
 # Shannon
 model <- glmmTMB(Shannon_AMF ~ FS*NR + (1|COT), data = div_dat_AMF) 
-qqnorm(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp5 <- model_result$Pr
 # Invsimp 
 model <- glmmTMB(Invsimp_AMF ~  FS*NR + (1|COT), data = div_dat_AMF)
-qqnorm(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp6 <- model_result$Pr
 
@@ -1259,4 +1247,5 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
 
 (Fig_3A|Fig_3B)/(Fig_3C|Fig_3D)/(Fig_3E|Fig_3F|Fig_3G)->Fig.3;Fig.3
 ggsave("Fig.3.pdf",plot = Fig.3,width = 14.4, height = 20.5, units = "cm",  dpi = 600) 
+
 
