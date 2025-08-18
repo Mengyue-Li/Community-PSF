@@ -25,6 +25,9 @@ library(glmm.hp)
 library(MuMIn)
 library(ggplot2)
 library(patchwork)
+library("DESeq2")
+library("Rtsne")
+library("RColorBrewer")
 
 mytheme= theme(legend.position = "none",
                panel.grid=element_blank(),
@@ -42,6 +45,8 @@ mytheme= theme(legend.position = "none",
 ###############################################################################################
 #####  Part0---Effects of FS DR and their interaction on the total biomass of focal plant #####
 ###############################################################################################
+setwd("C:/Users/MY/Desktop/li/3")
+
 #--------------------------------------
 ### Table S6  
 #--------------------------------------
@@ -79,7 +84,6 @@ emmip_biomass <- emmip(model_focalmass,~DR|FS,type="response",CIs=T,at=list(DR=u
 emmip_biomass$Mass_F <- emmip_biomass$yvar
 
 data_focalmass2 = rbind(data_focalmass, ck_biomass)
-
 ggplot(data_focalmass2, aes(x=DR, y=Mass_F,color=FS))+
   geom_point(size=3,position=pd,alpha=1,aes(fill = FS), color = "black", pch = 21 ) +  # 关键参数：控制点边框粗细 
   geom_line(aes(x=DR,y=Mass_F,color = FS, linetype = FS),emmip_biomass  ) +
@@ -94,20 +98,14 @@ ggplot(data_focalmass2, aes(x=DR, y=Mass_F,color=FS))+
   scale_linetype_manual(values = c(1,2,2)) +  
   labs(x = " Log2 (Distant neighbor richness)", y = "Total biomass of focal plant (g)")
 
-
 ###########################################################################################
 #####                   Part1--- Index calculation & Composition(RDA)                 #####
 ###########################################################################################
-
 #--------------------------------------------------------------------
 # Step 1:  loading data and identify taxonomy levels
 #--------------------------------------------------------------------
 # raw data
-setwd("C:/Users/MY/Desktop/li/3")
-setwd("D:/00-2025-重新投稿-零模型调节群落丰富度表换成生物量表/EL/CODE/Fig.3&Table S5-S7 S9")
-
-MetaTab <- read_excel("data3_1.xlsx",sheet=1);
-MetaTab <- as.data.frame(MetaTab);rownames(MetaTab) <- MetaTab[,1] ;MetaTab <- MetaTab[MetaTab$Monoculture == "NO",]
+head(MetaTab)
 Biomass_dat <- read_excel("data3_1.xlsx",sheet=2);Biomass_dat <- as.data.frame(Biomass_dat);rownames(Biomass_dat) <- Biomass_dat[,1] 
 seqDat_full <- read_excel("data3_1.xlsx",sheet=3); seqDat_full <-seqDat_full[,1:282]; dim(seqDat_full);seqDat_full <- as.data.frame(seqDat_full);rownames(seqDat_full) <- seqDat_full[,1]
 tax <- seqDat_full$Taxonomy; tax <- as.data.frame(tax); rownames(tax) <- rownames(seqDat_full)
@@ -208,7 +206,6 @@ taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_al
 # extract pathogen and AMF 
 seqDat_plantPathogen <- taxMod_all[taxMod_all$guild == "Plant Pathogen"| taxMod_all$genus == "Fusarium", c(3:282)]; seqDat_plantPathogen <- na.omit(seqDat_plantPathogen)
 seqDat_AMF <- taxMod_all[taxMod_all$phylum == "Glomeromycota",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
-#seqDat_AMF <- taxMod_all[taxMod_all$guild == "Arbuscular Mycorrhizal",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
 
 #--------------------------------------------------------------------
 # Step 2:  Shannon diversity and inverse Simpson diversity 
@@ -318,7 +315,6 @@ p.adjust(pp, "bonferroni")
 #--------------------------------------------------------------------
 #----------------------Table S8-Composition: RDA 
 ##########################################################################################
-library(openxlsx)
 sampleTab <- read.xlsx("data3_1.xlsx",sheet=3, colNames = T, rowNames = T)
 sampleTab <-sampleTab[,1:280]
 sampleTab <- as.data.frame(sampleTab)
@@ -336,10 +332,7 @@ dds <- DESeqDataSetFromMatrix(countData = (sampleTab[,rownames(sampleTab_GROUP)]
 dds <- DESeq(dds)
 normData <- log2(DESeq2::counts(dds, normalized = TRUE) + 1)
 dim(normData)
-
 write.table(normdata_noremoved, "normData-8-14-no-removed.csv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
-
-  
 
 ### RDA_result_overall
 normData <- read.xlsx("data3_1.xlsx", sheet ="normdata_noremoved", colNames = T, rowNames = T)
@@ -553,9 +546,9 @@ p.adjust(pp_results_AMF , "bonferroni")
 
 
 #-------------------------------------- 
-# index_Visualization: Fig_3a,b
+# index_Visualization: Fig_3(a),(b)
 #--------------------------------------
-### Fig_3a  
+### Fig_3(a ) 
 div_dat_long_overall <- div_dat_long_overall %>% left_join(results_overall %>% dplyr::select(FS, variable, NR.trend, SE, p.value),
                                                            by = c("FS", "variable")) %>%mutate(significant = p.value < 0.05) # Mark significant slopes
 div_dat_long_pathogen <- div_dat_long_pathogen %>% left_join(results_pathogen %>% dplyr::select(FS, variable, NR.trend, SE, p.value),
@@ -649,7 +642,7 @@ ggplot(data_richness_invsimp_pathogen, aes(x = NR, y = value, color = FS)) +
   labs(x = "Log2 (Distant neighbor richness)", y = NULL, tag = "(a)") -> Fig_3a; Fig_3a
 
 
-### Fig_3b
+### Fig_3(b)
 # Define the critical t-value for 95% confidence intervals
 t_critical_AMF<- qt(0.975, df = max(results_AMF$df)) # Use the maximum degrees of freedom from the results
 
@@ -741,9 +734,9 @@ Fig_3a + Fig_3b
 
 
 #--------------------------------------
-### RDA_Visualization:Fig.3c & d 
+### RDA_Visualization:Fig.3(c) & (d) 
 #--------------------------------------
-### Fig.3c
+### Fig.3(c)
 RDA2 <- rda(t(normData_pathogen) ~ Treat, subSampleTab_pathogen)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -784,7 +777,7 @@ ggplot(pathogen_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
   scale_color_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) -> Fig_3c; Fig_3c
 
 
-### Fig.3d 
+### Fig.3(d)
 RDA2 <- rda(t(normData_AMF) ~ Treat, subSampleTab_AMF)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -1029,7 +1022,7 @@ variance99 <- variance9 %>% mutate( Relative_Percentage = (`R2_AMF_Invsimp`[1:3]
 variance_AMF_Invsimp<- variance99[1:3, c("Relative_Percentage")];variance_AMF_Invsimp # Print the relative contributions
 
 
-### TableS7_results
+### TableS10_results
 # overall fungi
 variance22 
 Residual_variance2
@@ -1057,9 +1050,9 @@ Top_bar <- na.omit(c(#R2_full2[1],R2_full3[1],Total_percent1,
 
 
 #--------------------------------------
-### Visualization:  Fig.3e & f & g
+### Visualization:  Fig.3(e) & (f) & (g)
 #--------------------------------------
-### Fig.3e 
+### Fig.3(e)
 variance_pathogen = data.frame(factor = rep(c("Focal species", "Neighbouring species richness", "Interaction"), 3),
                                group = c(rep(c("Composition"), 3), rep(c("Shannon"), 3), rep(c("Inverse Simpson"), 3)),
                                value =c(variance_pathogen_com, variance_pathogen_Shannon, variance_pathogen_Invsimp));variance_pathogen
@@ -1078,7 +1071,7 @@ ggplot(variance_pathogen, aes(fill=factor, y=value, x=group)) +
   labs(x = NULL, y = "Percentage contribution (%)", tag = "(e)")  -> Fig_3e; Fig_3e
 
 
-### Fig.3f
+### Fig.3(f)
 variance_AMF = data.frame(factor = rep(c("Focal species", "Neighbouring species richness", "Interaction"), 3),
                           group = c(rep(c("Composition"), 3), rep(c("Shannon"), 3), rep(c("Inverse Simpson"), 3)),
                           value =c(variance_AMF_com, variance_AMF_Shannon, variance_AMF_Invsimp));variance_AMF
@@ -1336,7 +1329,7 @@ my_cols <- c("Focal species"       = "#70A7C3",
              "Neighbour richness"  = "#A67C2A",
              "Interaction"         = "#D2BEA2")
 
-### Fig.3g
+### Fig.3(g)
 plot_dat$Metric <- factor(plot_dat$Metric,levels = c("Pathogen_Shannon", "Biomass"))
 ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
   geom_col(width = 0.7, color= "black") +
@@ -1360,5 +1353,6 @@ cowplot::plot_grid(Fig_3e,Fig_3f,Fig_3g, align = "v", ncol = 3,rel_widths= c(1,1
  
 
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
-ggsave("Fig.3-no-removed.pdf",plot = Fig.3,width = 10, height = 14) 
+ggsave("Fig.3.pdf",plot = Fig.3,width = 10, height = 14) 
+
 
