@@ -32,26 +32,80 @@ mytheme= theme(legend.position = "none",
                line = element_line(linewidth = 0.28), 
                axis.line = element_line(colour = "black",linewidth = 0.28),
                axis.ticks = element_line(colour = "black",linewidth = 0.28), 
-               legend.title = element_text(colour='black', size=8), 
+               legend.title = element_text(colour='black', size=9), 
                legend.text = element_text(size = 7.5, lineheight = 1.33),#10 pt leading-7.5 pt  
-               axis.title = element_text(colour='black', size=8),
-               axis.text = element_text(colour='black',size=7),
-               plot.tag = element_text(size = 9, face = "bold"))
+               axis.title = element_text(colour='black', size=13),
+               axis.text = element_text(colour='black',size=12),
+               plot.tag = element_text(size = 14, face = "bold"))
+
+
+###############################################################################################
+#####  Part0---Effects of FS DR and their interaction on the total biomass of focal plant #####
+###############################################################################################
+#--------------------------------------
+### Table S6  
+#--------------------------------------
+MetaTab <- read_excel("data3_1.xlsx",sheet=1);
+MetaTab <- as.data.frame(MetaTab);rownames(MetaTab) <- MetaTab[,1] ;MetaTab <- MetaTab[MetaTab$Monoculture == "NO",];head(MetaTab)
+
+# Whether the focal and near neighbor species were the same was included as a random term (P = 0.43).
+model_focalmass1 <- glmmTMB(Mass_F ~  FS*DR + (1|NT), data = MetaTab)# random factor
+model_focalmass2 <- glmmTMB(Mass_F ~  FS*DR , data = MetaTab)# without random factor
+anova(model_focalmass1 , model_focalmass2, test = "Chisq")
+
+# model
+model_focalmass <- glmmTMB(Mass_F ~  FS*DR + (1|NT), data = MetaTab)
+Anova(model_focalmass, type = "III")-> model_focalmass_result; model_focalmass_result
+pp_focalmass <- model_focalmass_result$Pr
+p.adjust(pp_focalmass, "bonferroni")
+
+#--------------------------------------
+### Table S7 
+#--------------------------------------
+model_focalmass <- glmmTMB(Mass_F ~  FS*DR + (1|NT), data = MetaTab)
+emt_focalmass <- emtrends(model_focalmass,~FS,var="DR"); emt_focalmass 
+model_focalmass_result <- test(emt_focalmass);model_focalmass_result
+pp_focalmass <- model_focalmass_result$p.value
+p.adjust(pp_focalmass, "bonferroni")
+
+#--------------------------------------
+### Fig. S3
+#--------------------------------------
+colnames(MetaTab)
+ck_biomass = data.frame(Pot = c("1_1_1", "2_1_1", "3_1_1"),Mass_F = c( 2.25, 1.11,4.63), FS = c("C", "O", "V"),
+                        NNS = NA,DR = -0.4, NT = NA, Monoculture = NA)
+
+emmip_biomass <- emmip(model_focalmass,~DR|FS,type="response",CIs=T,at=list(DR=unique(MetaTab$DR)),plotit = FALSE)
+emmip_biomass$Mass_F <- emmip_biomass$yvar
+
+data_focalmass2 = rbind(data_focalmass, ck_biomass)
+ggplot(data_focalmass2, aes(x=DR, y=Mass_F,color=FS))+
+  geom_point(size=3,position=pd,alpha=1,aes(fill = FS), color = "black", pch = 21 ) +  # 关键参数：控制点边框粗细 
+  geom_line(aes(x=DR,y=Mass_F,color = FS, linetype = FS),emmip_biomass  ) +
+  scale_fill_manual(values = c("C" = "#40B0A6", "O" = "#E1BD69", "V" = "#A38E89")) +
+  geom_ribbon(data = emmip_biomass, aes(x = DR, ymin = LCL, ymax = UCL, fill = FS), alpha = 0.3, inherit.aes = FALSE) + 
+  scale_color_manual(values = c("C" = "#40B0A6", "O" = "#E1BD69", "V" = "#A38E89")) +
+  theme_bw() + mytheme + 
+  theme(legend.position = c(0.15,0.65), strip.text.x = element_text(size = 11, color = "black")) + 
+  scale_y_continuous(expand = expansion(mult = c(0.15, 0.15))) + 
+  scale_x_continuous(breaks = c(-0.4, 0, 1, 2), labels = c("Monoculture", "0", "1", "2")) +  
+  geom_vline(xintercept = -0.2, linetype = 1) +
+  scale_linetype_manual(values = c(1,2,2)) +  
+  labs(x = " Log2 (Distant neighbor richness)", y = "Total biomass of focal plant (g)")
 
 ###########################################################################################
 #####                   Part1--- Index calculation & Composition(RDA)                 #####
 ###########################################################################################
-
 #--------------------------------------------------------------------
 # Step 1:  loading data and identify taxonomy levels
 #--------------------------------------------------------------------
 # raw data
 setwd("C:/Users/MY/Desktop/li/3")
 
-MetaTab <- read_excel("data3.xlsx",sheet=1);
+MetaTab <- read_excel("data3_1.xlsx",sheet=1);
 MetaTab <- as.data.frame(MetaTab);rownames(MetaTab) <- MetaTab[,1] ;MetaTab <- MetaTab[MetaTab$Monoculture == "NO",]
-Biomass_dat <- read_excel("data3.xlsx",sheet=2);Biomass_dat <- as.data.frame(Biomass_dat);rownames(Biomass_dat) <- Biomass_dat[,1] 
-seqDat_full <- read_excel("data3.xlsx",sheet=3); seqDat_full <-seqDat_full[,1:282]; dim(seqDat_full);seqDat_full <- as.data.frame(seqDat_full);rownames(seqDat_full) <- seqDat_full[,1]
+Biomass_dat <- read_excel("data3_1.xlsx",sheet=2);Biomass_dat <- as.data.frame(Biomass_dat);rownames(Biomass_dat) <- Biomass_dat[,1] 
+seqDat_full <- read_excel("data3_1.xlsx",sheet=3); seqDat_full <-seqDat_full[,1:282]; dim(seqDat_full);seqDat_full <- as.data.frame(seqDat_full);rownames(seqDat_full) <- seqDat_full[,1]
 tax <- seqDat_full$Taxonomy; tax <- as.data.frame(tax); rownames(tax) <- rownames(seqDat_full)
 seqDat <- seqDat_full[,c(2:281)]
 
@@ -141,14 +195,17 @@ taxMod <- f.modify.utax.taxon.table(tax, onlyConfident = TRUE)
 
 taxMod_with_guilds <- funguild_assign(seqDat_full, db = get_funguild_db(), tax_col = "Taxonomy");rownames(taxMod_with_guilds) <- rownames(seqDat)
 taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
+#write.table(taxMod_with_guilds, "taxMod_with_guilds20250805.csv",sep = ",",  row.names = TRUE,col.names = TRUE, quote = FALSE)
+
 ## If FUNGuild database is updated, please use the following line of code: directly load the data
-#taxMod_with_guilds <-read_excel("data3.xlsx",sheet="taxMod_with_guilds");taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
+#taxMod_with_guilds <-read_excel("data3_2.xlsx",sheet="taxMod_with_guilds");taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
 #taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
 
 # extract pathogen and AMF 
 seqDat_plantPathogen <- taxMod_all[taxMod_all$guild == "Plant Pathogen"| taxMod_all$genus == "Fusarium", c(3:282)]; seqDat_plantPathogen <- na.omit(seqDat_plantPathogen)
-seqDat_AMF <- taxMod_all[taxMod_all$guild == "Arbuscular Mycorrhizal",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
- 
+seqDat_AMF <- taxMod_all[taxMod_all$phylum == "Glomeromycota",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
+#seqDat_AMF <- taxMod_all[taxMod_all$guild == "Arbuscular Mycorrhizal",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
+
 #--------------------------------------------------------------------
 # Step 2:  Shannon diversity and inverse Simpson diversity 
 #--------------------------------------------------------------------
@@ -183,77 +240,69 @@ div_dat_pathogen$Treat <- paste(div_dat_pathogen$FS,div_dat_pathogen$NR,sep = "_
 div_dat_AMF <- merge(index_AMF,MetaTab,by=0) %>% left_join(Biomass_dat)
 div_dat_AMF$Treat <- paste(div_dat_AMF$FS,div_dat_AMF$NR,sep = "_");head(div_dat_AMF)
 
-### Shannon & Invsimp
+###  
 div_dat_overall <- div_dat_overall[div_dat_overall$Monoculture == "NO",]
-# Shannon
-model <- glmmTMB(Shannon_overall ~ FS*NR*COT, data = div_dat_overall)
-Anova(model, type = "III")-> model_result; model_result
-p1 <- model_result$Pr
-# Invsimp
-model <- glmmTMB(Invsimp_overall ~ FS*NR*COT, data = div_dat_overall) 
-Anova(model, type = "III")-> model_result; model_result
-p2 <- model_result$Pr
-
 div_dat_pathogen <- div_dat_pathogen[div_dat_pathogen$Monoculture == "NO",]
-# Shannon
-model <- glmmTMB(Shannon_pathogen ~ FS*NR*COT, data = div_dat_pathogen)
-Anova(model, type = "III")-> model_result; model_result
-p3 <- model_result$Pr
-# Invsimp
-model <- glmmTMB(Invsimp_pathogen ~ FS*NR*COT, data = div_dat_pathogen) 
-Anova(model, type = "III")-> model_result; model_result
-p4 <- model_result$Pr
-
 div_dat_AMF <- div_dat_AMF[div_dat_AMF$Monoculture == "NO",]
-# Shannon
-model <- glmmTMB(Shannon_AMF ~ FS*NR*COT, data = div_dat_AMF)
-Anova(model, type = "III")-> model_result; model_result
-p5 <- model_result$Pr
-# Invsimp
-model <- glmmTMB(Invsimp_AMF ~ FS*NR*COT, data = div_dat_AMF) 
-Anova(model, type = "III")-> model_result; model_result
-p6 <- model_result$Pr
-
+ 
 
 #--------------------------------------
-### Table S9
+### Table S8  
 #--------------------------------------
-p <- na.omit(c(p1,p2,p3,p4,p5,p6))
-p.adjust(p, "BH")
-p.adjust(p, "bonferroni")
+#----------------------Table S8-1: Shannon&Invsimp
+#write.csv(div_dat_overall, "div_dat_overall.csv")
 
-
-### since the variable co-occuring species type (COT) is not significant, we indluding it into random faCOTor
-#--------------------------------------
-### Table S5  
-#--------------------------------------
-#----------------------Table S5-1: Shannon&Invsimp
 # Shannon 
-model <- glmmTMB(Shannon_overall ~  FS*NR + (1|COT), data = div_dat_overall)
+model <- glmmTMB((Shannon_overall) ~  FS*NR + (1|COT), data = div_dat_overall)# random factor
+hist(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp1 <- model_result$Pr
+# Whether the focal and near neighbor species were the same was included as a random term (all P >0.28).
+model_reduced <- glmmTMB(Shannon_overall ~ FS * NR, data = div_dat_overall)# without random factor
+anova(model, model_reduced, test = "Chisq")
+
 # Invsimp
 model <- glmmTMB(Invsimp_overall ~ FS*NR + (1|COT), data = div_dat_overall)
 Anova(model, type = "III")-> model_result; model_result
 pp2 <- model_result$Pr
+###
+model_reduced <- glmmTMB(Invsimp_overall ~ FS * NR, data = div_dat_overall)# without random factor
+anova(model, model_reduced, test = "Chisq")
 
 # Shannon 
 model <- glmmTMB(Shannon_pathogen ~ FS*NR + (1|COT), data = div_dat_pathogen) 
+qqnorm(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp3 <- model_result$Pr
+###
+model_reduced <- glmmTMB(Shannon_pathogen ~ FS * NR, data = div_dat_pathogen)# without random factor
+anova(model, model_reduced, test = "Chisq")
+
 # Invsimp  
 model <- glmmTMB(Invsimp_pathogen ~  FS*NR + (1|COT), data = div_dat_pathogen)
+qqnorm(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp4 <- model_result$Pr
+###
+model_reduced <- glmmTMB(Invsimp_pathogen  ~ FS * NR, data = div_dat_pathogen)# without random factor
+anova(model, model_reduced, test = "Chisq")
 
 # Shannon
 model <- glmmTMB(Shannon_AMF ~ FS*NR + (1|COT), data = div_dat_AMF) 
+qqnorm(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp5 <- model_result$Pr
+model_reduced <- glmmTMB(Shannon_AMF  ~ FS * NR, data = div_dat_AMF)# without random factor
+anova(model, model_reduced, test = "Chisq")
+
 # Invsimp 
 model <- glmmTMB(Invsimp_AMF ~  FS*NR + (1|COT), data = div_dat_AMF)
+qqnorm(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp6 <- model_result$Pr
+model_reduced <- glmmTMB(Invsimp_AMF  ~ FS * NR, data = div_dat_AMF)# without random factor
+anova(model, model_reduced, test = "Chisq")
+
 
 pp <- na.omit(c(pp1,pp2,pp3,pp4,pp5,pp6))
 p.adjust(pp, "BH")
@@ -263,9 +312,33 @@ p.adjust(pp, "bonferroni")
 #--------------------------------------------------------------------
 # Step 3:  RDA result
 #--------------------------------------------------------------------
-#----------------------Table S5-2: RDA 
+#----------------------Table S8-Composition: RDA 
+##########################################################################################
+library(openxlsx)
+sampleTab <- read.xlsx("data3_1.xlsx",sheet=3, colNames = T, rowNames = T)
+sampleTab <-sampleTab[,1:280]
+sampleTab <- as.data.frame(sampleTab)
+
+sampleTab_GROUP <- read.xlsx("data3_1.xlsx",sheet=1, colNames = T, rowNames = T)
+sampleTab_GROUP <- sampleTab_GROUP[rownames(sampleTab_GROUP),]
+sampleTab_GROUP$treatment = as.factor(paste0(sampleTab_GROUP$FS,"|",sampleTab_GROUP$NR))
+
+levels(sampleTab_GROUP$treatment) <- make.names(levels(sampleTab_GROUP$treatment))
+
+# normalize with the treatment factor
+formulaString <- "~treatment"
+design <- model.matrix(formula(formulaString), data = sampleTab, contrasts.arg = NULL)
+dds <- DESeqDataSetFromMatrix(countData = (sampleTab[,rownames(sampleTab_GROUP)]), colData = sampleTab_GROUP, design = ~ treatment)
+dds <- DESeq(dds)
+normData <- log2(DESeq2::counts(dds, normalized = TRUE) + 1)
+dim(normData)
+
+write.table(normdata_noremoved, "normData-8-14-no-removed.csv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
+
+  
+
 ### RDA_result_overall
-normData <- read.xlsx("data3.xlsx", sheet =4, colNames = T, rowNames = T)
+normData <- read.xlsx("data3_1.xlsx", sheet ="normdata_noremoved", colNames = T, rowNames = T)
 normData_overall <- normData[,rownames(MetaTab)] # removed monoculture
 
 rownames(MetaTab) %in% colnames(normData_overall)## check
@@ -274,7 +347,7 @@ selectedOtus <- rownames(normData_overall)
 selectedSamples <- rownames(MetaTab)   
 subSampleTab <- MetaTab[selectedSamples,]
 subSampleTab$Treat <- paste(MetaTab$FS,MetaTab$NR,sep = "_");subSampleTab
-
+#
 RDA2 <- rda(t(normData_overall) ~ FS+ NR + FS:NR +Condition(COT), data = subSampleTab)
 RDA_result_overall = anova(RDA2, by = "term", permutations = 999); RDA_result_overall
 
@@ -311,7 +384,7 @@ RDA_result_AMF = anova(RDA2, by = "term", permutations = 999); RDA_result_AMF
 
 
 #--------------------------------------
-### TableS6
+### TableS9
 #--------------------------------------
 div_dat_long_overall <- melt(div_dat_overall, id= c("Row.names","Pot","FS","NR","COT","CS","Treat","TG_pot","F_survival","Monoculture"));head(div_dat_long_overall)
 div_dat_long_pathogen <- melt(div_dat_pathogen, id= c("Row.names","Pot","FS","NR","COT","CS","Treat","TG_pot","F_survival","Monoculture"));head(div_dat_long_overall)
@@ -465,11 +538,20 @@ results_overall <- bind_rows(results_overall);head(results_overall)
 results_pathogen <- bind_rows(results_pathogen);head(results_pathogen)
 results_AMF <- bind_rows(results_AMF);head(results_AMF)
 
+pp_results_overall<-  results_overall$p.value
+p.adjust(pp_results_overall, "bonferroni")
+
+pp_results_pathogen <-  results_pathogen$p.value
+p.adjust(pp_results_pathogen, "bonferroni")
+
+pp_results_AMF  <-  results_AMF $p.value
+p.adjust(pp_results_AMF , "bonferroni")
+
 
 #-------------------------------------- 
-# index_Visualization: Fig_3A,B
+# index_Visualization: Fig_3(a),(b)
 #--------------------------------------
-### Fig_3a  
+### Fig_3(a ) 
 div_dat_long_overall <- div_dat_long_overall %>% left_join(results_overall %>% dplyr::select(FS, variable, NR.trend, SE, p.value),
                                                            by = c("FS", "variable")) %>%mutate(significant = p.value < 0.05) # Mark significant slopes
 div_dat_long_pathogen <- div_dat_long_pathogen %>% left_join(results_pathogen %>% dplyr::select(FS, variable, NR.trend, SE, p.value),
@@ -520,8 +602,8 @@ monoculture_pathogen <- index_pathogen[c(1, 101, 181), ]
 additional_points_pathogen <- data.frame(
   Row.names = rownames(monoculture_pathogen),          # Row names from index_overall
   Pot = NA,                                   # Placeholder for Pot column
-  FS = NA,                                    # Placeholder for FS column
-  NR = 0,                                     # NR = 0 for Monoculture
+  FS = c("C", "O", "V", "C", "O", "V"),                                    # Placeholder for FS column
+  NR = -0.4,                                     # NR = 0 for Monoculture
   COT = NA,                                    # Placeholder for COT column
   CS = NA,                                    # Placeholder for CS column
   Treat = NA,                                 # Placeholder for Treat column
@@ -545,24 +627,25 @@ line_and_ribbon_data_pathogen$variable <- factor(line_and_ribbon_data_pathogen$v
 regression_lines_pathogen$variable <- factor(regression_lines_pathogen$variable, levels = c("Shannon_pathogen", "Invsimp_pathogen"))
 
 pd = position_dodge(.2)
-ggplot(data_richness_invsimp_pathogen, aes(x = NR, y = value, color = as.factor(FS))) +
-  geom_point(size=2,position=pd,alpha=1,aes(shape = as.factor(NR), fill = FS)) + 
-  scale_color_manual(values = c("#6C7C86","#83B8B0","#EAD69D")) +
-  ggnewscale::new_scale_color() + ggnewscale::new_scale_fill() + 
-  geom_line(data = significant_lines_pathogen %>% filter(variable %in% c("Shannon_pathogen", "Invsimp_pathogen")), aes(x = x, y = y, color = as.factor(FS)), linetype = "solid",alpha = 1) +
-  geom_ribbon(data = line_and_ribbon_data_pathogen %>% filter(variable %in% c("Shannon_pathogen", "Invsimp_pathogen")), aes(x = x, ymin = ymin, ymax = ymax, fill = as.factor(FS)), alpha = 0.5, inherit.aes = FALSE) +
-  geom_segment(data = regression_lines_pathogen %>% filter(!significant & variable %in% c("Shannon_pathogen", "Invsimp_pathogen")), aes(x = x_min, xend = x_max, y = y_min, yend = y_max, color = as.factor(FS)), linetype = "dashed", linewidth = 0.4,alpha = 0.7) +
-  scale_x_continuous(breaks = c(0, 1, 2, 4), labels = c("Monoculture", "1", "2", "4")) +  
-  scale_color_manual(values = c("#6C7C86","#83B8B0","#EAD69D")) +
-  scale_fill_manual(values = c("#6C7C86","#83B8B0","#EAD69D")) + 
-  scale_shape_manual(values = c(1,16,16,16)) +
+ggplot(data_richness_invsimp_pathogen, aes(x = NR, y = value, color = FS)) +
+  geom_point(size=3,position=pd,alpha=1, aes(fill = FS), color = "black", pch = 21) + 
+  geom_line(data = significant_lines_pathogen %>% filter(variable %in% c("Shannon_pathogen", "Invsimp_pathogen")), aes(x = x, y = y, color = as.factor(FS)), linetype = "solid",alpha = 1, linewidth = 1, show.legend = F) +
+  geom_ribbon(data = line_and_ribbon_data_pathogen %>% filter(variable %in% c("Shannon_pathogen", "Invsimp_pathogen")), aes(x = x, ymin = ymin, ymax = ymax, fill = as.factor(FS)), alpha = 0.5, inherit.aes = FALSE, show.legend = F) +
+  geom_segment(data = regression_lines_pathogen %>% filter(!significant & variable %in% c("Shannon_pathogen", "Invsimp_pathogen")), aes(x = x_min, xend = x_max, y = y_min, yend = y_max, color = as.factor(FS)), linetype = "dashed", linewidth = 1,alpha = 0.5, show.legend = F) +
+  scale_x_continuous(breaks = c(-0.4, 0, 1, 2), labels = c("Mono", "0", "1", "2")) +  
+  scale_fill_manual(values = c("C" = "#40B0A6", "O" = "#E1BD69", "V" = "#A38E89")) +
+  scale_color_manual(values = c("C" = "#40B0A6", "O" = "#E1BD69", "V" = "#A38E89")) +
   facet_wrap(vars(variable), scales = "free", nrow = 2, ncol = 1, labeller = labeller(.multi_line = FALSE)) +
   guides(color = guide_legend(override.aes = list(size = 2)), shape = guide_legend(override.aes = list(size = 2)), alpha = guide_legend(override.aes = list(size = 2))) +
-  theme_bw() + mytheme + theme(legend.position = "none") + 
-  labs(x = "Neighbour plant species richness", y = NULL, tag = "A") -> Fig_3A; Fig_3A
+  theme_bw() + mytheme + 
+  theme(legend.position = "none",
+        strip.text.x = element_text(size = 11, color = "black")) + 
+  scale_y_continuous(expand = expansion(mult = c(0.17, 0.25))) + 
+  geom_vline(xintercept = -0.2, linetype = 1) +
+  labs(x = "Log2 (Distant neighbor richness)", y = NULL, tag = "(a)") -> Fig_3a; Fig_3a
 
 
-### Fig_3B
+### Fig_3(b)
 # Define the critical t-value for 95% confidence intervals
 t_critical_AMF<- qt(0.975, df = max(results_AMF$df)) # Use the maximum degrees of freedom from the results
 
@@ -607,8 +690,8 @@ monoculture_AMF<- index_AMF[c(1, 101, 181), ]
 additional_points_AMF<- data.frame(
   Row.names = rownames(monoculture_AMF),          # Row names from index_overall
   Pot = NA,                                   # Placeholder for Pot column
-  FS = NA,                                    # Placeholder for FS column
-  NR = 0,                                     # NR = 0 for Monoculture
+  FS = c("C", "O", "V", "C", "O", "V"),         # Placeholder for FS column
+  NR = -0.4,                                     # NR = 0 for Monoculture
   COT = NA,                                    # Placeholder for COT column
   CS = NA,                                    # Placeholder for CS column
   Treat = NA,                                 # Placeholder for Treat column
@@ -632,29 +715,31 @@ line_and_ribbon_data_AMF$variable <- factor(line_and_ribbon_data_AMF$variable, l
 regression_lines_AMF$variable <- factor(regression_lines_AMF$variable, levels = c("Shannon_AMF", "Invsimp_AMF"))
 
 pd = position_dodge(.2)
-ggplot(data_richness_invsimp_AMF, aes(x = NR, y = value, color = as.factor(FS))) +
-  geom_point(size=2,position=pd,alpha=1,aes(shape = as.factor(NR), fill = FS)) + 
-  scale_color_manual(values = c("#6C7C86","#83B8B0","#EAD69D")) +
-  ggnewscale::new_scale_color() + ggnewscale::new_scale_fill() + 
-  geom_line(data = significant_lines_AMF%>% filter(variable %in% c("Shannon_AMF", "Invsimp_AMF")), aes(x = x, y = y, color = as.factor(FS)), linetype = "solid",alpha = 1) +
-  geom_ribbon(data = line_and_ribbon_data_AMF%>% filter(variable %in% c("Shannon_AMF", "Invsimp_AMF")), aes(x = x, ymin = ymin, ymax = ymax, fill = as.factor(FS)), alpha = 0.5, inherit.aes = FALSE) +
-  geom_segment(data = regression_lines_AMF%>% filter(!significant & variable %in% c("Shannon_AMF", "Invsimp_AMF")), aes(x = x_min, xend = x_max, y = y_min, yend = y_max, color = as.factor(FS)), linetype = "dashed", linewidth = 0.4,alpha = 0.7) +
-  scale_x_continuous(breaks = c(0, 1, 2, 4), labels = c("Monoculture", "1", "2", "4")) +  
-  scale_color_manual(values = c("#6C7C86","#83B8B0","#EAD69D")) +
-  scale_fill_manual(values = c("#6C7C86","#83B8B0","#EAD69D")) + 
-  scale_shape_manual(values = c(1,16,16,16)) +
+ggplot(data_richness_invsimp_AMF, aes(x = NR, y = value, color = FS)) +
+  geom_point(size=3,position=pd,alpha=1,aes(fill = FS), color = "black", pch = 21) + 
+  geom_line(data = significant_lines_AMF%>% filter(variable %in% c("Shannon_AMF", "Invsimp_AMF")), aes(x = x, y = y, color = as.factor(FS)), linetype = "solid",alpha = 1, linewidth = 1, show.legend = T) +
+  geom_ribbon(data = line_and_ribbon_data_AMF%>% filter(variable %in% c("Shannon_AMF", "Invsimp_AMF")), aes(x = x, ymin = ymin, ymax = ymax, fill = as.factor(FS)), alpha = 0.5, inherit.aes = FALSE, show.legend = F) +
+  geom_segment(data = regression_lines_AMF%>% filter(!significant & variable %in% c("Shannon_AMF", "Invsimp_AMF")), aes(x = x_min, xend = x_max, y = y_min, yend = y_max, color = as.factor(FS)), linetype = "dashed", linewidth = 1,alpha = 0.5, show.legend = F) +
+  scale_x_continuous(breaks = c(-0.4, 0, 1, 2), labels = c("Mono", "0", "1", "2")) +  
+  scale_fill_manual(values = c("C" = "#40B0A6", "O" = "#E1BD69", "V" = "#A38E89")) +
+  scale_color_manual(values = c("C" = "#40B0A6", "O" = "#E1BD69", "V" = "#A38E89")) +
   facet_wrap(vars(variable), scales = "free", nrow = 2, ncol = 1, labeller = labeller(.multi_line = FALSE)) +
   guides(color = guide_legend(override.aes = list(size = 2)), shape = guide_legend(override.aes = list(size = 2)), alpha = guide_legend(override.aes = list(size = 2))) +
-  theme_bw() + mytheme + theme(legend.position = "none") + 
-  labs(x = "Neighbour plant species richness", y = NULL, tag = "B") -> Fig_3B; Fig_3B
+  theme_bw() + mytheme + 
+  theme(legend.position = c(0.15,0.65),
+        strip.text.x = element_text(size = 11, color = "black")) + 
+  # scale_y_continuous(breaks = seq(0, 20, by = 10))+###
+  scale_y_continuous(expand = expansion(mult = c(0.15, 0.15))) + 
+  geom_vline(xintercept = -0.2, linetype = 1) +
+  labs(x =  "Log2 (Distant neighbor richness)", y = NULL, tag = "(b)") -> Fig_3b; Fig_3b
 
 Fig_3a + Fig_3b
 
 
 #--------------------------------------
-### RDA_Visualization:Fig.3C & D 
+### RDA_Visualization:Fig.3(c) & (d) 
 #--------------------------------------
-### Fig.3c
+### Fig.3(c)
 RDA2 <- rda(t(normData_pathogen) ~ Treat, subSampleTab_pathogen)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -674,25 +759,28 @@ pathogen_rda_mean2 = merge(pathogen_rda_mean, pathogen_rda, by = c("FS", "NR"))
 pathogen_rda_mean$NR = as.factor(pathogen_rda_mean$NR)
 pathogen_rda_mean2$NR = as.factor(pathogen_rda_mean2$NR)
 
+unique(pathogen_rda_mean2$Treat)
+#   scale_fill_manual(values = c("C" = "#40B0A6", "O" = "#E1BD69", "V" = "#A38E89")) +
 ggplot(pathogen_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) + 
-  geom_point(data = pathogen_rda_mean2,mapping = aes(RDA1, RDA2,color =Treat, 
-                                                     size = NR),show.legend = T, pch = 16) + 
-  scale_color_manual(values = c(alpha("#2D4452",1),alpha("#2D4452",0.7),alpha("#2D4452",0.4),
-                                alpha("#4E9A8E",1),alpha("#4E9A8E",0.7),alpha("#4E9A8E",0.4),
-                                alpha("#E2C577",1),alpha("#E2C577",0.7),alpha("#E2C577",0.4))) +
-  scale_size_manual(values = c(1,2.5,5.5)) +
+  geom_point(data = pathogen_rda_mean2,mapping = aes(RDA1, RDA2,fill =FS, size = NR),
+             show.legend = T, pch = 21, color = "black") + 
+  scale_fill_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) +
+  scale_size_manual(values = c(2,3,4)) +
   ggnewscale::new_scale_color() + ggnewscale::new_scale_fill() + 
   stat_ellipse(data =pathogen_rda_mean2,mapping = aes(x = RDA1, y = RDA2, 
-                                                      group=interaction(NR, FS), color = FS,linetype=NR),
-               type="norm",geom = "polygon",fill = NA) + 
+                                                      group=interaction(NR, FS), color = FS, linetype=NR),
+               type="norm",geom = "path", size = 0.8) + 
   labs(x=paste("RDA1 (", format(100 * temp$importance[2,1], digits=3), "%)", sep=""),
-       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "C") +
+       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "(c)") +
   theme_bw() + mytheme +  
+  theme(legend.position = c(0.85,0.25)) + 
+  theme(legend.box = "horizontal") +
+  scale_y_continuous( breaks = c(-2.5,   0, 2.5, 5.0 ), limits = c(-2.6, 5.1) ) +
   scale_linetype_manual(values = c('solid', 'dashed', 'dotted'))+
-  scale_color_manual(values = c(alpha("#2D4452",0.5),alpha("#4E9A8E",0.5),alpha("#E2C577",0.5))) -> Fig_3C; Fig_3C
+  scale_color_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) -> Fig_3c; Fig_3c
 
 
-### Fig.3D 
+### Fig.3(d )
 RDA2 <- rda(t(normData_AMF) ~ Treat, subSampleTab_AMF)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -713,22 +801,40 @@ AMF_rda_mean$NR = as.factor(AMF_rda_mean$NR)
 AMF_rda_mean2$NR = as.factor(AMF_rda_mean2$NR)
 
 ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) + 
-  geom_point(data = AMF_rda_mean2,mapping = aes(RDA1, RDA2,color =Treat, 
-                                                size = NR),show.legend = T, pch = 16) + 
-  scale_color_manual(values = c(alpha("#2D4452",1),alpha("#2D4452",0.7),alpha("#2D4452",0.4),
-                                alpha("#4E9A8E",1),alpha("#4E9A8E",0.7),alpha("#4E9A8E",0.4),
-                                alpha("#E2C577",1),alpha("#E2C577",0.7),alpha("#E2C577",0.4))) +
-  scale_size_manual(values = c(1,2.5,5.5)) +
+  geom_point(data = AMF_rda_mean2,mapping = aes(RDA1, RDA2,fill =Treat, 
+                                                size = NR),show.legend = T, pch = 21) + 
+  scale_fill_manual(values = c(alpha("#40B0A6",1),alpha("#40B0A6",1),alpha("#40B0A6",1),
+                               alpha("#E1BD69",1),alpha("#E1BD69",1),alpha("#E1BD69",1),
+                               alpha("#A38E89",1),alpha("#A38E89",1),alpha("#A38E89",1))) +
+  scale_size_manual(values = c(2,3,4)) +
   ggnewscale::new_scale_color() + ggnewscale::new_scale_fill() + 
   stat_ellipse(data =AMF_rda_mean2,mapping = aes(x = RDA1, y = RDA2, 
                                                  group=interaction(NR, FS), color = FS,linetype=NR),
                type="norm",geom = "polygon",fill = NA) + 
   labs(x=paste("RDA1 (", format(100 * temp$importance[2,1], digits=3), "%)", sep=""),
-       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "D") +
+       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "d") +
   theme_bw() + mytheme +  
   scale_linetype_manual(values = c('solid', 'dashed', 'dotted'))+
   theme_bw() + mytheme + theme(legend.position.inside = c(0.2,0.76)) +
-  scale_color_manual(values = c(alpha("#2D4452",0.5),alpha("#4E9A8E",0.5),alpha("#E2C577",0.5))) -> Fig_3D; Fig_3D
+  scale_color_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) -> Fig_3d; Fig_3d
+
+
+ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) + 
+  geom_point(data = AMF_rda_mean2,mapping = aes(RDA1, RDA2,fill =FS, size = NR),
+             show.legend = T, pch = 21, color = "black") + 
+  scale_fill_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) +
+  scale_size_manual(values = c(2,3,4)) +
+  ggnewscale::new_scale_color() + ggnewscale::new_scale_fill() + 
+  stat_ellipse(data =AMF_rda_mean2,mapping = aes(x = RDA1, y = RDA2, 
+                                                 group=interaction(NR, FS), color = FS, linetype=NR),
+               type="norm",geom = "path", size = 0.8) + 
+  labs(x=paste("RDA1 (", format(100 * temp$importance[2,1], digits=3), "%)", sep=""),
+       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "(d)") +
+  theme_bw() + mytheme +  
+  theme(legend.position = "none") + 
+  theme(legend.box = "horizontal") + 
+  scale_linetype_manual(values = c('solid', 'dashed', 'dotted'))+
+  scale_color_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1)))-> Fig_3d; Fig_3d
 
 
 
@@ -738,7 +844,7 @@ ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
 ###########################################################################################
 
 #--------------------------------------
-### TableS7
+### TableS10
 #--------------------------------------
 #overall-1------------------- ### Explained variation_overall_composition
 variance1 <- as.data.frame(RDA_result_overall$Variance)
@@ -947,9 +1053,9 @@ Top_bar <- na.omit(c(#R2_full2[1],R2_full3[1],Total_percent1,
 
 
 #--------------------------------------
-### Visualization:  Fig.3E & F & G
+### Visualization:  Fig.3(e) & (f) & (g)
 #--------------------------------------
-### Fig.3E 
+### Fig.3(e)
 variance_pathogen = data.frame(factor = rep(c("Focal species", "Neighbouring species richness", "Interaction"), 3),
                                group = c(rep(c("Composition"), 3), rep(c("Shannon"), 3), rep(c("Inverse Simpson"), 3)),
                                value =c(variance_pathogen_com, variance_pathogen_Shannon, variance_pathogen_Invsimp));variance_pathogen
@@ -961,14 +1067,14 @@ ggplot(variance_pathogen, aes(fill=factor, y=value, x=group)) +
   geom_bar(stat="identity", color= "black", width = 0.8) + 
   scale_fill_manual(name = NULL,values = c("#70A7C3","#A67C2A","#D2BEA2"))+
   theme_bw() + mytheme + 
-  theme(axis.text.x = element_text(colour='black', size=14, angle = 25, hjust = 1, vjust = 1),
+  theme(axis.text.x = element_text(colour='black', size=10, angle = 25, hjust = 1, vjust = 1),
         legend.position = c(0.4,0.88)) +
   scale_y_continuous(expand = c(0,1), limits = c(0,130),breaks = seq(0, 130,50)) + 
   geom_vline(aes(xintercept = 2.5), linetype = "dashed") + 
-  labs(x = NULL, y = "Percentage contribution (%)", tag = "E")  -> Fig_3E; Fig_3E
+  labs(x = NULL, y = "Percentage contribution (%)", tag = "(e)")  -> Fig_3e; Fig_3e
 
 
-### Fig.3F
+### Fig.3(f)
 variance_AMF = data.frame(factor = rep(c("Focal species", "Neighbouring species richness", "Interaction"), 3),
                           group = c(rep(c("Composition"), 3), rep(c("Shannon"), 3), rep(c("Inverse Simpson"), 3)),
                           value =c(variance_AMF_com, variance_AMF_Shannon, variance_AMF_Invsimp));variance_AMF
@@ -980,11 +1086,11 @@ ggplot(variance_AMF, aes(fill=factor, y=value, x=group)) +
   geom_bar(stat="identity", color= "black", width = 0.8) + 
   scale_fill_manual(name = NULL,values = c("#70A7C3","#A67C2A","#D2BEA2"),guide="none")+
   theme_bw() + mytheme + 
-  theme(axis.text.x = element_text(colour='black', size=14, angle = 25, hjust = 1, vjust = 1),
+  theme(axis.text.x = element_text(colour='black', size=10, angle = 25, hjust = 1, vjust = 1),
         legend.position = c(0.3,0.91)) +
   scale_y_continuous(expand = c(0,1), limits = c(0,130),breaks = seq(0, 130,50)) + 
   geom_vline(aes(xintercept = 2.5), linetype = "dashed") + 
-  labs(x = NULL, y = NULL, tag = "F")  -> Fig_3F; Fig_3F
+  labs(x = NULL, y = NULL, tag = "(f)")  -> Fig_3f; Fig_3f
 
 
 ### for each species
@@ -1222,17 +1328,17 @@ label_dat <- label_dat %>%
                                     "Sv"  = "C",
                                     "Car" = "O",
                                     "Soc" = "V"))
-my_cols <- c("Focal species"       = "#70A7C3",
+my_cols <- c("Focal species"       = "#70A7C3", 
              "Neighbour richness"  = "#A67C2A",
              "Interaction"         = "#D2BEA2")
 
-### Fig.3G
+### Fig.3(g)
 plot_dat$Metric <- factor(plot_dat$Metric,levels = c("Pathogen_Shannon", "Biomass"))
 ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
   geom_col(width = 0.7, color= "black") +
   geom_text(data = label_dat,
             aes(x = Metric, y = 100, label = Total_Explained_Percent),
-            vjust = -0.4, size = 6, inherit.aes = FALSE) +
+            vjust = -0.4, size = 3, inherit.aes = FALSE) +
   scale_fill_manual(values = my_cols, guide = "none") +
   facet_grid(. ~ Focal_Species, switch = "x") +
   scale_x_discrete(labels = c(Biomass = "Biomass",
@@ -1240,12 +1346,15 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
   scale_y_continuous(expand = c(0,1), limits = c(0,130),
                      breaks = seq(0,130,50)) +
   theme_bw() + mytheme +
-  theme(axis.text.x = element_text(colour = "black", size = 6,
+  theme(axis.text.x = element_text(colour = "black", size = 10,
                                    angle = 25, hjust = 1, vjust = 1),
         legend.position = c(0.3, 0.91)) +
-  labs(x = NULL, y = NULL, tag = "G")  -> Fig_3G; Fig_3G
+  labs(x = NULL, y = NULL, tag = "(g)")  -> Fig_3g; Fig_3g
 
-(Fig_3A|Fig_3B)/(Fig_3C|Fig_3D)/(Fig_3E|Fig_3F|Fig_3G)->Fig.3;Fig.3
-ggsave("Fig.3.pdf",plot = Fig.3,width = 14.4, height = 20.5, units = "cm",  dpi = 600) 
+######################################
+cowplot::plot_grid(Fig_3e,Fig_3f,Fig_3g, align = "v", ncol = 3,rel_widths= c(1,1,1.5))->Fig_3efg;Fig_3efg
+ 
 
+((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
+ggsave("Fig.3-no-removed.pdf",plot = Fig.3,width = 10, height = 14) 
 
