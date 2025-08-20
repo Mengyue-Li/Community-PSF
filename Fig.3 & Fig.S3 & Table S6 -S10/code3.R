@@ -35,18 +35,17 @@ mytheme= theme(legend.position = "none",
                line = element_line(linewidth = 0.28), 
                axis.line = element_line(colour = "black",linewidth = 0.28),
                axis.ticks = element_line(colour = "black",linewidth = 0.28), 
-               legend.title = element_text(colour='black', size=9), 
-               legend.text = element_text(size = 7.5, lineheight = 1.33),#10 pt leading-7.5 pt  
+               legend.title = element_text(colour='black', size=13), 
+               legend.text = element_text(size = 12, lineheight = 1.33),#10 pt leading-7.5 pt  
                axis.title = element_text(colour='black', size=13),
                axis.text = element_text(colour='black',size=12),
                plot.tag = element_text(size = 14, face = "bold"))
 
+setwd("C:/Users/MY/Desktop/li/3")
 
 ###############################################################################################
 #####  Part0---Effects of FS DR and their interaction on the total biomass of focal plant #####
 ###############################################################################################
-setwd("C:/Users/MY/Desktop/li/3")
-
 #--------------------------------------
 ### Table S6  
 #--------------------------------------
@@ -84,6 +83,7 @@ emmip_biomass <- emmip(model_focalmass,~DR|FS,type="response",CIs=T,at=list(DR=u
 emmip_biomass$Mass_F <- emmip_biomass$yvar
 
 data_focalmass2 = rbind(data_focalmass, ck_biomass)
+
 ggplot(data_focalmass2, aes(x=DR, y=Mass_F,color=FS))+
   geom_point(size=3,position=pd,alpha=1,aes(fill = FS), color = "black", pch = 21 ) +  # 关键参数：控制点边框粗细 
   geom_line(aes(x=DR,y=Mass_F,color = FS, linetype = FS),emmip_biomass  ) +
@@ -98,9 +98,11 @@ ggplot(data_focalmass2, aes(x=DR, y=Mass_F,color=FS))+
   scale_linetype_manual(values = c(1,2,2)) +  
   labs(x = " Log2 (Distant neighbor richness)", y = "Total biomass of focal plant (g)")
 
+
 ###########################################################################################
 #####                   Part1--- Index calculation & Composition(RDA)                 #####
 ###########################################################################################
+
 #--------------------------------------------------------------------
 # Step 1:  loading data and identify taxonomy levels
 #--------------------------------------------------------------------
@@ -135,7 +137,7 @@ f.split.utax.taxo <- function(x) {
     }))
   } else {
     # Return empty matrix if no valid split
-    out <- matrix(ncol = 2, nrow = 0)
+    out <- matrix(ncol = 2, DRow = 0)
   }
   
   return(out)
@@ -145,7 +147,7 @@ f.split.utax.taxo <- function(x) {
 f.modify.utax.taxon.table <- function(taxDat, onlyConfident = TRUE) {
   # Ensure we're working with the correct column in the data frame
   colToUse <- 1  
-  emptyEntry <- rep("ukn", nrow(taxDat))
+  emptyEntry <- rep("ukn", DRow(taxDat))
   out <- data.frame(
     k = emptyEntry,
     p = emptyEntry,
@@ -162,7 +164,7 @@ f.modify.utax.taxon.table <- function(taxDat, onlyConfident = TRUE) {
     temp <- f.split.utax.taxo(taxDat[rn, colToUse])
     
     # Ensure that temp is a matrix and has at least one row with 2 columns
-    if (is.matrix(temp) && nrow(temp) > 0 && ncol(temp) == 2) {
+    if (is.matrix(temp) && DRow(temp) > 0 && ncol(temp) == 2) {
       tax_levels <- temp[, 1]
       tax_values <- temp[, 2]
       
@@ -197,7 +199,7 @@ taxMod <- f.modify.utax.taxon.table(tax, onlyConfident = TRUE)
 
 taxMod_with_guilds <- funguild_assign(seqDat_full, db = get_funguild_db(), tax_col = "Taxonomy");rownames(taxMod_with_guilds) <- rownames(seqDat)
 taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
-#write.table(taxMod_with_guilds, "taxMod_with_guilds20250805.csv",sep = ",",  row.names = TRUE,col.names = TRUE, quote = FALSE)
+ #write.table(taxMod_with_guilds, "taxMod_with_guilds20250805.NNSv",sep = ",",  row.names = TRUE,col.names = TRUE, quote = FALSE)
 
 ## If FUNGuild database is updated, please use the following line of code: directly load the data
 #taxMod_with_guilds <-read_excel("data3_2.xlsx",sheet="taxMod_with_guilds");taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
@@ -205,7 +207,8 @@ taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_al
 
 # extract pathogen and AMF 
 seqDat_plantPathogen <- taxMod_all[taxMod_all$guild == "Plant Pathogen"| taxMod_all$genus == "Fusarium", c(3:282)]; seqDat_plantPathogen <- na.omit(seqDat_plantPathogen)
-seqDat_AMF <- taxMod_all[taxMod_all$phylum == "Glomeromycota",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
+seqDat_AMF <- taxMod_all[taxMod_all$phylum == "GlomeromyNTa",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
+#seqDat_AMF <- taxMod_all[taxMod_all$guild == "Arbuscular Mycorrhizal",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
 
 #--------------------------------------------------------------------
 # Step 2:  Shannon diversity and inverse Simpson diversity 
@@ -233,13 +236,13 @@ index_AMF$Invsimp_AMF <- Invsimp_AMF
 
 # merge data
 div_dat_overall <- merge(index_overall,MetaTab,by=0) %>% left_join(Biomass_dat)
-div_dat_overall$Treat <- paste(div_dat_overall$FS,div_dat_overall$NR,sep = "_");head(div_dat_overall)
+div_dat_overall$Treat <- paste(div_dat_overall$FS,div_dat_overall$DR,sep = "_");head(div_dat_overall)
 
 div_dat_pathogen <- merge(index_pathogen,MetaTab,by=0) %>% left_join(Biomass_dat)
-div_dat_pathogen$Treat <- paste(div_dat_pathogen$FS,div_dat_pathogen$NR,sep = "_");head(div_dat_pathogen)
+div_dat_pathogen$Treat <- paste(div_dat_pathogen$FS,div_dat_pathogen$DR,sep = "_");head(div_dat_pathogen)
 
 div_dat_AMF <- merge(index_AMF,MetaTab,by=0) %>% left_join(Biomass_dat)
-div_dat_AMF$Treat <- paste(div_dat_AMF$FS,div_dat_AMF$NR,sep = "_");head(div_dat_AMF)
+div_dat_AMF$Treat <- paste(div_dat_AMF$FS,div_dat_AMF$DR,sep = "_");head(div_dat_AMF)
 
 ###  
 div_dat_overall <- div_dat_overall[div_dat_overall$Monoculture == "NO",]
@@ -251,62 +254,57 @@ div_dat_AMF <- div_dat_AMF[div_dat_AMF$Monoculture == "NO",]
 ### Table S8  
 #--------------------------------------
 #----------------------Table S8-1: Shannon&Invsimp
-#write.csv(div_dat_overall, "div_dat_overall.csv")
+#write.NNSv(div_dat_overall, "div_dat_overall.NNSv")
 
 # Shannon 
-model <- glmmTMB((Shannon_overall) ~  FS*NR + (1|COT), data = div_dat_overall)# random factor
+model <- glmmTMB((Shannon_overall) ~  FS*DR + (1|NT), data = div_dat_overall)# random factor
 hist(resid(model))
 Anova(model, type = "III")-> model_result; model_result
 pp1 <- model_result$Pr
 # Whether the focal and near neighbor species were the same was included as a random term (all P >0.28).
-model_reduced <- glmmTMB(Shannon_overall ~ FS * NR, data = div_dat_overall)# without random factor
+model_reduced <- glmmTMB(Shannon_overall ~ FS * DR, data = div_dat_overall)# without random factor
 anova(model, model_reduced, test = "Chisq")
 
 # Invsimp
-model <- glmmTMB(Invsimp_overall ~ FS*NR + (1|COT), data = div_dat_overall)
+model <- glmmTMB(Invsimp_overall ~ FS*DR + (1|NT), data = div_dat_overall)
 Anova(model, type = "III")-> model_result; model_result
 pp2 <- model_result$Pr
 ###
-model_reduced <- glmmTMB(Invsimp_overall ~ FS * NR, data = div_dat_overall)# without random factor
+model_reduced <- glmmTMB(Invsimp_overall ~ FS * DR, data = div_dat_overall)# without random factor
 anova(model, model_reduced, test = "Chisq")
 
 # Shannon 
-model <- glmmTMB(Shannon_pathogen ~ FS*NR + (1|COT), data = div_dat_pathogen) 
-qqnorm(resid(model))
+model <- glmmTMB(Shannon_pathogen ~ FS*DR + (1|NT), data = div_dat_pathogen) 
 Anova(model, type = "III")-> model_result; model_result
 pp3 <- model_result$Pr
 ###
-model_reduced <- glmmTMB(Shannon_pathogen ~ FS * NR, data = div_dat_pathogen)# without random factor
+model_reduced <- glmmTMB(Shannon_pathogen ~ FS * DR, data = div_dat_pathogen)# without random factor
 anova(model, model_reduced, test = "Chisq")
 
 # Invsimp  
-model <- glmmTMB(Invsimp_pathogen ~  FS*NR + (1|COT), data = div_dat_pathogen)
-qqnorm(resid(model))
+model <- glmmTMB(Invsimp_pathogen ~ FS*DR + (1|NT), data = div_dat_pathogen)
 Anova(model, type = "III")-> model_result; model_result
 pp4 <- model_result$Pr
 ###
-model_reduced <- glmmTMB(Invsimp_pathogen  ~ FS * NR, data = div_dat_pathogen)# without random factor
+model_reduced <- glmmTMB(Invsimp_pathogen  ~ FS * DR, data = div_dat_pathogen)# without random factor
 anova(model, model_reduced, test = "Chisq")
 
 # Shannon
-model <- glmmTMB(Shannon_AMF ~ FS*NR + (1|COT), data = div_dat_AMF) 
-qqnorm(resid(model))
+model <- glmmTMB(Shannon_AMF ~ FS*DR + (1|NT), data = div_dat_AMF) 
 Anova(model, type = "III")-> model_result; model_result
 pp5 <- model_result$Pr
-model_reduced <- glmmTMB(Shannon_AMF  ~ FS * NR, data = div_dat_AMF)# without random factor
+model_reduced <- glmmTMB(Shannon_AMF  ~ FS * DR, data = div_dat_AMF)# without random factor
 anova(model, model_reduced, test = "Chisq")
 
 # Invsimp 
-model <- glmmTMB(Invsimp_AMF ~  FS*NR + (1|COT), data = div_dat_AMF)
-qqnorm(resid(model))
+model <- glmmTMB(Invsimp_AMF ~  FS*DR + (1|NT), data = div_dat_AMF)
 Anova(model, type = "III")-> model_result; model_result
 pp6 <- model_result$Pr
-model_reduced <- glmmTMB(Invsimp_AMF  ~ FS * NR, data = div_dat_AMF)# without random factor
+model_reduced <- glmmTMB(Invsimp_AMF  ~ FS * DR, data = div_dat_AMF)# without random factor
 anova(model, model_reduced, test = "Chisq")
 
-
 pp <- na.omit(c(pp1,pp2,pp3,pp4,pp5,pp6))
-p.adjust(pp, "BH")
+#p.adjust(pp, "BH")
 p.adjust(pp, "bonferroni")
 
 
@@ -321,7 +319,7 @@ sampleTab <- as.data.frame(sampleTab)
 
 sampleTab_GROUP <- read.xlsx("data3_1.xlsx",sheet=1, colNames = T, rowNames = T)
 sampleTab_GROUP <- sampleTab_GROUP[rownames(sampleTab_GROUP),]
-sampleTab_GROUP$treatment = as.factor(paste0(sampleTab_GROUP$FS,"|",sampleTab_GROUP$NR))
+sampleTab_GROUP$treatment = as.factor(paste0(sampleTab_GROUP$FS,"|",sampleTab_GROUP$DR))
 
 levels(sampleTab_GROUP$treatment) <- make.names(levels(sampleTab_GROUP$treatment))
 
@@ -332,8 +330,10 @@ dds <- DESeqDataSetFromMatrix(countData = (sampleTab[,rownames(sampleTab_GROUP)]
 dds <- DESeq(dds)
 normData <- log2(DESeq2::counts(dds, normalized = TRUE) + 1)
 dim(normData)
-write.table(normdata_noremoved, "normData-8-14-no-removed.csv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
 
+write.table(normdata_noremoved, "normdata_noremoved.NNSv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
+
+  
 ### RDA_result_overall
 normData <- read.xlsx("data3_1.xlsx", sheet ="normdata_noremoved", colNames = T, rowNames = T)
 normData_overall <- normData[,rownames(MetaTab)] # removed monoculture
@@ -343,9 +343,9 @@ rownames(MetaTab) %in% colnames(normData_overall)## check
 selectedOtus <- rownames(normData_overall)
 selectedSamples <- rownames(MetaTab)   
 subSampleTab <- MetaTab[selectedSamples,]
-subSampleTab$Treat <- paste(MetaTab$FS,MetaTab$NR,sep = "_");subSampleTab
+subSampleTab$Treat <- paste(MetaTab$FS,MetaTab$DR,sep = "_");subSampleTab
 #
-RDA2 <- rda(t(normData_overall) ~ FS+ NR + FS:NR +Condition(COT), data = subSampleTab)
+RDA2 <- rda(t(normData_overall) ~ FS+ DR + FS:DR +Condition(NT), data = subSampleTab)
 RDA_result_overall = anova(RDA2, by = "term", permutations = 999); RDA_result_overall
 
 
@@ -359,9 +359,9 @@ rownames(MetaTab) %in% colnames(normData_pathogen)## check
 selectedOtus_pathogen <- rownames(normData_pathogen)
 selectedSamples_pathogen <- rownames(MetaTab)
 subSampleTab_pathogen <- MetaTab[selectedSamples_pathogen,];subSampleTab_pathogen
-subSampleTab_pathogen$Treat <- paste(subSampleTab_pathogen$FS,subSampleTab_pathogen$NR,sep = "_");subSampleTab_pathogen
+subSampleTab_pathogen$Treat <- paste(subSampleTab_pathogen$FS,subSampleTab_pathogen$DR,sep = "_");subSampleTab_pathogen
 
-RDA2 <- rda(t(normData_pathogen) ~ FS+ NR + FS:NR +Condition(COT), data = subSampleTab)
+RDA2 <- rda(t(normData_pathogen) ~ FS+ DR + FS:DR +Condition(NT), data = subSampleTab)
 RDA_result_pathogen = anova(RDA2, by = "term", permutations = 999); RDA_result_pathogen
 
 ### RDA_result_AMF
@@ -374,29 +374,29 @@ rownames(MetaTab) %in% colnames(normData_AMF)## check
 selectedOtus_AMF <- rownames(normData_AMF)
 selectedSamples_AMF <- rownames(MetaTab)
 subSampleTab_AMF <- MetaTab[selectedSamples_AMF,];subSampleTab_AMF
-subSampleTab_AMF$Treat <- paste(subSampleTab_AMF$FS,subSampleTab_AMF$NR,sep = "_");subSampleTab_AMF
+subSampleTab_AMF$Treat <- paste(subSampleTab_AMF$FS,subSampleTab_AMF$DR,sep = "_");subSampleTab_AMF
 
-RDA2 <- rda(t(normData_AMF) ~ FS+ NR + FS:NR +Condition(COT), data = subSampleTab)
+RDA2 <- rda(t(normData_AMF) ~ FS+ DR + FS:DR +Condition(NT), data = subSampleTab)
 RDA_result_AMF = anova(RDA2, by = "term", permutations = 999); RDA_result_AMF
 
 
 #--------------------------------------
 ### TableS9
 #--------------------------------------
-div_dat_long_overall <- melt(div_dat_overall, id= c("Row.names","Pot","FS","NR","COT","CS","Treat","TG_pot","F_survival","Monoculture"));head(div_dat_long_overall)
-div_dat_long_pathogen <- melt(div_dat_pathogen, id= c("Row.names","Pot","FS","NR","COT","CS","Treat","TG_pot","F_survival","Monoculture"));head(div_dat_long_overall)
-div_dat_long_AMF <- melt(div_dat_AMF, id= c("Row.names","Pot","FS","NR","COT","CS","Treat","TG_pot","F_survival","Monoculture"));head(div_dat_long_overall)
+div_dat_long_overall <- melt(div_dat_overall, id= c("Row.names","Pot","FS","DR","NT","NNS","Treat","TG_pot","F_survival","Monoculture"));head(div_dat_long_overall)
+div_dat_long_pathogen <- melt(div_dat_pathogen, id= c("Row.names","Pot","FS","DR","NT","NNS","Treat","TG_pot","F_survival","Monoculture"));head(div_dat_long_overall)
+div_dat_long_AMF <- melt(div_dat_AMF, id= c("Row.names","Pot","FS","DR","NT","NNS","Treat","TG_pot","F_survival","Monoculture"));head(div_dat_long_overall)
 
 # check the model first
 par(mfrow = c(1, 2))
-model <- glmmTMB(value ~ NR * FS,family = gaussian,data = filter(div_dat_long_overall, variable == "Shannon_overall"));qqnorm(resid(model));qqline(resid(model))
-model <- glmmTMB(value ~ NR * FS,family = gaussian,data = filter(div_dat_long_overall, variable == "Invsimp_overall"));qqnorm(resid(model));qqline(resid(model))
+model <- glmmTMB(value ~ DR * FS,family = gaussian,data = filter(div_dat_long_overall, variable == "Shannon_overall")) 
+model <- glmmTMB(value ~ DR * FS,family = gaussian,data = filter(div_dat_long_overall, variable == "Invsimp_overall")) 
 
-model <- glmmTMB(value ~ NR * FS,family = gaussian,data = filter(div_dat_long_pathogen, variable == "Shannon_pathogen"));qqnorm(resid(model));qqline(resid(model))
-model <- glmmTMB(value ~ NR * FS,family = gaussian,data = filter(div_dat_long_pathogen, variable == "Invsimp_pathogen"));qqnorm(resid(model));qqline(resid(model))
+model <- glmmTMB(value ~ DR * FS,family = gaussian,data = filter(div_dat_long_pathogen, variable == "Shannon_pathogen")) 
+model <- glmmTMB(value ~ DR * FS,family = gaussian,data = filter(div_dat_long_pathogen, variable == "Invsimp_pathogen")) 
 
-model <- glmmTMB(value ~ NR * FS,family = gaussian,data = filter(div_dat_long_AMF, variable == "Shannon_AMF"));qqnorm(resid(model));qqline(resid(model))
-model <- glmmTMB(value ~ NR * FS,family = gaussian,data = filter(div_dat_long_AMF, variable == "Invsimp_AMF"));qqnorm(resid(model));qqline(resid(model))
+model <- glmmTMB(value ~ DR * FS,family = gaussian,data = filter(div_dat_long_AMF, variable == "Shannon_AMF")) 
+model <- glmmTMB(value ~ DR * FS,family = gaussian,data = filter(div_dat_long_AMF, variable == "Invsimp_AMF")) 
 
 # results of overall  pathogen and AMF
 results_overall <- list()
@@ -408,7 +408,7 @@ for (var in unique(div_dat_long_overall$variable)) {
   
   # Fit the appropriate model using glmmTMB
   if (var %in% c("Shannon_overall", "Invsimp_overall")) {
-    model <- glmmTMB(value ~ NR * FS + (1 | COT), family = gaussian, data = data_var,
+    model <- glmmTMB(value ~ DR * FS + (1 | NT), family = gaussian, data = data_var,
                      control = glmmTMBControl(optimizer = optim,optArgs = list(method = "BFGS"), profile = TRUE))
   }
   
@@ -417,7 +417,7 @@ for (var in unique(div_dat_long_overall$variable)) {
     warning(paste("Model for variable", var, "failed to converge. Results may not be reliable."))
   }
   # Calculate slopes using emmeans
-  emm_slopes <- emtrends(model, specs = ~ FS, var = "NR")
+  emm_slopes <- emtrends(model, speNNS = ~ FS, var = "DR")
   
   # Extract slope data
   slopes_df <- as.data.frame(summary(emm_slopes))
@@ -433,9 +433,9 @@ for (var in unique(div_dat_long_overall$variable)) {
   # Combine slope data with standardized confidence intervals
   slopes_df <- slopes_df %>%
     mutate(
-      t.ratio = NR.trend / SE, 
+      t.ratio = DR.trend / SE, 
       p.value = 2 * pt(-abs(t.ratio), df), 
-      std_slope = NR.trend / sd(data_var$NR, na.rm = TRUE),
+      std_slope = DR.trend / sd(data_var$DR, na.rm = TRUE),
       variable = var
     )
   
@@ -453,7 +453,7 @@ for (var in unique(div_dat_long_pathogen$variable)) {
   
   # Fit the appropriate model using glmmTMB
   if (var %in% c("Shannon_pathogen", "Invsimp_pathogen")) {
-    model <- glmmTMB(value ~ NR * FS + (1 | COT), family = gaussian, data = data_var,
+    model <- glmmTMB(value ~ DR * FS + (1 | NT), family = gaussian, data = data_var,
                      control = glmmTMBControl(optimizer = optim,optArgs = list(method = "BFGS"), profile = TRUE))
   }
   # Check for singular fit (glmmTMB models do not have isSingular() directly)
@@ -461,7 +461,7 @@ for (var in unique(div_dat_long_pathogen$variable)) {
     warning(paste("Model for variable", var, "failed to converge. Results may not be reliable."))
   }
   # Calculate slopes using emmeans
-  emm_slopes <- emtrends(model, specs = ~ FS, var = "NR")
+  emm_slopes <- emtrends(model, speNNS = ~ FS, var = "DR")
   
   # Extract slope data
   slopes_df <- as.data.frame(summary(emm_slopes))
@@ -477,9 +477,9 @@ for (var in unique(div_dat_long_pathogen$variable)) {
   # Combine slope data with standardized confidence intervals
   slopes_df <- slopes_df %>%
     mutate(
-      t.ratio = NR.trend / SE, 
+      t.ratio = DR.trend / SE, 
       p.value = 2 * pt(-abs(t.ratio), df), 
-      std_slope = NR.trend / sd(data_var$NR, na.rm = TRUE),
+      std_slope = DR.trend / sd(data_var$DR, na.rm = TRUE),
       variable = var
     )
   
@@ -497,7 +497,7 @@ for (var in unique(div_dat_long_AMF$variable)) {
   
   # Fit the appropriate model using glmmTMB
   if (var %in% c("Shannon_AMF", "Invsimp_AMF")) {
-    model <- glmmTMB(value ~ NR * FS + (1 | COT), family = gaussian, data = data_var,
+    model <- glmmTMB(value ~ DR * FS + (1 | NT), family = gaussian, data = data_var,
                      control = glmmTMBControl(optimizer = optim,optArgs = list(method = "BFGS"), profile = TRUE))
   }
   # Check for singular fit (glmmTMB models do not have isSingular() directly)
@@ -506,7 +506,7 @@ for (var in unique(div_dat_long_AMF$variable)) {
   }
   
   # Calculate slopes using emmeans
-  emm_slopes <- emtrends(model, specs = ~ FS, var = "NR")
+  emm_slopes <- emtrends(model, speNNS = ~ FS, var = "DR")
   
   # Extract slope data
   slopes_df <- as.data.frame(summary(emm_slopes))
@@ -522,46 +522,43 @@ for (var in unique(div_dat_long_AMF$variable)) {
   # Combine slope data with standardized confidence intervals
   slopes_df <- slopes_df %>%
     mutate(
-      t.ratio = NR.trend / SE, 
+      t.ratio = DR.trend / SE, 
       p.value = 2 * pt(-abs(t.ratio), df), 
-      std_slope = NR.trend / sd(data_var$NR, na.rm = TRUE),
+      std_slope = DR.trend / sd(data_var$DR, na.rm = TRUE),
       variable = var
     )
   
   # Store results
   results_AMF[[var]] <- slopes_df
 }
+
+### TableS9-RESULT
 results_overall <- bind_rows(results_overall);head(results_overall)
 results_pathogen <- bind_rows(results_pathogen);head(results_pathogen)
 results_AMF <- bind_rows(results_AMF);head(results_AMF)
 
-pp_results_overall<-  results_overall$p.value
-p.adjust(pp_results_overall, "bonferroni")
-
-pp_results_pathogen <-  results_pathogen$p.value
-p.adjust(pp_results_pathogen, "bonferroni")
-
-pp_results_AMF  <-  results_AMF $p.value
-p.adjust(pp_results_AMF , "bonferroni")
+pp_results_overall<-  results_overall$p.value; p.adjust(pp_results_overall, "bonferroni")
+pp_results_pathogen <-  results_pathogen$p.value; p.adjust(pp_results_pathogen, "bonferroni")
+pp_results_AMF  <-  results_AMF $p.value; p.adjust(pp_results_AMF , "bonferroni")
 
 
 #-------------------------------------- 
-# index_Visualization: Fig_3(a),(b)
+# index_Visualization: Fig_3a,b
 #--------------------------------------
-### Fig_3(a ) 
-div_dat_long_overall <- div_dat_long_overall %>% left_join(results_overall %>% dplyr::select(FS, variable, NR.trend, SE, p.value),
+### Fig_3a  
+div_dat_long_overall <- div_dat_long_overall %>% left_join(results_overall %>% dplyr::select(FS, variable, DR.trend, SE, p.value),
                                                            by = c("FS", "variable")) %>%mutate(significant = p.value < 0.05) # Mark significant slopes
-div_dat_long_pathogen <- div_dat_long_pathogen %>% left_join(results_pathogen %>% dplyr::select(FS, variable, NR.trend, SE, p.value),
+div_dat_long_pathogen <- div_dat_long_pathogen %>% left_join(results_pathogen %>% dplyr::select(FS, variable, DR.trend, SE, p.value),
                                                              by = c("FS", "variable")) %>% mutate(significant = p.value < 0.05)
-div_dat_long_AMF <- div_dat_long_AMF %>% left_join(results_AMF %>% dplyr::select(FS, variable, NR.trend, SE, p.value),
+div_dat_long_AMF <- div_dat_long_AMF %>% left_join(results_AMF %>% dplyr::select(FS, variable, DR.trend, SE, p.value),
                                                    by = c("FS", "variable")) %>% mutate(significant = p.value < 0.05)
 # Define the critical t-value for 95% confidence intervals
 t_critical_pathogen <- qt(0.975, df = max(results_pathogen$df)) # Use the maximum degrees of freedom from the results
 
 # Prepare regression lines with confidence intervals for all slopes
-regression_lines_pathogen <- div_dat_long_pathogen %>% group_by(FS, variable) %>% summarize(slope = unique(NR.trend),
-                                                                                            intercept = mean(value,na.rm=T) - mean(NR) * unique(NR.trend),SE = unique(SE),
-                                                                                            significant = unique(significant),x_min = min(NR),x_max = max(NR),.groups = "drop") %>%
+regression_lines_pathogen <- div_dat_long_pathogen %>% group_by(FS, variable) %>% summarize(slope = unique(DR.trend),
+                                                                                            intercept = mean(value,na.rm=T) - mean(DR) * unique(DR.trend),SE = unique(SE),
+                                                                                            significant = unique(significant),x_min = min(DR),x_max = max(DR),.groups = "drop") %>%
   rowwise() %>% # Ensure row-by-row calculations
   mutate(y_min = intercept + slope * x_min,y_max = intercept + slope * x_max,
          y_min_upper = if (significant) intercept + slope * x_min + t_critical_pathogen * SE else NA,
@@ -600,16 +597,16 @@ additional_points_pathogen <- data.frame(
   Row.names = rownames(monoculture_pathogen),          # Row names from index_overall
   Pot = NA,                                   # Placeholder for Pot column
   FS = c("C", "O", "V", "C", "O", "V"),                                    # Placeholder for FS column
-  NR = -0.4,                                     # NR = 0 for Monoculture
-  COT = NA,                                    # Placeholder for COT column
-  CS = NA,                                    # Placeholder for CS column
+  DR = -0.4,                                     # DR = 0 for Monoculture
+  NT = NA,                                    # Placeholder for NT column
+  NNS = NA,                                    # Placeholder for NNS column
   Treat = NA,                                 # Placeholder for Treat column
   TG_pot = NA,                                # Placeholder for TG_pot column
   F_survival = NA,                            # Placeholder for F_survival column
   Monoculture = "YES",                        # Mark as Monoculture
   variable = rep(c("Shannon_pathogen", "Invsimp_pathogen"), each = 3),
   value = c(monoculture_pathogen$Shannon_pathogen, monoculture_pathogen$Invsimp_pathogen),  # Add values dynamically
-  NR.trend = NA,                              # Placeholder for NR.trend
+  DR.trend = NA,                              # Placeholder for DR.trend
   SE = NA,                                    # Placeholder for SE
   p.value = NA,                               # Placeholder for p-value
   significant = NA                            # Placeholder for significant flag
@@ -624,7 +621,7 @@ line_and_ribbon_data_pathogen$variable <- factor(line_and_ribbon_data_pathogen$v
 regression_lines_pathogen$variable <- factor(regression_lines_pathogen$variable, levels = c("Shannon_pathogen", "Invsimp_pathogen"))
 
 pd = position_dodge(.2)
-ggplot(data_richness_invsimp_pathogen, aes(x = NR, y = value, color = FS)) +
+ggplot(data_richness_invsimp_pathogen, aes(x = DR, y = value, color = FS)) +
   geom_point(size=3,position=pd,alpha=1, aes(fill = FS), color = "black", pch = 21) + 
   geom_line(data = significant_lines_pathogen %>% filter(variable %in% c("Shannon_pathogen", "Invsimp_pathogen")), aes(x = x, y = y, color = as.factor(FS)), linetype = "solid",alpha = 1, linewidth = 1, show.legend = F) +
   geom_ribbon(data = line_and_ribbon_data_pathogen %>% filter(variable %in% c("Shannon_pathogen", "Invsimp_pathogen")), aes(x = x, ymin = ymin, ymax = ymax, fill = as.factor(FS)), alpha = 0.5, inherit.aes = FALSE, show.legend = F) +
@@ -642,14 +639,14 @@ ggplot(data_richness_invsimp_pathogen, aes(x = NR, y = value, color = FS)) +
   labs(x = "Log2 (Distant neighbor richness)", y = NULL, tag = "(a)") -> Fig_3a; Fig_3a
 
 
-### Fig_3(b)
+### Fig_3b
 # Define the critical t-value for 95% confidence intervals
 t_critical_AMF<- qt(0.975, df = max(results_AMF$df)) # Use the maximum degrees of freedom from the results
 
 # Prepare regression lines with confidence intervals for all slopes
-regression_lines_AMF<- div_dat_long_AMF%>% group_by(FS, variable) %>% summarize(slope = unique(NR.trend),
-                                                                                intercept = mean(value,na.rm=T) - mean(NR) * unique(NR.trend),SE = unique(SE),
-                                                                                significant = unique(significant),x_min = min(NR),x_max = max(NR),.groups = "drop") %>%
+regression_lines_AMF<- div_dat_long_AMF%>% group_by(FS, variable) %>% summarize(slope = unique(DR.trend),
+                                                                                intercept = mean(value,na.rm=T) - mean(DR) * unique(DR.trend),SE = unique(SE),
+                                                                                significant = unique(significant),x_min = min(DR),x_max = max(DR),.groups = "drop") %>%
   rowwise() %>% # Ensure row-by-row calculations
   mutate(y_min = intercept + slope * x_min,y_max = intercept + slope * x_max,
          y_min_upper = if (significant) intercept + slope * x_min + t_critical_AMF * SE else NA,
@@ -688,16 +685,16 @@ additional_points_AMF<- data.frame(
   Row.names = rownames(monoculture_AMF),          # Row names from index_overall
   Pot = NA,                                   # Placeholder for Pot column
   FS = c("C", "O", "V", "C", "O", "V"),         # Placeholder for FS column
-  NR = -0.4,                                     # NR = 0 for Monoculture
-  COT = NA,                                    # Placeholder for COT column
-  CS = NA,                                    # Placeholder for CS column
+  DR = -0.4,                                     # DR = 0 for Monoculture
+  NT = NA,                                    # Placeholder for NT column
+  NNS = NA,                                    # Placeholder for NNS column
   Treat = NA,                                 # Placeholder for Treat column
   TG_pot = NA,                                # Placeholder for TG_pot column
   F_survival = NA,                            # Placeholder for F_survival column
   Monoculture = "YES",                        # Mark as Monoculture
   variable = rep(c("Shannon_AMF", "Invsimp_AMF"), each = 3),
   value = c(monoculture_AMF$Shannon_AMF, monoculture_AMF$Invsimp_AMF),  # Add values dynamically
-  NR.trend = NA,                              # Placeholder for NR.trend
+  DR.trend = NA,                              # Placeholder for DR.trend
   SE = NA,                                    # Placeholder for SE
   p.value = NA,                               # Placeholder for p-value
   significant = NA                            # Placeholder for significant flag
@@ -712,7 +709,7 @@ line_and_ribbon_data_AMF$variable <- factor(line_and_ribbon_data_AMF$variable, l
 regression_lines_AMF$variable <- factor(regression_lines_AMF$variable, levels = c("Shannon_AMF", "Invsimp_AMF"))
 
 pd = position_dodge(.2)
-ggplot(data_richness_invsimp_AMF, aes(x = NR, y = value, color = FS)) +
+ggplot(data_richness_invsimp_AMF, aes(x = DR, y = value, color = FS)) +
   geom_point(size=3,position=pd,alpha=1,aes(fill = FS), color = "black", pch = 21) + 
   geom_line(data = significant_lines_AMF%>% filter(variable %in% c("Shannon_AMF", "Invsimp_AMF")), aes(x = x, y = y, color = as.factor(FS)), linetype = "solid",alpha = 1, linewidth = 1, show.legend = T) +
   geom_ribbon(data = line_and_ribbon_data_AMF%>% filter(variable %in% c("Shannon_AMF", "Invsimp_AMF")), aes(x = x, ymin = ymin, ymax = ymax, fill = as.factor(FS)), alpha = 0.5, inherit.aes = FALSE, show.legend = F) +
@@ -734,9 +731,9 @@ Fig_3a + Fig_3b
 
 
 #--------------------------------------
-### RDA_Visualization:Fig.3(c) & (d) 
+### RDA_Visualization:Fig.3c & d 
 #--------------------------------------
-### Fig.3(c)
+### Fig.3c
 RDA2 <- rda(t(normData_pathogen) ~ Treat, subSampleTab_pathogen)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -744,28 +741,28 @@ temp <- summary(RDA2)$cont; temp
 pathogen_rda = as.data.frame(axes[,1:2])
 pathogen_rda$Pot = rownames(pathogen_rda) 
 pathogen_rda = pathogen_rda %>% left_join(subSampleTab_pathogen)  
-pathogen_rda$NR = as.factor(pathogen_rda$NR)
+pathogen_rda$DR = as.factor(pathogen_rda$DR)
 colnames(pathogen_rda)  
 
-pathogen_rda_mean = pathogen_rda %>% group_by(FS, NR) %>% 
+pathogen_rda_mean = pathogen_rda %>% group_by(FS, DR) %>% 
   summarise(RDA1_mean = mean(RDA1), RDA1_se = sd(RDA1)/(sqrt(length(RDA1))),
             RDA2_mean = mean(RDA2), RDA2_se = sd(RDA2)/(sqrt(length(RDA2))))
 
-pathogen_rda_mean2 = merge(pathogen_rda_mean, pathogen_rda, by = c("FS", "NR"))
+pathogen_rda_mean2 = merge(pathogen_rda_mean, pathogen_rda, by = c("FS", "DR"))
 
-pathogen_rda_mean$NR = as.factor(pathogen_rda_mean$NR)
-pathogen_rda_mean2$NR = as.factor(pathogen_rda_mean2$NR)
+pathogen_rda_mean$DR = as.factor(pathogen_rda_mean$DR)
+pathogen_rda_mean2$DR = as.factor(pathogen_rda_mean2$DR)
 
 unique(pathogen_rda_mean2$Treat)
 #   scale_fill_manual(values = c("C" = "#40B0A6", "O" = "#E1BD69", "V" = "#A38E89")) +
 ggplot(pathogen_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) + 
-  geom_point(data = pathogen_rda_mean2,mapping = aes(RDA1, RDA2,fill =FS, size = NR),
+  geom_point(data = pathogen_rda_mean2,mapping = aes(RDA1, RDA2,fill =FS, size = DR),
              show.legend = T, pch = 21, color = "black") + 
   scale_fill_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) +
   scale_size_manual(values = c(2,3,4)) +
   ggnewscale::new_scale_color() + ggnewscale::new_scale_fill() + 
   stat_ellipse(data =pathogen_rda_mean2,mapping = aes(x = RDA1, y = RDA2, 
-                                                      group=interaction(NR, FS), color = FS, linetype=NR),
+                                                      group=interaction(DR, FS), color = FS, linetype=DR),
                type="norm",geom = "path", size = 0.8) + 
   labs(x=paste("RDA1 (", format(100 * temp$importance[2,1], digits=3), "%)", sep=""),
        y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "(c)") +
@@ -777,7 +774,7 @@ ggplot(pathogen_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
   scale_color_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) -> Fig_3c; Fig_3c
 
 
-### Fig.3(d)
+### Fig.3d 
 RDA2 <- rda(t(normData_AMF) ~ Treat, subSampleTab_AMF)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -785,28 +782,28 @@ temp <- summary(RDA2)$cont; temp
 AMF_rda = as.data.frame(axes[,1:2])
 AMF_rda$Pot = rownames(AMF_rda) 
 AMF_rda = AMF_rda %>% left_join(subSampleTab_AMF)  
-AMF_rda$NR = as.factor(AMF_rda$NR)
+AMF_rda$DR = as.factor(AMF_rda$DR)
 colnames(AMF_rda)  
 
-AMF_rda_mean = AMF_rda %>% group_by(FS, NR) %>% 
+AMF_rda_mean = AMF_rda %>% group_by(FS, DR) %>% 
   summarise(RDA1_mean = mean(RDA1), RDA1_se = sd(RDA1)/(sqrt(length(RDA1))),
             RDA2_mean = mean(RDA2), RDA2_se = sd(RDA2)/(sqrt(length(RDA2))))
 
-AMF_rda_mean2 = merge(AMF_rda_mean, AMF_rda, by = c("FS", "NR"))
+AMF_rda_mean2 = merge(AMF_rda_mean, AMF_rda, by = c("FS", "DR"))
 
-AMF_rda_mean$NR = as.factor(AMF_rda_mean$NR)
-AMF_rda_mean2$NR = as.factor(AMF_rda_mean2$NR)
+AMF_rda_mean$DR = as.factor(AMF_rda_mean$DR)
+AMF_rda_mean2$DR = as.factor(AMF_rda_mean2$DR)
 
 ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) + 
   geom_point(data = AMF_rda_mean2,mapping = aes(RDA1, RDA2,fill =Treat, 
-                                                size = NR),show.legend = T, pch = 21) + 
+                                                size = DR),show.legend = T, pch = 21) + 
   scale_fill_manual(values = c(alpha("#40B0A6",1),alpha("#40B0A6",1),alpha("#40B0A6",1),
                                alpha("#E1BD69",1),alpha("#E1BD69",1),alpha("#E1BD69",1),
                                alpha("#A38E89",1),alpha("#A38E89",1),alpha("#A38E89",1))) +
   scale_size_manual(values = c(2,3,4)) +
   ggnewscale::new_scale_color() + ggnewscale::new_scale_fill() + 
   stat_ellipse(data =AMF_rda_mean2,mapping = aes(x = RDA1, y = RDA2, 
-                                                 group=interaction(NR, FS), color = FS,linetype=NR),
+                                                 group=interaction(DR, FS), color = FS,linetype=DR),
                type="norm",geom = "polygon",fill = NA) + 
   labs(x=paste("RDA1 (", format(100 * temp$importance[2,1], digits=3), "%)", sep=""),
        y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "d") +
@@ -817,13 +814,13 @@ ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
 
 
 ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) + 
-  geom_point(data = AMF_rda_mean2,mapping = aes(RDA1, RDA2,fill =FS, size = NR),
+  geom_point(data = AMF_rda_mean2,mapping = aes(RDA1, RDA2,fill =FS, size = DR),
              show.legend = T, pch = 21, color = "black") + 
   scale_fill_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) +
   scale_size_manual(values = c(2,3,4)) +
   ggnewscale::new_scale_color() + ggnewscale::new_scale_fill() + 
   stat_ellipse(data =AMF_rda_mean2,mapping = aes(x = RDA1, y = RDA2, 
-                                                 group=interaction(NR, FS), color = FS, linetype=NR),
+                                                 group=interaction(DR, FS), color = FS, linetype=DR),
                type="norm",geom = "path", size = 0.8) + 
   labs(x=paste("RDA1 (", format(100 * temp$importance[2,1], digits=3), "%)", sep=""),
        y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "(d)") +
@@ -843,181 +840,190 @@ ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
 #--------------------------------------
 ### TableS10
 #--------------------------------------
+#########################################################################Explained variation_overall
 #overall-1------------------- ### Explained variation_overall_composition
 variance1 <- as.data.frame(RDA_result_overall$Variance)
-rownames(variance1) <- c("FS", "NR", "interaction","Residual");head(variance1)
+rownames(variance1) <- c("FS", "DR", "interaction","Residual");head(variance1)
 variance1 <- variance1 %>% mutate_if(is.numeric, function(x){x/sum(x)});variance1
 Total_percent1 <- 1 -variance1$`RDA_result_overall$Variance`[4];Total_percent1 # this is the model explained, should be on top of the bar
 
-Total_explained_variance1 <- sum(variance1$`RDA_result_overall$Variance`[1:3]);Total_explained_variance1  # Variance explained by FS, NR, and interaction
+Total_explained_variance1 <- sum(variance1$`RDA_result_overall$Variance`[1:3]);Total_explained_variance1  # Variance explained by FS, DR, and interaction
 variance11 <- variance1 %>% mutate( Relative_Percentage = (`RDA_result_overall$Variance`/ Total_explained_variance1) * 100);variance11
 variance_overall_com<- variance11[1:3, c("Relative_Percentage")];variance_overall_com # Print the relative contributions
 
 #overall-2--------------------### Explained variation_overall_Shannon 
-model_overall2 <- glmmTMB(Shannon_overall ~ FS * NR + (1 | COT), data = div_dat_overall)
-model_overall_no_FS2 <- glmmTMB(Shannon_overall ~ NR + (1 | COT), data = div_dat_overall)
-model_overall_no_NR2 <- glmmTMB(Shannon_overall ~ FS + (1 | COT), data = div_dat_overall)
-model_overall_no_interaction2 <- glmmTMB(Shannon_overall ~ FS + NR + (1 | COT), data = div_dat_overall)
+model_overall2 <- glmmTMB(Shannon_overall ~ FS * DR + (1 | NT), data = div_dat_overall)
+model_overall_no_FS2 <- glmmTMB(Shannon_overall ~ DR + (1 | NT), data = div_dat_overall)
+model_overall_no_DR2 <- glmmTMB(Shannon_overall ~ FS + (1 | NT), data = div_dat_overall)
+model_overall_no_interaction2 <- glmmTMB(Shannon_overall ~ FS + DR + (1 | NT), data = div_dat_overall)
 
 R2_full2 <- r.squaredGLMM(model_overall2);R2_full2 # this is the model explained, should be on top of the bar
 R2_no_FS2 <- r.squaredGLMM(model_overall_no_FS2);R2_no_FS2
-R2_no_NR2 <- r.squaredGLMM(model_overall_no_NR2);R2_no_NR2
+R2_no_DR2 <- r.squaredGLMM(model_overall_no_DR2);R2_no_DR2
 R2_no_interaction2 <- r.squaredGLMM(model_overall_no_interaction2);R2_no_interaction2
 
 #R2 result
 Residual_variance2 <- 1-R2_full2[1];Residual_variance2
 R2_interaction2 <- R2_full2[1] - R2_no_interaction2[1];R2_interaction2  # variance explained by interaction
 R2_FS2 <- (R2_full2[1] - R2_no_FS2[1]) - R2_interaction2;R2_FS2 # variance explained by FS alone
-R2_NR2 <- (R2_full2[1] - R2_no_NR2[1]) - R2_interaction2;R2_NR2 # variance explained by NR alone
-R2_overall_Shannon <- na.omit(c(R2_FS2,R2_NR2,R2_interaction2));R2_overall_Shannon 
+R2_DR2 <- (R2_full2[1] - R2_no_DR2[1]) - R2_interaction2;R2_DR2 # variance explained by DR alone
+R2_overall_Shannon <- na.omit(c(R2_FS2,R2_DR2,R2_interaction2));R2_overall_Shannon 
 
 #Percentage contributions
 variance2 <- as.data.frame(R2_overall_Shannon);variance2
-Total_explained_variance2 <- sum(variance2$`R2_overall_Shannon`[1:3]);Total_explained_variance2  # Variance explained by FS, NR, and interaction
+Total_explained_variance2 <- sum(variance2$`R2_overall_Shannon`[1:3]);Total_explained_variance2  # Variance explained by FS, DR, and interaction
 variance22 <- variance2 %>% mutate( Relative_Percentage = (`R2_overall_Shannon`[1:3]/ Total_explained_variance2) * 100);variance22
 variance_overall_Shannon<- variance22[1:3, c("Relative_Percentage")];variance_overall_Shannon # Print the percentage contributions
 
 #overall-3--------------------### Explained variation_overall_Invsimp 
-model_overall3 <- glmmTMB(Invsimp_overall ~ FS * NR + (1 | COT), data = div_dat_overall)
-model_overall_no_FS3 <- glmmTMB(Invsimp_overall ~ NR + (1 | COT), data = div_dat_overall)
-model_overall_no_NR3 <- glmmTMB(Invsimp_overall ~ FS + (1 | COT), data = div_dat_overall)
-model_overall_no_interaction3 <- glmmTMB(Invsimp_overall ~ FS + NR + (1 | COT), data = div_dat_overall)
+model_overall3 <- glmmTMB(Invsimp_overall ~ FS * DR + (1 | NT), data = div_dat_overall)
+model_overall_no_FS3 <- glmmTMB(Invsimp_overall ~ DR + (1 | NT), data = div_dat_overall)
+model_overall_no_DR3 <- glmmTMB(Invsimp_overall ~ FS + (1 | NT), data = div_dat_overall)
+model_overall_no_interaction3 <- glmmTMB(Invsimp_overall ~ FS + DR + (1 | NT), data = div_dat_overall)
 
 R2_full3 <- r.squaredGLMM(model_overall3);R2_full3# this is the model explained, should be on top of the bar
 R2_no_FS3 <- r.squaredGLMM(model_overall_no_FS3);R2_no_FS3
-R2_no_NR3 <- r.squaredGLMM(model_overall_no_NR3);R2_no_NR3
+R2_no_DR3 <- r.squaredGLMM(model_overall_no_DR3);R2_no_DR3
 R2_no_interaction3 <- r.squaredGLMM(model_overall_no_interaction3);R2_no_interaction3
 
 #R2 result
 Residual_variance3 <- 1-R2_full3[1];Residual_variance3
 R2_interaction3 <- R2_full3[1] - R2_no_interaction3[1];R2_interaction3 # variance explained by interaction
 R2_FS3 <- (R2_full3[1] - R2_no_FS3[1]) - R2_interaction3;R2_FS3  # variance explained by FS alone
-R2_NR3 <- (R2_full3[1] - R2_no_NR3[1]) - R2_interaction3;R2_NR3 # variance explained by NR alone
-R2_overall_Invsimp <- na.omit(c(R2_FS3,R2_NR3,R2_interaction3));R2_overall_Invsimp 
+R2_DR3 <- (R2_full3[1] - R2_no_DR3[1]) - R2_interaction3;R2_DR3 # variance explained by DR alone
+R2_overall_Invsimp <- na.omit(c(R2_FS3,R2_DR3,R2_interaction3));R2_overall_Invsimp 
 
 #Percentage contributions
 variance3 <- as.data.frame(R2_overall_Invsimp);variance3
-Total_explained_variance3 <- sum(variance3$`R2_overall_Invsimp`[1:3]);Total_explained_variance3  # Variance explained by FS, NR, and interaction
+Total_explained_variance3 <- sum(variance3$`R2_overall_Invsimp`[1:3]);Total_explained_variance3  # Variance explained by FS, DR, and interaction
 variance33 <- variance3 %>% mutate( Relative_Percentage = (`R2_overall_Invsimp`[1:3]/ Total_explained_variance3) * 100);variance33
 variance_overall_Invsimp<- variance33[1:3, c("Relative_Percentage")];variance_overall_Invsimp # Print the relative contributions
 
 
-### Explained variation_pathogen
+
+###########################################################################Explained variation_pathogen
 #pathogen-1--------------------### Explained variation_pathogen_composition 
 variance4 <- as.data.frame(RDA_result_pathogen$Variance)
-rownames(variance4) <- c("FS", "NR", "interaction","Residual");head(variance4)
+rownames(variance4) <- c("FS", "DR", "interaction","Residual");head(variance4)
 variance4 <- variance4 %>% mutate_if(is.numeric, function(x){x/sum(x)});variance4
+# Fig.3(e)-pathogen_composition 28.8%
 Total_percent4 <- 1 -variance4$`RDA_result_pathogen$Variance`[4];Total_percent4 # this is the model explained, should be on top of the bar
 
-Total_explained_variance4 <- sum(variance4$`RDA_result_pathogen$Variance`[1:3]);Total_explained_variance4  # Variance explained by FS, NR, and interaction
+Total_explained_variance4 <- sum(variance4$`RDA_result_pathogen$Variance`[1:3]);Total_explained_variance4  # Variance explained by FS, DR, and interaction
 variance44 <- variance4 %>% mutate( Relative_Percentage = (`RDA_result_pathogen$Variance`/ Total_explained_variance4) * 100);variance44
 variance_pathogen_com<- variance44[1:3, c("Relative_Percentage")];variance_pathogen_com # Print the relative contributions
 
 #pathogen-2--------------------### Explained variation_pathogen_Shannon 
-model_pathogen5 <- glmmTMB(Shannon_pathogen ~ FS * NR + (1 | COT), data = div_dat_pathogen);Anova(model_pathogen5,type="III")
-model_pathogen_no_FS5 <- glmmTMB(Shannon_pathogen ~ NR + (1 | COT), data = div_dat_pathogen)
-model_pathogen_no_NR5 <- glmmTMB(Shannon_pathogen ~ FS + (1 | COT), data = div_dat_pathogen)
-model_pathogen_no_interaction5 <- glmmTMB(Shannon_pathogen ~ FS + NR + (1 | COT), data = div_dat_pathogen)
+model_pathogen5 <- glmmTMB(Shannon_pathogen ~ FS * DR + (1 | NT), data = div_dat_pathogen);Anova(model_pathogen5,type="III")
+model_pathogen_no_FS5 <- glmmTMB(Shannon_pathogen ~ DR + (1 | NT), data = div_dat_pathogen)
+model_pathogen_no_DR5 <- glmmTMB(Shannon_pathogen ~ FS + (1 | NT), data = div_dat_pathogen)
+model_pathogen_no_interaction5 <- glmmTMB(Shannon_pathogen ~ FS + DR + (1 | NT), data = div_dat_pathogen)
 
+# Fig.3(e)-pathogen_Shanno73.7%
 R2_full5 <- r.squaredGLMM(model_pathogen5);R2_full5 # this is the model explained, should be on top of the bar
 R2_no_FS5 <- r.squaredGLMM(model_pathogen_no_FS5);R2_no_FS5
-R2_no_NR5 <- r.squaredGLMM(model_pathogen_no_NR5);R2_no_NR5
+R2_no_DR5 <- r.squaredGLMM(model_pathogen_no_DR5);R2_no_DR5
 R2_no_interaction5 <- r.squaredGLMM(model_pathogen_no_interaction5);R2_no_interaction5
 
 #R2 result
 Residual_variance5 <- 1-R2_full5[1];Residual_variance5
 R2_interaction5 <- R2_full5[1] - R2_no_interaction5[1];R2_interaction5  # variance explained by interaction
 R2_FS5 <- (R2_full5[1] - R2_no_FS5[1]) - R2_interaction5;R2_FS5 # variance explained by FS alone
-R2_NR5 <- (R2_full5[1] - R2_no_NR5[1]) - R2_interaction5;R2_NR5 # variance explained by NR alone
-R2_pathogen_Shannon <- na.omit(c(R2_FS5,R2_NR5,R2_interaction5));R2_pathogen_Shannon 
+R2_DR5 <- (R2_full5[1] - R2_no_DR5[1]) - R2_interaction5;R2_DR5 # variance explained by DR alone
+R2_pathogen_Shannon <- na.omit(c(R2_FS5,R2_DR5,R2_interaction5));R2_pathogen_Shannon 
 
 #Percentage contributions
 variance5 <- as.data.frame(R2_pathogen_Shannon);variance5
-Total_explained_variance5 <- sum(variance5$`R2_pathogen_Shannon`[1:3]);Total_explained_variance5  # Variance explained by FS, NR, and interaction
+Total_explained_variance5 <- sum(variance5$`R2_pathogen_Shannon`[1:3]);Total_explained_variance5  # Variance explained by FS, DR, and interaction
 variance55 <- variance5 %>% mutate( Relative_Percentage = (`R2_pathogen_Shannon`[1:3]/ Total_explained_variance5) * 100);variance55
 variance_pathogen_Shannon<- variance55[1:3, c("Relative_Percentage")];variance_pathogen_Shannon # Print the relative contributions
 
 #pathogen-3--------------------### Explained variation_pathogen_Invsimp
-model_pathogen6 <- glmmTMB(Invsimp_pathogen ~ FS * NR + (1 | COT), data = div_dat_pathogen);Anova(model_pathogen6,type="III")
-model_pathogen_no_FS6 <- glmmTMB(Invsimp_pathogen ~ NR + (1 | COT), data = div_dat_pathogen)
-model_pathogen_no_NR6 <- glmmTMB(Invsimp_pathogen ~ FS + (1 | COT), data = div_dat_pathogen)
-model_pathogen_no_interaction6 <- glmmTMB(Invsimp_pathogen ~ FS + NR + (1 | COT), data = div_dat_pathogen)
+model_pathogen6 <- glmmTMB(Invsimp_pathogen ~ FS * DR + (1 | NT), data = div_dat_pathogen);Anova(model_pathogen6,type="III")
+model_pathogen_no_FS6 <- glmmTMB(Invsimp_pathogen ~ DR + (1 | NT), data = div_dat_pathogen)
+model_pathogen_no_DR6 <- glmmTMB(Invsimp_pathogen ~ FS + (1 | NT), data = div_dat_pathogen)
+model_pathogen_no_interaction6 <- glmmTMB(Invsimp_pathogen ~ FS + DR + (1 | NT), data = div_dat_pathogen)
 
+# Fig.3(e)-pathogen_Invsimp 69.3%
 R2_full6 <- r.squaredGLMM(model_pathogen6);R2_full6 # this is the model explained, should be on top of the bar
 R2_no_FS6 <- r.squaredGLMM(model_pathogen_no_FS6);R2_no_FS6 
-R2_no_NR6 <- r.squaredGLMM(model_pathogen_no_NR6);R2_no_NR6 
+R2_no_DR6 <- r.squaredGLMM(model_pathogen_no_DR6);R2_no_DR6 
 R2_no_interaction6 <- r.squaredGLMM(model_pathogen_no_interaction6);R2_no_interaction6  
 
 #R2 result
 Residual_variance6 <- 1-R2_full6[1];Residual_variance6
 R2_interaction6 <- R2_full6[1] - R2_no_interaction6[1];R2_interaction6  # variance explained by interaction
 R2_FS6 <- (R2_full6[1] - R2_no_FS6[1]) - R2_interaction6 # variance explained by FS alone
-R2_NR6 <- (R2_full6[1] - R2_no_NR6[1]) - R2_interaction6 # variance explained by NR alone
-R2_pathogen_Invsimp <- na.omit(c(R2_FS6,R2_NR6,R2_interaction6));R2_pathogen_Invsimp 
+R2_DR6 <- (R2_full6[1] - R2_no_DR6[1]) - R2_interaction6 # variance explained by DR alone
+R2_pathogen_Invsimp <- na.omit(c(R2_FS6,R2_DR6,R2_interaction6));R2_pathogen_Invsimp 
 
 #Percentage contributions
 variance6 <- as.data.frame(R2_pathogen_Invsimp);variance6
-Total_explained_variance6 <- sum(variance6$`R2_pathogen_Invsimp`[1:3]);Total_explained_variance6  # Variance explained by FS, NR, and interaction
+Total_explained_variance6 <- sum(variance6$`R2_pathogen_Invsimp`[1:3]);Total_explained_variance6  # Variance explained by FS, DR, and interaction
 variance66 <- variance6 %>% mutate( Relative_Percentage = (`R2_pathogen_Invsimp`[1:3]/ Total_explained_variance6) * 100);variance66
 variance_pathogen_Invsimp<- variance66[1:3, c("Relative_Percentage")];variance_pathogen_Invsimp # Print the relative contributions
 
 
-### Explained variation_AMF
+
+################################################################# Explained variation_AMF
 #AMF-1--------------------### Explained variation_AMF_composition 
 variance7 <- as.data.frame(RDA_result_AMF$Variance)
-rownames(variance7) <- c("FS", "NR", "interaction","Residual");head(variance7)
+rownames(variance7) <- c("FS", "DR", "interaction","Residual");head(variance7)
 variance7 <- variance7 %>% mutate_if(is.numeric, function(x){x/sum(x)});variance7
+# Fig.3(f)-AMF_composition 14.6%
 Total_percent7 <- 1 -variance7$`RDA_result_AMF$Variance`[4];Total_percent7 # this is the model explained, should be on top of the bar
 
-Total_explained_variance7 <- sum(variance7$`RDA_result_AMF$Variance`[1:3]);Total_explained_variance7  # Variance explained by FS, NR, and interaction
+Total_explained_variance7 <- sum(variance7$`RDA_result_AMF$Variance`[1:3]);Total_explained_variance7  # Variance explained by FS, DR, and interaction
 variance77 <- variance7 %>% mutate( Relative_Percentage = (`RDA_result_AMF$Variance`/ Total_explained_variance7) * 100);variance77
 variance_AMF_com<- variance77[1:3, c("Relative_Percentage")];variance_AMF_com # Print the relative contributions
 
 #AMF-2--------------------### Explained variation_AMF_Shannon 
-model_AMF8 <- glmmTMB(Shannon_AMF ~ FS * NR + (1 | COT), data = div_dat_AMF);Anova(model_AMF8,type="III")
-model_AMF_no_FS8 <- glmmTMB(Shannon_AMF ~ NR + (1 | COT), data = div_dat_AMF)
-model_AMF_no_NR8 <- glmmTMB(Shannon_AMF ~ FS + (1 | COT), data = div_dat_AMF)
-model_AMF_no_interaction8 <- glmmTMB(Shannon_AMF ~ FS + NR + (1 | COT), data = div_dat_AMF)
+model_AMF8 <- glmmTMB(Shannon_AMF ~ FS * DR + (1 | NT), data = div_dat_AMF);Anova(model_AMF8,type="III")
+model_AMF_no_FS8 <- glmmTMB(Shannon_AMF ~ DR + (1 | NT), data = div_dat_AMF)
+model_AMF_no_DR8 <- glmmTMB(Shannon_AMF ~ FS + (1 | NT), data = div_dat_AMF)
+model_AMF_no_interaction8 <- glmmTMB(Shannon_AMF ~ FS + DR + (1 | NT), data = div_dat_AMF)
 
+# Fig.3(f)-AMF_Shannon 8.4%
 R2_full8 <- r.squaredGLMM(model_AMF8);R2_full8 # this is the model explained, should be on top of the bar
 R2_no_FS8 <- r.squaredGLMM(model_AMF_no_FS8);R2_no_FS8
-R2_no_NR8 <- r.squaredGLMM(model_AMF_no_NR8);R2_no_NR8
+R2_no_DR8 <- r.squaredGLMM(model_AMF_no_DR8);R2_no_DR8
 R2_no_interaction8 <- r.squaredGLMM(model_AMF_no_interaction8);R2_no_interaction8
 
 #R2 result
 Residual_variance8 <- 1-R2_full8[1];Residual_variance8
 R2_interaction8 <- R2_full8[1] - R2_no_interaction8[1];R2_interaction8  # variance explained by interaction
 R2_FS8 <- (R2_full8[1] - R2_no_FS8[1]) - R2_interaction8 # variance explained by FS alone
-R2_NR8 <- (R2_full8[1] - R2_no_NR8[1]) - R2_interaction8 # variance explained by NR alone
-R2_AMF_Shannon <- na.omit(c(R2_FS8,R2_NR8,R2_interaction8));R2_AMF_Shannon 
+R2_DR8 <- (R2_full8[1] - R2_no_DR8[1]) - R2_interaction8 # variance explained by DR alone
+R2_AMF_Shannon <- na.omit(c(R2_FS8,R2_DR8,R2_interaction8));R2_AMF_Shannon 
 
 #Percentage contributions
 variance8 <- as.data.frame(R2_AMF_Shannon);variance8
-Total_explained_variance8 <- sum(variance8$`R2_AMF_Shannon`[1:3]);Total_explained_variance8  # Variance explained by FS, NR, and interaction
+Total_explained_variance8 <- sum(variance8$`R2_AMF_Shannon`[1:3]);Total_explained_variance8  # Variance explained by FS, DR, and interaction
 variance88 <- variance8 %>% mutate( Relative_Percentage = (`R2_AMF_Shannon`[1:3]/ Total_explained_variance8) * 100);variance88
 variance_AMF_Shannon<- variance88[1:3, c("Relative_Percentage")];variance_AMF_Shannon # Print the relative contributions
 
 #AMF-3--------------------### Explained variation_AMF_Invsimp
-model_AMF9 <- glmmTMB(Invsimp_AMF ~ FS * NR + (1 | COT), data = div_dat_AMF)
-model_AMF_no_FS9 <- glmmTMB(Invsimp_AMF ~ NR + (1 | COT), data = div_dat_AMF)
-model_AMF_no_NR9 <- glmmTMB(Invsimp_AMF ~ FS + (1 | COT), data = div_dat_AMF)
-model_AMF_no_interaction9 <- glmmTMB(Invsimp_AMF ~ FS + NR + (1 | COT), data = div_dat_AMF)
+model_AMF9 <- glmmTMB(Invsimp_AMF ~ FS * DR + (1 | NT), data = div_dat_AMF)
+model_AMF_no_FS9 <- glmmTMB(Invsimp_AMF ~ DR + (1 | NT), data = div_dat_AMF)
+model_AMF_no_DR9 <- glmmTMB(Invsimp_AMF ~ FS + (1 | NT), data = div_dat_AMF)
+model_AMF_no_interaction9 <- glmmTMB(Invsimp_AMF ~ FS + DR + (1 | NT), data = div_dat_AMF)
 
+# Fig.3(f)-AMF_Invsimp 8.4%
 R2_full9 <- r.squaredGLMM(model_AMF9);R2_full9 # this is the model explained, should be on top of the bar
 R2_no_FS9 <- r.squaredGLMM(model_AMF_no_FS9);R2_no_FS9
-R2_no_NR9 <- r.squaredGLMM(model_AMF_no_NR9);R2_no_NR9
+R2_no_DR9 <- r.squaredGLMM(model_AMF_no_DR9);R2_no_DR9
 R2_no_interaction9 <- r.squaredGLMM(model_AMF_no_interaction9);R2_no_interaction9
 
 #R2 result
 Residual_variance9 <- 1-R2_full9[1];Residual_variance9
 R2_interaction9 <- R2_full9[1] - R2_no_interaction9[1];R2_interaction9    # variance explained by interaction
 R2_FS9 <- (R2_full9[1] - R2_no_FS9[1]) - R2_interaction9 # variance explained by FS alone
-R2_NR9 <- (R2_full9[1] - R2_no_NR9[1]) - R2_interaction9 # variance explained by NR alone
-R2_AMF_Invsimp <- na.omit(c(R2_FS9,R2_NR9,R2_interaction9));R2_AMF_Invsimp 
+R2_DR9 <- (R2_full9[1] - R2_no_DR9[1]) - R2_interaction9 # variance explained by DR alone
+R2_AMF_Invsimp <- na.omit(c(R2_FS9,R2_DR9,R2_interaction9));R2_AMF_Invsimp 
 
 #Percentage contributions
 variance9 <- as.data.frame(R2_AMF_Invsimp);variance9
-Total_explained_variance9 <- sum(variance9$`R2_AMF_Invsimp`[1:3]);Total_explained_variance9  # Variance explained by FS, NR, and interaction
+Total_explained_variance9 <- sum(variance9$`R2_AMF_Invsimp`[1:3]);Total_explained_variance9  # Variance explained by FS, DR, and interaction
 variance99 <- variance9 %>% mutate( Relative_Percentage = (`R2_AMF_Invsimp`[1:3]/ Total_explained_variance9) * 100);variance99
 variance_AMF_Invsimp<- variance99[1:3, c("Relative_Percentage")];variance_AMF_Invsimp # Print the relative contributions
 
@@ -1043,16 +1049,16 @@ Residual_variance9
 variance77
 
 
-#model explained: on top of the bartop of the bar (Fig.3G H)
+#model explained: on top of the bartop of the bar (Fig.3e&f)
 Top_bar <- na.omit(c(#R2_full2[1],R2_full3[1],Total_percent1,
   R2_full5[1], R2_full6[1],Total_percent4,
   R2_full8[1], R2_full9[1],Total_percent7));Top_bar
 
 
 #--------------------------------------
-### Visualization:  Fig.3(e) & (f) & (g)
+### Visualization:  Fig.3(e)& (f) & (g)
 #--------------------------------------
-### Fig.3(e)
+### Fig.3(e) 
 variance_pathogen = data.frame(factor = rep(c("Focal species", "Neighbouring species richness", "Interaction"), 3),
                                group = c(rep(c("Composition"), 3), rep(c("Shannon"), 3), rep(c("Inverse Simpson"), 3)),
                                value =c(variance_pathogen_com, variance_pathogen_Shannon, variance_pathogen_Invsimp));variance_pathogen
@@ -1110,24 +1116,24 @@ for (fs in focal_species) {
     mutate(Is_FS = ifelse(FS == fs, 1, 0))
   
   # --- Shannon Index ---
-  model_full_shannon <- glmmTMB(Shannon_pathogen ~ Is_FS * NR + (1 | COT), data = div_dat_temp)
-  model_no_fs_shannon <- glmmTMB(Shannon_pathogen ~ NR + (1 | COT), data = div_dat_temp)
-  model_no_nr_shannon <- glmmTMB(Shannon_pathogen ~ Is_FS + (1 | COT), data = div_dat_temp)
-  model_no_interaction_shannon <- glmmTMB(Shannon_pathogen ~ Is_FS + NR + (1 | COT), data = div_dat_temp)
+  model_full_shannon <- glmmTMB(Shannon_pathogen ~ Is_FS * DR + (1 | NT), data = div_dat_temp)
+  model_no_fs_shannon <- glmmTMB(Shannon_pathogen ~ DR + (1 | NT), data = div_dat_temp)
+  model_no_DR_shannon <- glmmTMB(Shannon_pathogen ~ Is_FS + (1 | NT), data = div_dat_temp)
+  model_no_interaction_shannon <- glmmTMB(Shannon_pathogen ~ Is_FS + DR + (1 | NT), data = div_dat_temp)
   
   R2_full_shannon <- r.squaredGLMM(model_full_shannon)[1]
   R2_no_fs_shannon <- r.squaredGLMM(model_no_fs_shannon)[1]
-  R2_no_nr_shannon <- r.squaredGLMM(model_no_nr_shannon)[1]
+  R2_no_DR_shannon <- r.squaredGLMM(model_no_DR_shannon)[1]
   R2_no_interaction_shannon <- r.squaredGLMM(model_no_interaction_shannon)[1]
   
   R2_fs_shannon <- R2_full_shannon - R2_no_fs_shannon
-  R2_nr_shannon <- R2_full_shannon - R2_no_nr_shannon
+  R2_DR_shannon <- R2_full_shannon - R2_no_DR_shannon
   R2_interaction_shannon <- R2_full_shannon - R2_no_interaction_shannon
   
-  R2_pathogen_shannon <- na.omit(c(R2_fs_shannon, R2_nr_shannon, R2_interaction_shannon))
+  R2_pathogen_shannon <- na.omit(c(R2_fs_shannon, R2_DR_shannon, R2_interaction_shannon))
   variance_shannon <- as.data.frame(R2_pathogen_shannon)
   colnames(variance_shannon) <- "Variance"
-  rownames(variance_shannon) <- c(paste0("Species_", fs), "NR", paste0("Species_", fs, ":NR"))
+  rownames(variance_shannon) <- c(paste0("Species_", fs), "DR", paste0("Species_", fs, ":DR"))
   
   total_explained_shannon <- sum(variance_shannon$Variance)
   variance_shannon <- variance_shannon %>%
@@ -1137,24 +1143,24 @@ for (fs in focal_species) {
   variance_list_pathogen_shannon[[fs]] <- variance_shannon
   
   # --- InvSimp Index ---
-  model_full_invsimp <- glmmTMB(Invsimp_pathogen ~ Is_FS * NR + (1 | COT), data = div_dat_temp)
-  model_no_fs_invsimp <- glmmTMB(Invsimp_pathogen ~ NR + (1 | COT), data = div_dat_temp)
-  model_no_nr_invsimp <- glmmTMB(Invsimp_pathogen ~ Is_FS + (1 | COT), data = div_dat_temp)
-  model_no_interaction_invsimp <- glmmTMB(Invsimp_pathogen ~ Is_FS + NR + (1 | COT), data = div_dat_temp)
+  model_full_invsimp <- glmmTMB(Invsimp_pathogen ~ Is_FS * DR + (1 | NT), data = div_dat_temp)
+  model_no_fs_invsimp <- glmmTMB(Invsimp_pathogen ~ DR + (1 | NT), data = div_dat_temp)
+  model_no_DR_invsimp <- glmmTMB(Invsimp_pathogen ~ Is_FS + (1 | NT), data = div_dat_temp)
+  model_no_interaction_invsimp <- glmmTMB(Invsimp_pathogen ~ Is_FS + DR + (1 | NT), data = div_dat_temp)
   
   R2_full_invsimp <- r.squaredGLMM(model_full_invsimp)[1]
   R2_no_fs_invsimp <- r.squaredGLMM(model_no_fs_invsimp)[1]
-  R2_no_nr_invsimp <- r.squaredGLMM(model_no_nr_invsimp)[1]
+  R2_no_DR_invsimp <- r.squaredGLMM(model_no_DR_invsimp)[1]
   R2_no_interaction_invsimp <- r.squaredGLMM(model_no_interaction_invsimp)[1]
   
   R2_fs_invsimp <- R2_full_invsimp - R2_no_fs_invsimp
-  R2_nr_invsimp <- R2_full_invsimp - R2_no_nr_invsimp
+  R2_DR_invsimp <- R2_full_invsimp - R2_no_DR_invsimp
   R2_interaction_invsimp <- R2_full_invsimp - R2_no_interaction_invsimp
   
-  R2_pathogen_invsimp <- na.omit(c(R2_fs_invsimp, R2_nr_invsimp, R2_interaction_invsimp))
+  R2_pathogen_invsimp <- na.omit(c(R2_fs_invsimp, R2_DR_invsimp, R2_interaction_invsimp))
   variance_invsimp <- as.data.frame(R2_pathogen_invsimp)
   colnames(variance_invsimp) <- "Variance"
-  rownames(variance_invsimp) <- c(paste0("Species_", fs), "NR", paste0("Species_", fs, ":NR"))
+  rownames(variance_invsimp) <- c(paste0("Species_", fs), "DR", paste0("Species_", fs, ":DR"))
   
   total_explained_invsimp <- sum(variance_invsimp$Variance)
   variance_invsimp <- variance_invsimp %>%
@@ -1171,13 +1177,13 @@ print(variance_combined_pathogen_shannon)
 
 for (fs in focal_species) {
   total_explained_shannon <- sum(variance_list_pathogen_shannon[[fs]]$Proportion)
-  cat(sprintf("Total explained variance for Pathogen Shannon (Species %s, NR, and Species_%s:NR):\n", fs, fs))
+  cat(sprintf("Total explained variance for Pathogen Shannon (Species %s, DR, and Species_%s:DR):\n", fs, fs))
   print(total_explained_shannon)
 }
 
 plot_data_pathogen_shannon <- variance_combined_pathogen_shannon %>%
   mutate(Component = case_when(
-    grepl(":NR", row.names(.)) ~ "Interaction",
+    grepl(":DR", row.names(.)) ~ "Interaction",
     grepl("Species_", row.names(.)) ~ "Focal species",
     TRUE ~ "Neighbour richness"
   ))
@@ -1206,29 +1212,29 @@ for (fs in focal_species) {
       mutate(Is_FS = ifelse(FS == fs, 1, 0))
     
     # Full model
-    model_full <- glmmTMB(TG_pot ~ Is_FS * NR + (1 | COT), data = div_dat_temp)
+    model_full <- glmmTMB(TG_pot ~ Is_FS * DR + (1 | NT), data = div_dat_temp)
     
     # Reduced models
-    model_no_fs <- glmmTMB(TG_pot ~ NR + (1 | COT), data = div_dat_temp)
-    model_no_nr <- glmmTMB(TG_pot ~ Is_FS + (1 | COT), data = div_dat_temp)
-    model_no_interaction <- glmmTMB(TG_pot ~ Is_FS + NR + (1 | COT), data = div_dat_temp)
+    model_no_fs <- glmmTMB(TG_pot ~ DR + (1 | NT), data = div_dat_temp)
+    model_no_DR <- glmmTMB(TG_pot ~ Is_FS + (1 | NT), data = div_dat_temp)
+    model_no_interaction <- glmmTMB(TG_pot ~ Is_FS + DR + (1 | NT), data = div_dat_temp)
     
     # Calculate R² for each model
     R2_full <- r.squaredGLMM(model_full)[1]  # Marginal R²
     R2_no_fs <- r.squaredGLMM(model_no_fs)[1]
-    R2_no_nr <- r.squaredGLMM(model_no_nr)[1]
+    R2_no_DR <- r.squaredGLMM(model_no_DR)[1]
     R2_no_interaction <- r.squaredGLMM(model_no_interaction)[1]
     
     # Calculate variance explained by each term
     R2_fs <- R2_full - R2_no_fs
-    R2_nr <- R2_full - R2_no_nr
+    R2_DR <- R2_full - R2_no_DR
     R2_interaction <- R2_full - R2_no_interaction
     
     # Store variance components in a data frame
-    R2_biomass <- na.omit(c(R2_fs, R2_nr, R2_interaction))
+    R2_biomass <- na.omit(c(R2_fs, R2_DR, R2_interaction))
     variance_biomass <- as.data.frame(R2_biomass)
     colnames(variance_biomass) <- "Variance"
-    rownames(variance_biomass) <- c(paste0("Species_", fs), "NR", paste0("Species_", fs, ":NR"))
+    rownames(variance_biomass) <- c(paste0("Species_", fs), "DR", paste0("Species_", fs, ":DR"))
     
     # Calculate total explained variance
     total_explained_biomass <- sum(variance_biomass$Variance)
@@ -1250,7 +1256,7 @@ for (fs in focal_species) {
   # Print total explained variance for total biomass
   for (fs in focal_species) {
     total_explained_biomass <- sum(variance_list_biomass[[fs]]$Proportion)
-    cat(sprintf("Total explained variance for Total Biomass (Species %s, NR, and Species_%s:NR):\n", fs, fs))
+    cat(sprintf("Total explained variance for Total Biomass (Species %s, DR, and Species_%s:DR):\n", fs, fs))
     print(total_explained_biomass)
   }
   
@@ -1264,7 +1270,7 @@ for (fs in focal_species) {
   # Prepare the data for plotting
   plot_data_biomass <- variance_combined_biomass %>%
     mutate(Component = case_when(
-      grepl(":NR", row.names(.)) ~ "Interaction",
+      grepl(":DR", row.names(.)) ~ "Interaction",
       grepl("Species_", row.names(.)) ~ "Focal species",
       TRUE ~ "Neighbour richness"
     ))
@@ -1283,7 +1289,7 @@ print(variance_combined_pathogen_invsimp)
 
 for (fs in focal_species) {
   total_explained_invsimp <- sum(variance_list_pathogen_invsimp[[fs]]$Proportion)
-  cat(sprintf("Total explained variance for Pathogen InvSimp (Species %s, NR, and Species_%s:NR):\n", fs, fs))
+  cat(sprintf("Total explained variance for Pathogen InvSimp (Species %s, DR, and Species_%s:DR):\n", fs, fs))
   print(total_explained_invsimp)
 }
 
@@ -1353,6 +1359,5 @@ cowplot::plot_grid(Fig_3e,Fig_3f,Fig_3g, align = "v", ncol = 3,rel_widths= c(1,1
  
 
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
-ggsave("Fig.3.pdf",plot = Fig.3,width = 10, height = 14) 
-
+ggsave("Fig.3-no-removed.pdf",plot = Fig.3,width = 10, height = 14) 
 
