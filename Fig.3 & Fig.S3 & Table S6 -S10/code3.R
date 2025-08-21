@@ -46,7 +46,7 @@ mytheme= theme(legend.position = "none",
 #####  Part0---Effects of FS DR and their interaction on the total biomass of focal plant #####
 ###############################################################################################
 setwd("C:/Users/MY/Desktop/li/3")
-
+ 
 #--------------------------------------
 ### Table S6  
 #--------------------------------------
@@ -200,7 +200,7 @@ taxMod <- f.modify.utax.taxon.table(tax, onlyConfident = TRUE)
 
 taxMod_with_guilds <- funguild_assign(seqDat_full, db = get_funguild_db(), tax_col = "Taxonomy");rownames(taxMod_with_guilds) <- rownames(seqDat)
 taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
-#write.table(taxMod_with_guilds, "taxMod_with_guilds20250805.CSv",sep = ",",  row.names = TRUE,col.names = TRUE, quote = FALSE)
+ #write.table(taxMod_with_guilds, "taxMod_with_guilds20250805.CSv",sep = ",",  row.names = TRUE,col.names = TRUE, quote = FALSE)
 
 ## If FUNGuild database is updated, please use the following line of code: directly load the data
 #taxMod_with_guilds <-read_excel("data3_2.xlsx",sheet="taxMod_with_guilds");taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
@@ -544,9 +544,9 @@ pp_results_AMF  <-  results_AMF $p.value; p.adjust(pp_results_AMF , "bonferroni"
 
 
 #-------------------------------------- 
-# index_Visualization: Fig_3a,b
+# index_Visualization: Fig_3(a)&(b)
 #--------------------------------------
-### Fig_3a  
+### Fig_3(a) 
 div_dat_long_overall <- div_dat_long_overall %>% left_join(results_overall %>% dplyr::select(FS, variable, DR.trend, SE, p.value),
                                                            by = c("FS", "variable")) %>%mutate(significant = p.value < 0.05) # Mark significant slopes
 div_dat_long_pathogen <- div_dat_long_pathogen %>% left_join(results_pathogen %>% dplyr::select(FS, variable, DR.trend, SE, p.value),
@@ -640,7 +640,7 @@ ggplot(data_richness_invsimp_pathogen, aes(x = DR, y = value, color = FS)) +
   labs(x = "Log2 (Distant neighbor richness)", y = NULL, tag = "(a)") -> Fig_3a; Fig_3a
 
 
-### Fig_3b
+### Fig_3(b)
 # Define the critical t-value for 95% confidence intervals
 t_critical_AMF<- qt(0.975, df = max(results_AMF$df)) # Use the maximum degrees of freedom from the results
 
@@ -732,9 +732,9 @@ Fig_3a + Fig_3b
 
 
 #--------------------------------------
-### RDA_Visualization:Fig.3c & d 
+### RDA_Visualization:Fig.3(c) & (d) 
 #--------------------------------------
-### Fig.3c
+### Fig.3(c)
 RDA2 <- rda(t(normData_pathogen) ~ Treat, subSampleTab_pathogen)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -775,7 +775,7 @@ ggplot(pathogen_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
   scale_color_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) -> Fig_3c; Fig_3c
 
 
-### Fig.3d 
+### Fig.3(d) 
 RDA2 <- rda(t(normData_AMF) ~ Treat, subSampleTab_AMF)
 axes <- summary(RDA2)$site
 temp <- summary(RDA2)$cont; temp
@@ -796,25 +796,6 @@ AMF_rda_mean$DR = as.factor(AMF_rda_mean$DR)
 AMF_rda_mean2$DR = as.factor(AMF_rda_mean2$DR)
 
 ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) + 
-  geom_point(data = AMF_rda_mean2,mapping = aes(RDA1, RDA2,fill =Treat, 
-                                                size = DR),show.legend = T, pch = 21) + 
-  scale_fill_manual(values = c(alpha("#40B0A6",1),alpha("#40B0A6",1),alpha("#40B0A6",1),
-                               alpha("#E1BD69",1),alpha("#E1BD69",1),alpha("#E1BD69",1),
-                               alpha("#A38E89",1),alpha("#A38E89",1),alpha("#A38E89",1))) +
-  scale_size_manual(values = c(2,3,4)) +
-  ggnewscale::new_scale_color() + ggnewscale::new_scale_fill() + 
-  stat_ellipse(data =AMF_rda_mean2,mapping = aes(x = RDA1, y = RDA2, 
-                                                 group=interaction(DR, FS), color = FS,linetype=DR),
-               type="norm",geom = "polygon",fill = NA) + 
-  labs(x=paste("RDA1 (", format(100 * temp$importance[2,1], digits=3), "%)", sep=""),
-       y=paste("RDA2 (", format(100 * temp$importance[2,2], digits=3), "%)", sep=""), tag = "d") +
-  theme_bw() + mytheme +  
-  scale_linetype_manual(values = c('solid', 'dashed', 'dotted'))+
-  theme_bw() + mytheme + theme(legend.position.inside = c(0.2,0.76)) +
-  scale_color_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) -> Fig_3d; Fig_3d
-
-
-ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) + 
   geom_point(data = AMF_rda_mean2,mapping = aes(RDA1, RDA2,fill =FS, size = DR),
              show.legend = T, pch = 21, color = "black") + 
   scale_fill_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1))) +
@@ -830,7 +811,6 @@ ggplot(AMF_rda_mean, aes(x = RDA1_mean, y = RDA2_mean)) +
   theme(legend.box = "horizontal") + 
   scale_linetype_manual(values = c('solid', 'dashed', 'dotted'))+
   scale_color_manual(values = c(alpha("#40B0A6",1),alpha("#E1BD69",1),alpha("#A38E89",1)))-> Fig_3d; Fig_3d
-
 
 
 
@@ -1050,7 +1030,7 @@ Residual_variance9
 variance77
 
 
-#model explained: on top of the bartop of the bar (Fig.3e&f)
+#model explained: on top of the bartop of the bar (Fig.3(e)&(f))
 Top_bar <- na.omit(c(#R2_full2[1],R2_full3[1],Total_percent1,
   R2_full5[1], R2_full6[1],Total_percent4,
   R2_full8[1], R2_full9[1],Total_percent7));Top_bar
