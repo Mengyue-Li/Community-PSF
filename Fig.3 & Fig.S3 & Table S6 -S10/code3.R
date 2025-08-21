@@ -46,6 +46,7 @@ mytheme= theme(legend.position = "none",
 #####  Part0---Effects of FS DR and their interaction on the total biomass of focal plant #####
 ###############################################################################################
 setwd("C:/Users/MY/Desktop/li/3")
+
 #--------------------------------------
 ### Table S6  
 #--------------------------------------
@@ -199,7 +200,7 @@ taxMod <- f.modify.utax.taxon.table(tax, onlyConfident = TRUE)
 
 taxMod_with_guilds <- funguild_assign(seqDat_full, db = get_funguild_db(), tax_col = "Taxonomy");rownames(taxMod_with_guilds) <- rownames(seqDat)
 taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
- #write.table(taxMod_with_guilds, "taxMod_with_guilds20250805.NNSv",sep = ",",  row.names = TRUE,col.names = TRUE, quote = FALSE)
+#write.table(taxMod_with_guilds, "taxMod_with_guilds20250805.CSv",sep = ",",  row.names = TRUE,col.names = TRUE, quote = FALSE)
 
 ## If FUNGuild database is updated, please use the following line of code: directly load the data
 #taxMod_with_guilds <-read_excel("data3_2.xlsx",sheet="taxMod_with_guilds");taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
@@ -331,7 +332,7 @@ dds <- DESeq(dds)
 normData <- log2(DESeq2::counts(dds, normalized = TRUE) + 1)
 dim(normData)
 
-write.table(normdata_noremoved, "normdata_noremoved.NNSv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
+write.table(normdata_noremoved, "normdata_noremoved.CSv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
 
   
 ### RDA_result_overall
@@ -1356,6 +1357,6 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
 
 
 #### Create the combined plot layout
-((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
+((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|  Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
 ggsave("Fig.3-0821-noremoved.pdf",plot = Fig.3,width = 10, height = 14) 
 
