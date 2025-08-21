@@ -85,7 +85,7 @@ emmip_biomass$Mass_F <- emmip_biomass$yvar
 data_focalmass2 = rbind(data_focalmass, ck_biomass)
 
 ggplot(data_focalmass2, aes(x=DR, y=Mass_F,color=FS))+
-  geom_point(size=3,position=pd,alpha=1,aes(fill = FS), color = "black", pch = 21 ) +  # 关键参数：控制点边框粗细 
+  geom_point(size=3,position=pd,alpha=1,aes(fill = FS), color = "black", pch = 21 ) + 
   geom_line(aes(x=DR,y=Mass_F,color = FS, linetype = FS),emmip_biomass  ) +
   scale_fill_manual(values = c("C" = "#40B0A6", "O" = "#E1BD69", "V" = "#A38E89")) +
   geom_ribbon(data = emmip_biomass, aes(x = DR, ymin = LCL, ymax = UCL, fill = FS), alpha = 0.3, inherit.aes = FALSE) + 
@@ -1360,4 +1360,5 @@ cowplot::plot_grid(Fig_3e,Fig_3f,Fig_3g, align = "v", ncol = 3,rel_widths= c(1,1
 
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
 ggsave("Fig.3-no-removed.pdf",plot = Fig.3,width = 10, height = 14) 
+
 
