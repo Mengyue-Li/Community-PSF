@@ -46,20 +46,19 @@ mytheme= theme(legend.position = "none",
 #####  Part0---Effects of FS DR and their interaction on the total biomass of focal plant #####
 ###############################################################################################
 setwd("C:/Users/MY/Desktop/li/3")
-
 #--------------------------------------
 ### Table S6  
 #--------------------------------------
-MetaTab <- read_excel("data3_1.xlsx",sheet=1);
-MetaTab <- as.data.frame(MetaTab);rownames(MetaTab) <- MetaTab[,1] ;MetaTab <- MetaTab[MetaTab$Monoculture == "NO",];head(MetaTab)
+MetaTab0 <- read_excel("data3_1.xlsx",sheet=1);
+MetaTab0 <- as.data.frame(MetaTab0);rownames(MetaTab0) <- MetaTab0[,1] ;MetaTab0 <- MetaTab0[MetaTab0$Monoculture == "NO",];head(MetaTab0)
 
 # Whether the focal and near neighbor species were the same was included as a random term (P = 0.43).
-model_focalmass1 <- glmmTMB(Mass_F ~  FS*DR + (1|NT), data = MetaTab)# random factor
-model_focalmass2 <- glmmTMB(Mass_F ~  FS*DR , data = MetaTab)# without random factor
+model_focalmass1 <- glmmTMB(Mass_F ~  FS*DR + (1|NT), data = MetaTab0)# random factor
+model_focalmass2 <- glmmTMB(Mass_F ~  FS*DR , data = MetaTab0)# without random factor
 anova(model_focalmass1 , model_focalmass2, test = "Chisq")
 
 # model
-model_focalmass <- glmmTMB(Mass_F ~  FS*DR + (1|NT), data = MetaTab)
+model_focalmass <- glmmTMB(Mass_F ~  FS*DR + (1|NT), data = MetaTab0)
 Anova(model_focalmass, type = "III")-> model_focalmass_result; model_focalmass_result
 pp_focalmass <- model_focalmass_result$Pr
 p.adjust(pp_focalmass, "bonferroni")
@@ -67,7 +66,7 @@ p.adjust(pp_focalmass, "bonferroni")
 #--------------------------------------
 ### Table S7 
 #--------------------------------------
-model_focalmass <- glmmTMB(Mass_F ~  FS*DR + (1|NT), data = MetaTab)
+model_focalmass <- glmmTMB(Mass_F ~  FS*DR + (1|NT), data = MetaTab0)
 emt_focalmass <- emtrends(model_focalmass,~FS,var="DR"); emt_focalmass 
 model_focalmass_result <- test(emt_focalmass);model_focalmass_result
 pp_focalmass <- model_focalmass_result$p.value
@@ -76,11 +75,11 @@ p.adjust(pp_focalmass, "bonferroni")
 #--------------------------------------
 ### Fig. S3
 #--------------------------------------
-colnames(MetaTab)
+colnames(MetaTab0)
 ck_biomass = data.frame(Pot = c("1_1_1", "2_1_1", "3_1_1"),Mass_F = c( 2.25, 1.11,4.63), FS = c("C", "O", "V"),
                         NNS = NA,DR = -0.4, NT = NA, Monoculture = NA)
 
-emmip_biomass <- emmip(model_focalmass,~DR|FS,type="response",CIs=T,at=list(DR=unique(MetaTab$DR)),plotit = FALSE)
+emmip_biomass <- emmip(model_focalmass,~DR|FS,type="response",CIs=T,at=list(DR=unique(MetaTab0$DR)),plotit = FALSE)
 emmip_biomass$Mass_F <- emmip_biomass$yvar
 
 data_focalmass2 = rbind(data_focalmass, ck_biomass)
@@ -108,7 +107,7 @@ ggplot(data_focalmass2, aes(x=DR, y=Mass_F,color=FS))+
 # Step 1:  loading data and identify taxonomy levels
 #--------------------------------------------------------------------
 # raw data
-head(MetaTab)
+MetaTab <- MetaTab0[,1:6];head(MetaTab)
 Biomass_dat <- read_excel("data3_1.xlsx",sheet=2);Biomass_dat <- as.data.frame(Biomass_dat);rownames(Biomass_dat) <- Biomass_dat[,1] 
 seqDat_full <- read_excel("data3_1.xlsx",sheet=3); seqDat_full <-seqDat_full[,1:282]; dim(seqDat_full);seqDat_full <- as.data.frame(seqDat_full);rownames(seqDat_full) <- seqDat_full[,1]
 tax <- seqDat_full$Taxonomy; tax <- as.data.frame(tax); rownames(tax) <- rownames(seqDat_full)
@@ -418,7 +417,7 @@ for (var in unique(div_dat_long_overall$variable)) {
     warning(paste("Model for variable", var, "failed to converge. Results may not be reliable."))
   }
   # Calculate slopes using emmeans
-  emm_slopes <- emtrends(model, speNNS = ~ FS, var = "DR")
+  emm_slopes <- emtrends(model, specs = ~ FS, var = "DR")
   
   # Extract slope data
   slopes_df <- as.data.frame(summary(emm_slopes))
@@ -462,7 +461,7 @@ for (var in unique(div_dat_long_pathogen$variable)) {
     warning(paste("Model for variable", var, "failed to converge. Results may not be reliable."))
   }
   # Calculate slopes using emmeans
-  emm_slopes <- emtrends(model, speNNS = ~ FS, var = "DR")
+  emm_slopes <- emtrends(model, specs = ~ FS, var = "DR")
   
   # Extract slope data
   slopes_df <- as.data.frame(summary(emm_slopes))
@@ -507,7 +506,7 @@ for (var in unique(div_dat_long_AMF$variable)) {
   }
   
   # Calculate slopes using emmeans
-  emm_slopes <- emtrends(model, speNNS = ~ FS, var = "DR")
+  emm_slopes <- emtrends(model, specs = ~ FS, var = "DR")
   
   # Extract slope data
   slopes_df <- as.data.frame(summary(emm_slopes))
@@ -1359,5 +1358,4 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
 #### Create the combined plot layout
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
 ggsave("Fig.3-0821-noremoved.pdf",plot = Fig.3,width = 10, height = 14) 
-
 
