@@ -41,11 +41,12 @@ mytheme= theme(legend.position = "none",
                axis.text = element_text(colour='black',size=12),
                plot.tag = element_text(size = 14, face = "bold"))
 
-setwd("C:/Users/MY/Desktop/li/3")
 
 ###############################################################################################
 #####  Part0---Effects of FS DR and their interaction on the total biomass of focal plant #####
 ###############################################################################################
+setwd("C:/Users/MY/Desktop/li/3")
+
 #--------------------------------------
 ### Table S6  
 #--------------------------------------
@@ -137,7 +138,7 @@ f.split.utax.taxo <- function(x) {
     }))
   } else {
     # Return empty matrix if no valid split
-    out <- matrix(ncol = 2, DRow = 0)
+    out <- matrix(ncol = 2, nrow = 0)
   }
   
   return(out)
@@ -147,7 +148,7 @@ f.split.utax.taxo <- function(x) {
 f.modify.utax.taxon.table <- function(taxDat, onlyConfident = TRUE) {
   # Ensure we're working with the correct column in the data frame
   colToUse <- 1  
-  emptyEntry <- rep("ukn", DRow(taxDat))
+  emptyEntry <- rep("ukn", nrow(taxDat))
   out <- data.frame(
     k = emptyEntry,
     p = emptyEntry,
@@ -164,7 +165,7 @@ f.modify.utax.taxon.table <- function(taxDat, onlyConfident = TRUE) {
     temp <- f.split.utax.taxo(taxDat[rn, colToUse])
     
     # Ensure that temp is a matrix and has at least one row with 2 columns
-    if (is.matrix(temp) && DRow(temp) > 0 && ncol(temp) == 2) {
+    if (is.matrix(temp) && nrow(temp) > 0 && ncol(temp) == 2) {
       tax_levels <- temp[, 1]
       tax_values <- temp[, 2]
       
@@ -1070,7 +1071,7 @@ ggplot(variance_pathogen, aes(fill=factor, y=value, x=group)) +
   geom_bar(stat="identity", color= "black", width = 0.8) + 
   scale_fill_manual(name = NULL,values = c("#70A7C3","#A67C2A","#D2BEA2"))+
   theme_bw() + mytheme + 
-  theme(axis.text.x = element_text(colour='black', size=10, angle = 25, hjust = 1, vjust = 1),
+  theme(axis.text.x = element_text(colour='black',   angle = 25, hjust = 1, vjust = 1),
         legend.position = c(0.4,0.88)) +
   scale_y_continuous(expand = c(0,1), limits = c(0,130),breaks = seq(0, 130,50)) + 
   geom_vline(aes(xintercept = 2.5), linetype = "dashed") + 
@@ -1089,7 +1090,7 @@ ggplot(variance_AMF, aes(fill=factor, y=value, x=group)) +
   geom_bar(stat="identity", color= "black", width = 0.8) + 
   scale_fill_manual(name = NULL,values = c("#70A7C3","#A67C2A","#D2BEA2"),guide="none")+
   theme_bw() + mytheme + 
-  theme(axis.text.x = element_text(colour='black', size=10, angle = 25, hjust = 1, vjust = 1),
+  theme(axis.text.x = element_text(colour='black',   angle = 25, hjust = 1, vjust = 1),
         legend.position = c(0.3,0.91)) +
   scale_y_continuous(expand = c(0,1), limits = c(0,130),breaks = seq(0, 130,50)) + 
   geom_vline(aes(xintercept = 2.5), linetype = "dashed") + 
@@ -1349,16 +1350,13 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
   scale_y_continuous(expand = c(0,1), limits = c(0,130),
                      breaks = seq(0,130,50)) +
   theme_bw() + mytheme +
-  theme(axis.text.x = element_text(colour = "black", size = 10,
+  theme(axis.text.x = element_text(colour = "black",  
                                    angle = 25, hjust = 1, vjust = 1),
         legend.position = c(0.3, 0.91)) +
   labs(x = NULL, y = NULL, tag = "(g)")  -> Fig_3g; Fig_3g
 
-######################################
-cowplot::plot_grid(Fig_3e,Fig_3f,Fig_3g, align = "v", ncol = 3,rel_widths= c(1,1,1.5))->Fig_3efg;Fig_3efg
- 
 
+#### Create the combined plot layout
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
-ggsave("Fig.3-no-removed.pdf",plot = Fig.3,width = 10, height = 14) 
-
+ggsave("Fig.3-0821-noremoved.pdf",plot = Fig.3,width = 10, height = 14) 
 
