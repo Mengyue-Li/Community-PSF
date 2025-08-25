@@ -205,7 +205,6 @@ taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_al
 # extract pathogen and AMF 
 seqDat_plantPathogen <- taxMod_all[taxMod_all$guild == "Plant Pathogen"| taxMod_all$genus == "Fusarium", c(3:282)]; seqDat_plantPathogen <- na.omit(seqDat_plantPathogen)
 seqDat_AMF <- taxMod_all[taxMod_all$phylum == "Glomeromycota",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
-#seqDat_AMF <- taxMod_all[taxMod_all$guild == "Arbuscular Mycorrhizal",c(3:282)]; seqDat_AMF <- na.omit(seqDat_AMF)
 
 #--------------------------------------------------------------------
 # Step 2:  Shannon diversity and inverse Simpson diversity 
@@ -327,7 +326,6 @@ dds <- DESeqDataSetFromMatrix(countData = (sampleTab[,rownames(sampleTab_GROUP)]
 dds <- DESeq(dds)
 normData <- log2(DESeq2::counts(dds, normalized = TRUE) + 1)
 dim(normData)
-
 write.table(normdata_noremoved, "normdata_noremoved.CSv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
 
   
@@ -1335,3 +1333,4 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
 #### Create the combined plot layout
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
 ggsave("Fig.3.pdf",plot = Fig.3,width = 10, height = 14) 
+
