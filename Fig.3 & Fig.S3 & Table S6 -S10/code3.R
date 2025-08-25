@@ -250,7 +250,7 @@ div_dat_AMF <- div_dat_AMF[div_dat_AMF$Monoculture == "NO",]
 ### Table S8  
 #--------------------------------------
 #----------------------Table S8-1: Shannon&Invsimp
-#write.NNSv(div_dat_overall, "div_dat_overall.NNSv")
+#write.csv(div_dat_overall, "div_dat_overall.csv")
 
 # Shannon 
 model <- glmmTMB((Shannon_overall) ~  FS*DR + (1|NT), data = div_dat_overall)# random factor
@@ -308,25 +308,25 @@ p.adjust(pp, "bonferroni")
 # Step 3:  RDA result
 #--------------------------------------------------------------------
 #----------------------Table S8-Composition: RDA 
-##########################################################################################
-sampleTab <- read.xlsx("data3.xlsx",sheet=3, colNames = T, rowNames = T)
-sampleTab <-sampleTab[,1:280]
-sampleTab <- as.data.frame(sampleTab)
+### log2(x+1)-transformed OTU-abundances (DESeq2 normalized OTU abundance)
+#sampleTab <- read.xlsx("data3.xlsx",sheet=3, colNames = T, rowNames = T)
+#sampleTab <-sampleTab[,1:280]
+#sampleTab <- as.data.frame(sampleTab)
 
-sampleTab_GROUP <- read.xlsx("data3.xlsx",sheet=1, colNames = T, rowNames = T)
-sampleTab_GROUP <- sampleTab_GROUP[rownames(sampleTab_GROUP),]
-sampleTab_GROUP$treatment = as.factor(paste0(sampleTab_GROUP$FS,"|",sampleTab_GROUP$DR))
+#sampleTab_GROUP <- read.xlsx("data3.xlsx",sheet=1, colNames = T, rowNames = T)
+#sampleTab_GROUP <- sampleTab_GROUP[rownames(sampleTab_GROUP),]
+#sampleTab_GROUP$treatment = as.factor(paste0(sampleTab_GROUP$FS,"|",sampleTab_GROUP$DR))
 
-levels(sampleTab_GROUP$treatment) <- make.names(levels(sampleTab_GROUP$treatment))
+#levels(sampleTab_GROUP$treatment) <- make.names(levels(sampleTab_GROUP$treatment))
 
-# normalize with the treatment factor
-formulaString <- "~treatment"
-design <- model.matrix(formula(formulaString), data = sampleTab, contrasts.arg = NULL)
-dds <- DESeqDataSetFromMatrix(countData = (sampleTab[,rownames(sampleTab_GROUP)]), colData = sampleTab_GROUP, design = ~ treatment)
-dds <- DESeq(dds)
-normData <- log2(DESeq2::counts(dds, normalized = TRUE) + 1)
-dim(normData)
-write.table(normdata_noremoved, "normdata_noremoved.CSv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
+### normalize with the treatment factor
+#formulaString <- "~treatment"
+#design <- model.matrix(formula(formulaString), data = sampleTab, contrasts.arg = NULL)
+#dds <- DESeqDataSetFromMatrix(countData = (sampleTab[,rownames(sampleTab_GROUP)]), colData = sampleTab_GROUP, design = ~ treatment)
+#dds <- DESeq(dds)
+#normData <- log2(DESeq2::counts(dds, normalized = TRUE) + 1)
+#dim(normData)
+#write.table(normdata_noremoved, "normdata_noremoved.CSv",sep = ",",  row.names = TRUE, col.names = TRUE, quote = FALSE)
 
   
 ### RDA_result_overall
@@ -1333,4 +1333,5 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
 #### Create the combined plot layout
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
 ggsave("Fig.3.pdf",plot = Fig.3,width = 10, height = 14) 
+
 
