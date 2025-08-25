@@ -43,7 +43,7 @@ dat <- read_excel("data2.xlsx",sheet=1);head(dat)
 mod_full <- lm(TG ~ Richness_con * (B_con + C_con + F_con + T_con + V_con), data = dat)
 qqnorm(resid(mod_full));qqline(resid(mod_full));anova(mod_full)-> mod_full_result; mod_full_result
 p <- mod_full_result$Pr;p 
-p.adjust(p, "BH")
+#p.adjust(p, "BH")
 p.adjust(p, "bonferroni")
 
 
@@ -668,6 +668,7 @@ results_list <- list(
 # Create the combined plot layout
 P = a / (b + c + plot_layout(widths = c(2, 1))) +plot_layout(heights = c(1.2, 1));P
 ggsave("Fig.2.pdf",plot = P,width = 12, height = 11, units = "cm",  dpi = 600)           
+
 
 
 
