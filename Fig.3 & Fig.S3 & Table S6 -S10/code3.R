@@ -46,7 +46,6 @@ mytheme= theme(legend.position = "none",
 #####  Part0---Effects of FS DR and their interaction on the total biomass of focal plant #####
 ###############################################################################################
 setwd("C:/Users/MY/Desktop/li/3")
-setwd("D:/00-2025-重新投稿-零模型调节群落丰富度表换成生物量表/New Phytologist-0814-evan/投稿-20250821/CODE-new phy/Fig.3 & Fig.S3 & Table S6 -S10")
  
 #--------------------------------------
 ### Table S6  
@@ -202,10 +201,6 @@ taxMod <- f.modify.utax.taxon.table(tax, onlyConfident = TRUE)
 taxMod_with_guilds <- funguild_assign(seqDat_full, db = get_funguild_db(), tax_col = "Taxonomy");rownames(taxMod_with_guilds) <- rownames(seqDat)
 taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
 #write.table(taxMod_with_guilds, "taxMod_with_guilds20250805.CSv",sep = ",",  row.names = TRUE,col.names = TRUE, quote = FALSE)
-
-## If FUNGuild database is updated, please use the following line of code: directly load the data
-taxMod_with_guilds <-read_excel("data3_2.xlsx",sheet="taxMod_with_guilds");taxMod_with_guilds<- as.data.frame(taxMod_with_guilds); rownames(taxMod_with_guilds) <- rownames(seqDat) 
-taxMod_all <- merge(taxMod_with_guilds,taxMod,by=0, all=TRUE);rownames(taxMod_all) <- taxMod_all[,1]
 
 # extract pathogen and AMF 
 seqDat_plantPathogen <- taxMod_all[taxMod_all$guild == "Plant Pathogen"| taxMod_all$genus == "Fusarium", c(3:282)]; seqDat_plantPathogen <- na.omit(seqDat_plantPathogen)
@@ -1340,4 +1335,3 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
 #### Create the combined plot layout
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
 ggsave("Fig.3.pdf",plot = Fig.3,width = 10, height = 14) 
-
