@@ -34,7 +34,6 @@ mytheme= theme(legend.position = "none",
 #####                                                                        #####  
 ##################################################################################
 setwd('C:/Users/MY/Desktop/CODE/2')
-setwd('D:/00-2025-重新投稿-零模型调节群落丰富度表换成生物量表/New Phytologist-0814-evan/投稿-20250821/CODE-new phy/Fig.2&Table S3-5')
 
 #--------------------------------------
 ### Table S8
@@ -617,7 +616,7 @@ c <- ggplot(data = plot_data_c, aes(x = Model, y = R2, fill = Model)) +
 # Using RandomForest for final models
 #install.packages("randomForest")
 library(randomForest)
-set.seed(122)
+
 final_model_Lv <- randomForest(fml_Lv, data = df.rf, 
                                ntree = n_tree, mtry = min(2, n_pred_Lv))
 
@@ -668,3 +667,4 @@ results_list
 # Create the combined plot layout
 P = a / (b + c + plot_layout(widths = c(2, 1))) +plot_layout(heights = c(1.2, 1));P
 ggsave("Fig.2.pdf",plot = P,width = 12, height = 11, units = "cm",  dpi = 600)           
+
