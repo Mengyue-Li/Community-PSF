@@ -36,16 +36,15 @@ mytheme= theme(legend.position = "none",
 setwd('C:/Users/MY/Desktop/CODE/2')
 
 #--------------------------------------
-### Table S3
+### Table S8
 #--------------------------------------
 dat <- read_excel("data2.xlsx",sheet=1);head(dat)
 # Fit lm model with totol biomass
 mod_full <- lm(TG ~ Richness_con * (B_con + C_con + F_con + T_con + V_con), data = dat)
 anova(mod_full)-> mod_full_result; mod_full_result
 p <- mod_full_result$Pr;p 
-# p.adjust(p, "BH")
+#p.adjust(p, "BH")
 p.adjust(p, "bonferroni")
-
 
 ##################################################################################
 #####                                                                        ##### 
@@ -162,12 +161,13 @@ for(i_response in responses){
 }
 
 #-------------------------------------
-### Table S4
+### Table S3
 #-------------------------------------
 response_mean 
 response_ES_all
+
 #-------------------------------------
-# Visualization: Fig_2(a)
+# Visualization: Fig.2(a)
 #-------------------------------------
 a <- ggplot() +
   theme_bw() +
@@ -215,7 +215,7 @@ a <- ggplot() +
   geom_errorbar(data = subset(response_mean, target %in% c("1", "2", "4", "6", "12")), 
                 aes(xmin = X2.5., xmax = X97.5., y = target), width = 0, color = "#000000", linewidth = 0.5) +
   
-  labs(x = "Total biomass of responding community (g)", y = "Single plant species Richness", tag = "a") +
+  labs(x = "Total biomass of responding community (g)", y = "Single plant species Richness", tag = "(a)") +
   mytheme +  # Assuming mytheme is defined; remove if not
   scale_x_continuous(limits = c(25, 123), expand = c(0, 0), breaks = seq(40, 120, 20))
 a
@@ -383,13 +383,13 @@ ES_plot_data <- NHST_summary_transform(nhst_summary)
 
 # Print results
 #--------------------------------------
-### Table S5
+### Table S4
 #--------------------------------------
-print(ES_plot_data) #Table S5
+print(ES_plot_data) #Table S4
 ES_plot_data$Lv <- factor(ES_plot_data$Lv, levels = as.numeric(levels), labels = levels)
 
 #-------------------------------------
-# Visualization: Fig_2(b)
+# Visualization: Fig.2(b)
 #-------------------------------------
 b <- ggplot() +
   theme_bw() +
@@ -410,7 +410,7 @@ b <- ggplot() +
                      expand = c(0, 0), 
                      breaks = seq(-3.5, 0.2, 1))  + mytheme +
     labs(x = "Plant-soil feedback effects
-Ln(biomass in conditioned soil / biomass in sterilized)", y = " ", tag = "b") 
+Ln(biomass in conditioned soil / biomass in sterilized)", y = " ", tag = "(b)") 
 b
 
 
@@ -555,11 +555,7 @@ rf_summary <- results_rf %>%
     SD = sd(R2_RF, na.rm = TRUE)  
   )
 
-
 rf_summary
-
-
-
 
 # Calculate improvement percentages over baseline
 baseline_rf <- rf_summary$Mean[rf_summary$Model == "Species_richness"]
@@ -591,7 +587,7 @@ model_labels <- c(
 
 # Create Panel C plot (matching the original style)
 #-------------------------------------
-# Visualization: Fig_2(c)
+# Visualization: Fig.2(c)
 #-------------------------------------
 c <- ggplot(data = plot_data_c, aes(x = Model, y = R2, fill = Model)) +
   # Violin plot
@@ -608,9 +604,10 @@ c <- ggplot(data = plot_data_c, aes(x = Model, y = R2, fill = Model)) +
   mytheme +
   ylim(c(0, 1.0)) +
   theme(legend.position = "none", axis.title.x = element_blank()) +
-  labs(x = " ", y = "Variability explained (R²)", tag = "c") +
+  labs(x = " ", y = "Variability explained (R²)", tag = "(c)") +
   scale_x_discrete(labels = model_labels) +
   theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1));c
+
 
 #----------------------------------------------
 # Step 7: Train final models on complete dataset
@@ -618,6 +615,7 @@ c <- ggplot(data = plot_data_c, aes(x = Model, y = R2, fill = Model)) +
 # Using RandomForest for final models
 #install.packages("randomForest")
 library(randomForest)
+set.seed(122)
 final_model_Lv <- randomForest(fml_Lv, data = df.rf, 
                                ntree = n_tree, mtry = min(2, n_pred_Lv))
 
@@ -663,13 +661,9 @@ results_list <- list(
     Effect_size = final_model_Full
   )
 )
-
+results_list 
  
 # Create the combined plot layout
 P = a / (b + c + plot_layout(widths = c(2, 1))) +plot_layout(heights = c(1.2, 1));P
 ggsave("Fig.2.pdf",plot = P,width = 12, height = 11, units = "cm",  dpi = 600)           
-
-
-
-
-
+ 
