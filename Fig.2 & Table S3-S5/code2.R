@@ -36,7 +36,7 @@ mytheme= theme(legend.position = "none",
 setwd('C:/Users/MY/Desktop/CODE/2')
 
 #--------------------------------------
-### Table S8
+### Table S3
 #--------------------------------------
 dat <- read_excel("data2.xlsx",sheet=1);head(dat)
 # Fit lm model with totol biomass
@@ -667,4 +667,5 @@ results_list
 # Create the combined plot layout
 P = a / (b + c + plot_layout(widths = c(2, 1))) +plot_layout(heights = c(1.2, 1));P
 ggsave("Fig.2.pdf",plot = P,width = 12, height = 11, units = "cm",  dpi = 600)           
+
 
