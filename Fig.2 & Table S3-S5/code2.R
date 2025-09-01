@@ -162,7 +162,7 @@ for(i_response in responses){
 }
 
 #-------------------------------------
-### Table S3
+### Table S4
 #-------------------------------------
 response_mean 
 response_ES_all
@@ -384,7 +384,7 @@ ES_plot_data <- NHST_summary_transform(nhst_summary)
 
 # Print results
 #--------------------------------------
-### Table S4
+### Table S5
 #--------------------------------------
 print(ES_plot_data) #Table S4
 ES_plot_data$Lv <- factor(ES_plot_data$Lv, levels = as.numeric(levels), labels = levels)
@@ -667,5 +667,6 @@ results_list
 # Create the combined plot layout
 P = a / (b + c + plot_layout(widths = c(2, 1))) +plot_layout(heights = c(1.2, 1));P
 ggsave("Fig.2.pdf",plot = P,width = 12, height = 11, units = "cm",  dpi = 600)           
+
 
 
