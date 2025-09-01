@@ -25,9 +25,9 @@ library(glmm.hp)
 library(MuMIn)
 library(ggplot2)
 library(patchwork)
-library("DESeq2")
-library("Rtsne")
-library("RColorBrewer")
+library(DESeq2)
+library(Rtsne)
+library(RColorBrewer)
 
 mytheme= theme(legend.position = "none",
                panel.grid=element_blank(),
@@ -1337,5 +1337,6 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
 #### Create the combined plot layout
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
 ggsave("Fig.3.pdf",plot = Fig.3,width = 10, height = 14) 
+
 
 
