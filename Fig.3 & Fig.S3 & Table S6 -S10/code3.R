@@ -84,7 +84,7 @@ emmip_biomass <- emmip(model_focalmass,~DR|FS,type="response",CIs=T,at=list(DR=u
 emmip_biomass$Mass_F <- emmip_biomass$yvar
 
 data_focalmass2 = rbind(MetaTab0, ck_biomass)
-
+pd = position_dodge(.2)
 ggplot(data_focalmass2, aes(x=DR, y=Mass_F,color=FS))+
   geom_point(size=3,position=pd,alpha=1,aes(fill = FS), color = "black", pch = 21 ) + 
   geom_line(aes(x=DR,y=Mass_F,color = FS, linetype = FS),emmip_biomass  ) +
@@ -1337,6 +1337,7 @@ ggplot(plot_dat, aes(x = Metric, y = Relative_Percentage, fill = Component)) +
 #### Create the combined plot layout
 ((Fig_3a|Fig_3b)/(Fig_3c|Fig_3d)/(Fig_3e|Fig_3f|Fig_3g)) + plot_layout(heights = c(0.45,0.25,0.20)) ->Fig.3;Fig.3
 ggsave("Fig.3.pdf",plot = Fig.3,width = 10, height = 14) 
+
 
 
 
