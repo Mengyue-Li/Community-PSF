@@ -69,7 +69,7 @@ setwd('C:/Users/MY/Desktop/CODE/Fig.2')
 #--------------------------------------
 ### Table S2
 #--------------------------------------
-data_sheet1 = read.xlsx("data_Fig2_1209.xlsx",sheet="homeaway_byminheigh"); data_sheet1[1:6,1:12]
+data_sheet1 = read.xlsx("data_Fig2_1214.xlsx",sheet="homeaway"); data_sheet1[1:6,1:12]
 # Fit lm model with TG_res
 mod_full <- lm(TG_res ~ Richness_con * (B_con + C_con + F_con + T_con + V_con), data = data_sheet1)
 anova(mod_full)-> mod_full_result; mod_full_result
