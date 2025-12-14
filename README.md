@@ -67,14 +67,14 @@ The package should take approximately 50-60 seconds to install with vignettes on
 ##################################################################################
 setwd('C:/Users/MY/Desktop/CODE/Fig.2')
 #--------------------------------------
-### Table S9
+### Table S2
 #--------------------------------------
-dat <- read_excel("data_Fig.2.xlsx",sheet=1);head(dat)
-# Fit lm model with totol biomass
-mod_full <- lm(TG ~ Richness_con * (B_con + C_con + F_con + T_con + V_con), data = dat)
-qqnorm(resid(mod_full));qqline(resid(mod_full));anova(mod_full)-> mod_full_result; mod_full_result
+data_sheet1 = read.xlsx("data_Fig2_1209.xlsx",sheet="homeaway_byminheigh"); data_sheet1[1:6,1:12]
+# Fit lm model with TG_res
+mod_full <- lm(TG_res ~ Richness_con * (B_con + C_con + F_con + T_con + V_con), data = data_sheet1)
+anova(mod_full)-> mod_full_result; mod_full_result
 p <- mod_full_result$Pr;p 
-p.adjust(p, "BH")
+#p.adjust(p, "BH")
 p.adjust(p, "bonferroni")
 ~~~
 ## Expected output
@@ -82,19 +82,17 @@ p.adjust(p, "bonferroni")
 > #--------------------------------------
 > ### Table S9
 > #--------------------------------------
-> dat <- read_excel("data_Fig.2.xlsx",sheet=1);head(dat)
-# A tibble: 6 × 10
-  Pot_res Pot_con      Richness_con    TG c_con B_con C_con F_con T_con V_con
-  <chr>   <chr>        <chr>        <dbl> <chr> <chr> <chr> <chr> <chr> <chr>
-1 1_26_1  1_26_1       1             70.5 NO    NO    NO    NO    NO    NO   
-2 CK_1    na (sterile) CK            87.5 NO    NO    NO    NO    NO    NO   
-3 CK_5    na (sterile) CK            74.8 NO    NO    NO    NO    NO    NO   
-4 1_27_4  1_27_4       1             83.6 NO    NO    NO    NO    NO    NO   
-5 CK_3    na (sterile) CK           100.  NO    NO    NO    NO    NO    NO   
-6 1_28_3  1_28_3       1             72.5 NO    NO    NO    NO    NO    NO   
-> # Fit lm model with totol biomass
-> mod_full <- lm(TG ~ Richness_con * (B_con + C_con + F_con + T_con + V_con), data = dat)
-> qqnorm(resid(mod_full));qqline(resid(mod_full));anova(mod_full)-> mod_full_result; mod_full_result
+> data_sheet1 = read.xlsx("data_Fig2_1209.xlsx",sheet="homeaway_byminheigh"); data_sheet1[1:6,1:12]
+pot Pot_res      Pot_con Richness_con AG_con TG_res       PSFs c_con B_con C_con F_con T_con
+1   1    CK_1 na (sterile)           CK     NA  87.54         NA    NO    NO    NO    NO    NO
+2   2    CK_2 na (sterile)           CK     NA  92.14         NA    NO    NO    NO    NO    NO
+3   3    CK_3 na (sterile)           CK     NA 100.32         NA    NO    NO    NO    NO    NO
+4   4    CK_4 na (sterile)           CK     NA  80.18         NA    NO    NO    NO    NO    NO
+5   5    CK_5 na (sterile)           CK     NA  74.82         NA    NO    NO    NO    NO    NO
+6   6   1_1_1        1_1_1            1   8.63  68.32 -0.2417056    NO    NO    NO    NO    NO   
+> # Fit lm model with TG_res
+> mod_full <- lm(TG_res ~ Richness_con * (B_con + C_con + F_con + T_con + V_con), data = data_sheet1)
+> anova(mod_full)-> mod_full_result; mod_full_result
 Analysis of Variance Table
 
 Response: TG
