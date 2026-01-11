@@ -2,22 +2,20 @@
 #####                                  Library & mytheme                              #####
 ###########################################################################################
 ### Load required packages and data
-library(dplyr)
+library(readxl)
+library(openxlsx)
 library(ggplot2)
 library(ggpubr)
 library(ggridges)
 library(ggepi)
-library(patchwork)
+library(glmmTMB)
 library(party)
 library(caret)
-library(readxl)
-library(openxlsx)
-library(glmmTMB)
 library(dbplyr)
 library(tidyr)
 library(tidyverse)
 library(randomForest)
- 
+library(patchwork)
 
 mytheme = theme( panel.background = element_rect(fill='white', colour='black'),legend.position = "none",
                  panel.grid=element_blank(), legend.title = element_blank(),legend.text = element_text(size = 11),
@@ -731,4 +729,5 @@ results_list
 # Create the combined plot layout
 P = a / (b + c + plot_layout(widths = c(2, 1))) +plot_layout(heights = c(1.2, 1.1));P
 ggsave("Fig.3.pdf",plot = P,width = 12, height = 11, units = "cm",  dpi = 600)           
+
 
