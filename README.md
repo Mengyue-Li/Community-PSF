@@ -58,7 +58,7 @@ Note: ggepi & patchwork can be installed via devtools
 The package should take approximately 50-60 seconds to install with vignettes on a recommended computer.
 
 # Demo
-## Instructions to run on data: example-“Fig.3&Table S5-S7 S9” code
+## Instructions to run on data: example-“Fig.3 & Table S2 S3 S4” code
 ~~~
 ##################################################################################
 #####                                                                        ##### 
