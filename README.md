@@ -13,17 +13,17 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
 3. Fig.S1: Fig.S1_code.R & data_Fig.S1.xlsx
 4. Fig.S2: Fig.S2.R & data_FigS2.xlsx
 5. Fig.S3: Fig.S3.R & data_FigS3.xlsx & Plant_tree.treefile 
-## Data-specific information for: data_Fig.1.xlsx
+### Data-specific information for: data_Fig.1.xlsx
 Variable List:
 1. The "bar" sheet:
-   ○ MaxNo._Cspp.: the maximum number of conditioning plant species per experimental unit across these studies
-   ○ 1993-2025: the number of PSF studies 
+   * MaxNo._Cspp.: the maximum number of conditioning plant species per experimental unit across these studies
+   * 1993-2025: the number of PSF studies 
 2. The "pie" sheet: 
    ○ MaxNo._Cspp.: the maximum number of conditioning plant species per experimental unit across these studies
    ○ MaxNo._Cspp.ID: ID of MaxNo._Cspp.
    ○ No._study_Cspp._peryear: the number of PSF studies per year for different MaxNo._Cspp.
    ○ Percentage : proportion of No._study_Cspp._peryear to total studies (466 PSF experiments)
-## Data-specific information for: data_Fig3.xlsx
+### Data-specific information for: data_Fig3.xlsx
 1. The "Note" sheet:
    ○ SpeciesID: the conditioning species ID
    ○ Species_abbrev: the abbreviation for conditioning species 
@@ -47,10 +47,10 @@ Variable List:
    ○ remark: sample classification: CK, conditioning community ID, conditioning species richness 
    ○ Lv: sample classification: conditioning species richness 
    ○ TG: total biomass of responding community
-## Data-specific information for: data_FigS1.xlsx
+### Data-specific information for: data_FigS1.xlsx
 1. The "FigS1" sheet: the abundance of conditioning species
    ○ Tube number: sample ID
-## Data-specific information for: data_FigS2.xlsx
+### Data-specific information for: data_FigS2.xlsx
 1. The "Note" sheet:
    ○ SpeciesID: the conditioning species ID
    ○ Species_abbrev: the abbreviation for conditioning species plants
@@ -61,7 +61,7 @@ Variable List:
    ○ AG_sp_con: aboveground biomass of conditioning species plants
    ○ AG_ind_con: mean aboveground biomass of individual conditioning species plants
    ○ Group: monocultures versus. mixtures
-## Data-specific information for: data_FigS3.xlsx
+### Data-specific information for: data_FigS3.xlsx
 1. The "Respond_AG" sheet:
    ○ Pot_res: responding community ID (/pot)
    ○ Paspalum_conjugatum: aboveground biomass of the response species *Paspalum conjugatum* 
@@ -87,7 +87,7 @@ Variable List:
    ○ Species_res: the abbreviation for responding species plants 
    ○ Species_PSF: species-specific effect of each responding species (all responding species were considered together)
    ○ Species_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for each response species (all responding species were considered together)
-## Data-specific information for: Plant_tree.treefile
+### Data-specific information for: Plant_tree.treefile
 Description: Phylogenetic relationship of all experimental species in Plant-soil feedback experiment.
 
  
