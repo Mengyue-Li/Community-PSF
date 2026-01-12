@@ -75,9 +75,9 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * Pot_res: responding community ID (/pot)
    * Pot_con: conditioning community ID (/pot)
    * Richness_con: species richness of conditioning community
-   * Pc_AG, Aa_AG, Sv_AG, St_AG, Ah_AG, Soc_AG: aboveground biomass of the responding species *Paspalum conjugatum* ,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
-   * Pc_PSF, Aa_PSF, Sv_PSF, St_PSF, Ah_PSF, Soc_PSF: species-specific effect of the responding species *Paspalum conjugatum* ,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
-   * Pc_Phylo_Dist, Aa_Phylo_Dist, Sv_Phylo_Dist, St_Phylo_Dist, Ah_Phylo_Dist, Soc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Paspalum conjugatum* ,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
+   * Pc_AG, Aa_AG, Sv_AG, St_AG, Ah_AG, Soc_AG: aboveground biomass of the responding species *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
+   * Pc_PSF, Aa_PSF, Sv_PSF, St_PSF, Ah_PSF, Soc_PSF: species-specific effect of the responding species *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
+   * Pc_Phylo_Dist, Aa_Phylo_Dist, Sv_Phylo_Dist, St_Phylo_Dist, Ah_Phylo_Dist, Soc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
 4. The "all_species" sheet:
    * Tube number: sample ID
    * Species_res: abbreviation for responding species plants 
