@@ -288,7 +288,79 @@ for (i in 1:n_iter) {
 ### Expected output
 
 ~~~
-
+#----------------------------------------------
+> # Step 4: Run bootstrap iterations (using only RandomForest)
+> #----------------------------------------------
+> # Identify indices for stratified sampling
+> id_lv1 <- which(df.rf$Lv == 1)
+> id_lvh <- which(df.rf$Lv > 1)
+> n_lv1 <- length(id_lv1)
+> n_lvh <- length(id_lvh)
+> # Progress tracker
+> cat("Starting bootstrap iterations...\n")
+Starting bootstrap iterations...
+> prog_interval <- ceiling(n_iter/10)
+> for (i in 1:n_iter) {
++   # Print progress
++   if (i %% prog_interval == 0) {
++     cat(sprintf("Completed %d%% (%d/%d iterations)\n", 
++                 round(i/n_iter*100), i, n_iter))
++   }
++   
++   #----------------------------------------------
++   # Standard RandomForest with train/test split
++   #----------------------------------------------
++   tryCatch({
++     # Create a stratified bootstrap sample
++     bs_indices <- c(
++       sample(id_lv1, ceiling(0.5*n_lv1), replace = TRUE),
++       sample(id_lvh, ceiling(0.5*n_lvh), replace = TRUE)
++     )
++     bs_data <- df.rf[bs_indices, ]
++     
++     # Train/test split
++     train_indices <- sample(nrow(bs_data), round(cv_prop * nrow(bs_data)))
++     train_data <- bs_data[train_indices, ]
++     test_data <- bs_data[-train_indices, ]
++     
++     # Fit the three models
++     model_Lv <- randomForest(fml_Lv, data = train_data, 
++                              ntree = n_tree, mtry = min(2, n_pred_Lv))
++     
++     model_LvID <- randomForest(fml_LvID, data = train_data, 
++                                ntree = n_tree, mtry = min(3, n_pred_LvID))
++     
++     model_Full <- randomForest(fml_Full, data = train_data, 
++                                ntree = n_tree, mtry = min(5, n_pred_Full))
++     
++     # Make predictions
++     pred_Lv <- predict(model_Lv, newdata = test_data)
++     pred_LvID <- predict(model_LvID, newdata = test_data)
++     pred_Full <- predict(model_Full, newdata = test_data)
++     
++     # Calculate R² (squared correlation)
++     r2_Lv <- cor(pred_Lv, test_data[[response_var]])^2
++     r2_LvID <- cor(pred_LvID, test_data[[response_var]])^2
++     r2_Full <- cor(pred_Full, test_data[[response_var]])^2
++     
++     # Store R² values
++     idx <- (i-1)*3 + 1:3
++     results_rf$R2_RF[idx] <- c(r2_Lv, r2_LvID, r2_Full)
++     
++   }, error = function(e) {
++     cat("Error in RF iteration", i, ":", conditionMessage(e), "\n")
++   })
++ }
+Completed 10% (100/1000 iterations)
+Completed 20% (200/1000 iterations)
+Completed 30% (300/1000 iterations)
+Completed 40% (400/1000 iterations)
+Completed 50% (500/1000 iterations)
+Completed 60% (600/1000 iterations)
+Completed 70% (700/1000 iterations)
+Completed 80% (800/1000 iterations)
+Completed 90% (900/1000 iterations)
+Completed 100% (1000/1000 iterations)
 ~~~
 # License
 This project is covered under the GNU GENERAL PUBLIC LICENSE Version 2 (GPL-2).
