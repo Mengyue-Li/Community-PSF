@@ -34,12 +34,12 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * AG_con: aboveground biomass of conditioning community
    * TG_res: total biomass of responding community
    * PSFs: the natural logarithm ratio of biomass of the responding communities in conditioned soil and that grown in sterilized soil (average of five)
-   * c_con: individual species (c, ) presence in both the conditioning and responding phases (binary variable)
-   * B_con: individual species (B, ) presence in both the conditioning and responding phases (binary variable)
-   * C_con: individual species (C, ) presence in both the conditioning and responding phases (binary variable)
-   * F_con: individual species (F, ) presence in both the conditioning and responding phases (binary variable)
-   * T_con: individual species (T, ) presence in both the conditioning and responding phases (binary variable)
-   * V_con: individual species (V, ) presence in both the conditioning and responding phases (binary variable) 
+   * c_con: individual species (c, *Paspalum conjugatum*) presence in both the conditioning and responding phases (binary variable)
+   * B_con: individual species (B, *Achyranthes aspera*) presence in both the conditioning and responding phases (binary variable)
+   * C_con: individual species (C, *Setaria viridis*) presence in both the conditioning and responding phases (binary variable)
+   * F_con: individual species (F, *Senna tora*) presence in both the conditioning and responding phases (binary variable)
+   * T_con: individual species (T, *Amaranthus hybridus*) presence in both the conditioning and responding phases (binary variable)
+   * V_con: individual species (V, *Senna occidentalis*) presence in both the conditioning and responding phases (binary variable) 
 3. The "PSF_raw" sheet:
    * Tube number: sample ID
    * A-b: aboveground biomass of conditioning species plants
