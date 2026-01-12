@@ -8,11 +8,11 @@ This script contains all the data analysis and visualization code of Fig.1, Fig.
 ## Data  
 This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig.S2,  Fig.S3.
 ## File overview
-1. Fig.1: Fig1_code.R & data_Fig.1.xlsx
-2. Fig.3 & Table S2 S3 S4: Fig.3 & Table S2 S3 S4.R & data_Fig.3 & Table S2 S3 S4.xlsx
-3. Fig.S1: Fig.S1_code.R & data_Fig.S1.xlsx
-4. Fig.S2: Fig.S2.R & data_FigS2.xlsx
-5. Fig.S3: Fig.S3.R & data_FigS3.xlsx & Plant_tree.treefile 
+1. Fig.1: Fig1_code.R, data_Fig.1.xlsx
+2. Fig.3 & Table S2 S3 S4: Fig.3 & Table S2 S3 S4.R, data_Fig.3 & Table S2 S3 S4.xlsx
+3. Fig.S1: Fig.S1_code.R, data_Fig.S1.xlsx
+4. Fig.S2: Fig.S2.R, data_FigS2.xlsx
+5. Fig.S3: Fig.S3.R, data_FigS3.xlsx, Plant_tree.treefile 
 ### Data-specific information for: data_Fig.1.xlsx
 1. The "bar" sheet:
    * MaxNo._Cspp.: the maximum number of conditioning plant species per experimental unit across these studies
