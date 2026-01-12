@@ -212,7 +212,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 [10] 0.43438274 0.70992651         NA
 > p.adjust(p1, "BH")
  [1] 0.7963684 0.8692559 0.5953317 0.7963684 0.7963684 0.8692559 0.8692559 0.7963684 0.8692559 0.7963684
-[11] 0.8692559        NA 
+[11] 0.8692559        NA
+#p.adjust(p1, "bonferroni")
 ~~~
 ## Note: 
 The dataset stored in this repository is same to the dataset in figshare( ).
