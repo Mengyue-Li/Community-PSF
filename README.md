@@ -1,4 +1,4 @@
-<img width="105" height="29" alt="image" src="https://github.com/user-attachments/assets/182acb80-edc6-4bdb-881f-73441e2945c9" /># Overview
+# Overview
 The following files allow one to reproduce analyses in the manuscript entitled "Can plant-soil feedbacks scale up from individual species to communities: tests of the richness and biomass-ratio hypotheses".
 
 
@@ -14,79 +14,78 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
 4. Fig.S2: Fig.S2.R & data_FigS2.xlsx
 5. Fig.S3: Fig.S3.R & data_FigS3.xlsx & Plant_tree.treefile 
 ### Data-specific information for: data_Fig.1.xlsx
-Variable List:
 1. The "bar" sheet:
    * MaxNo._Cspp.: the maximum number of conditioning plant species per experimental unit across these studies
    * 1993-2025: the number of PSF studies 
 2. The "pie" sheet: 
-   ○ MaxNo._Cspp.: the maximum number of conditioning plant species per experimental unit across these studies
-   ○ MaxNo._Cspp.ID: ID of MaxNo._Cspp.
-   ○ No._study_Cspp._peryear: the number of PSF studies per year for different MaxNo._Cspp.
-   ○ Percentage : proportion of No._study_Cspp._peryear to total studies (466 PSF experiments)
+   * MaxNo._Cspp.: the maximum number of conditioning plant species per experimental unit across these studies
+   * MaxNo._Cspp.ID: ID of MaxNo._Cspp.
+   * No._study_Cspp._peryear: the number of PSF studies per year for different MaxNo._Cspp.
+   * Percentage : proportion of No._study_Cspp._peryear to total studies (466 PSF experiments)
 ### Data-specific information for: data_Fig3.xlsx
 1. The "Note" sheet:
-   ○ SpeciesID: the conditioning species ID
-   ○ Species_abbrev: the abbreviation for conditioning species 
+   * SpeciesID: the conditioning species ID
+   * Species_abbrev: the abbreviation for conditioning species 
 2. The "homeaway_raw" sheet:
-   ○ Tube number: sample ID
-   ○ Pot_res: responding community ID (/pot)
-   ○ Pot_con: conditioning community ID (/pot)
-   ○ Richness_con: species richness of conditioning community
-   ○ AG_con: aboveground biomass of conditioning community
-   ○ TG_res: total biomass of responding community
-   ○ PSFs: the natural logarithm ratio of biomass of the responding communities in conditioned soil and that grown in sterilized soil (average of five)
-   ○ c_con: individual species (c) presence in both the conditioning and responding phases (binary variable)
-   ○ B_con: individual species (B) presence in both the conditioning and responding phases (binary variable)
-   ○ C_con: individual species (C) presence in both the conditioning and responding phases (binary variable)
-   ○ F_con: individual species (F) presence in both the conditioning and responding phases (binary variable)
-   ○ T_con: individual species (T) presence in both the conditioning and responding phases (binary variable)
-   ○ V_con: individual species (V) presence in both the conditioning and responding phases (binary variable) 
+   * Tube number: sample ID
+   * Pot_res: responding community ID (/pot)
+   * Pot_con: conditioning community ID (/pot)
+   * Richness_con: species richness of conditioning community
+   * AG_con: aboveground biomass of conditioning community
+   * TG_res: total biomass of responding community
+   * PSFs: the natural logarithm ratio of biomass of the responding communities in conditioned soil and that grown in sterilized soil (average of five)
+   * c_con: individual species (c) presence in both the conditioning and responding phases (binary variable)
+   * B_con: individual species (B) presence in both the conditioning and responding phases (binary variable)
+   * C_con: individual species (C) presence in both the conditioning and responding phases (binary variable)
+   * F_con: individual species (F) presence in both the conditioning and responding phases (binary variable)
+   * T_con: individual species (T) presence in both the conditioning and responding phases (binary variable)
+   * V_con: individual species (V) presence in both the conditioning and responding phases (binary variable) 
 3. The "PSF_raw" sheet:
-   ○ Tube number: sample ID
-   ○ A-b: aboveground biomass of conditioning species plants
-   ○ remark: sample classification: CK, conditioning community ID, conditioning species richness 
-   ○ Lv: sample classification: conditioning species richness 
-   ○ TG: total biomass of responding community
+   * Tube number: sample ID
+   * A-b: aboveground biomass of conditioning species plants
+   * remark: sample classification: CK, conditioning community ID, conditioning species richness 
+   * Lv: sample classification: conditioning species richness 
+   * TG: total biomass of responding community
 ### Data-specific information for: data_FigS1.xlsx
 1. The "FigS1" sheet: the abundance of conditioning species
-   ○ Tube number: sample ID
+   * Tube number: sample ID
 ### Data-specific information for: data_FigS2.xlsx
 1. The "Note" sheet:
-   ○ SpeciesID: the conditioning species ID
-   ○ Species_abbrev: the abbreviation for conditioning species plants
+   * SpeciesID: the conditioning species ID
+   * Species_abbrev: the abbreviation for conditioning species plants
 2. The "AG_con" sheet:
-   ○ Pot_con: conditioning community ID (/pot)
-   ○ SpeciesID: the conditioning species ID
-   ○ Species_con: the abbreviation for conditioning species plants
-   ○ AG_sp_con: aboveground biomass of conditioning species plants
-   ○ AG_ind_con: mean aboveground biomass of individual conditioning species plants
-   ○ Group: monocultures versus. mixtures
+   * Pot_con: conditioning community ID (/pot)
+   * SpeciesID: the conditioning species ID
+   * Species_con: the abbreviation for conditioning species plants
+   * AG_sp_con: aboveground biomass of conditioning species plants
+   * AG_ind_con: mean aboveground biomass of individual conditioning species plants
+   * Group: monocultures versus. mixtures
 ### Data-specific information for: data_FigS3.xlsx
 1. The "Respond_AG" sheet:
-   ○ Pot_res: responding community ID (/pot)
-   ○ Paspalum_conjugatum: aboveground biomass of the response species *Paspalum conjugatum* 
-   ○ Achyranthes_aspera: aboveground biomass of the response species *Achyranthes aspera*
-   ○ Setaria_viridis: aboveground biomass of the response species *Setaria viridis*
-   ○ Senna_tora: aboveground biomass of the response species *Senna tora*
-   ○ Amaranthus_hybridus: aboveground biomass of the response species *Amaranthus hybridus*
-   ○ Senna_occidentalis: aboveground biomass of the response species *Senna occidentalis*
+   * Pot_res: responding community ID (/pot)
+   * Paspalum_conjugatum: aboveground biomass of the response species *Paspalum conjugatum* 
+   * Achyranthes_aspera: aboveground biomass of the response species *Achyranthes aspera*
+   * Setaria_viridis: aboveground biomass of the response species *Setaria viridis*
+   * Senna_tora: aboveground biomass of the response species *Senna tora*
+   * Amaranthus_hybridus: aboveground biomass of the response species *Amaranthus hybridus*
+   * Senna_occidentalis: aboveground biomass of the response species *Senna occidentalis*
 2. The "Condition_AGraw" sheet: 
-   ○ Pot_con: conditioning community ID (/pot)
+   * Pot_con: conditioning community ID (/pot)
 3. The "species_specific_PSF" sheet: aboveground biomass of conditioning species: data in wide format
-   ○ Pot_res: responding community ID (/pot)
-   ○ Pot_con: conditioning community ID (/pot)
-   ○ Richness_con: species richness of conditioning community
-   ○ Pc_AG, Aa_AG, Sv_AG, St_AG, Ah_AG, Soc_AG: aboveground biomass of the responding species *Paspalum conjugatum* ,*Achyranthes aspera*,*Setaria viridis*,
+   * Pot_res: responding community ID (/pot)
+   * Pot_con: conditioning community ID (/pot)
+   * Richness_con: species richness of conditioning community
+   * Pc_AG, Aa_AG, Sv_AG, St_AG, Ah_AG, Soc_AG: aboveground biomass of the responding species *Paspalum conjugatum* ,*Achyranthes aspera*,*Setaria viridis*,
                                                 *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
-   ○ Pc_PSF, Aa_PSF, Sv_PSF, St_PSF, Ah_PSF, Soc_PSF: species-specific effect of the responding species *Paspalum conjugatum* ,*Achyranthes aspera*,*Setaria viridis*,
+   * Pc_PSF, Aa_PSF, Sv_PSF, St_PSF, Ah_PSF, Soc_PSF: species-specific effect of the responding species *Paspalum conjugatum* ,*Achyranthes aspera*,*Setaria viridis*,
                                                       *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
-   ○ Pc_Phylo_Dist, Aa_Phylo_Dist, Sv_Phylo_Dist, St_Phylo_Dist, Ah_Phylo_Dist, Soc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for                                                                                                  *Paspalum conjugatum* ,*Achyranthes aspera*,*Setaria viridis*,
+   * Pc_Phylo_Dist, Aa_Phylo_Dist, Sv_Phylo_Dist, St_Phylo_Dist, Ah_Phylo_Dist, Soc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for                                                                                                  *Paspalum conjugatum* ,*Achyranthes aspera*,*Setaria viridis*,
                                                                                                 *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
  4. The "all_species" sheet:
-   ○ Tube number: sample ID
-   ○ Species_res: the abbreviation for responding species plants 
-   ○ Species_PSF: species-specific effect of each responding species (all responding species were considered together)
-   ○ Species_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for each response species (all responding species were considered together)
+   * Tube number: sample ID
+   * Species_res: the abbreviation for responding species plants 
+   * Species_PSF: species-specific effect of each responding species (all responding species were considered together)
+   * Species_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for each response species (all responding species were considered together)
 ### Data-specific information for: Plant_tree.treefile
 Description: Phylogenetic relationship of all experimental species in Plant-soil feedback experiment.
 
