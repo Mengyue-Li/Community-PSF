@@ -84,7 +84,7 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * Species_PSF: species-specific effect of each responding species (all responding species were considered together)
    * Species_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for each response species (all responding species were considered together)
 ### Data-specific information for: Plant_tree.treefile
-Description: Phylogenetic relationship of all experimental species in Plant-soil feedback experiment.
+Description: Phylogenetic relationship of all experimental species in the plant-soil feedback experiment.
 
  
 # System Requirements
