@@ -9,7 +9,7 @@ This script contains all the data analysis and visualization code of Fig.1, Fig.
 This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig.S2,  Fig.S3.
 ## File overview
 1. Fig.1: Fig1_code.R & data_Fig.1.xlsx
-2. Fig.3 & Table S2 S3 S4: Fig.3.R & data_Fig3.xlsx
+2. Fig.3 & Table S2 S3 S4: Fig.3 & Table S2 S3 S4.R & data_Fig.3 & Table S2 S3 S4.xlsx
 3. Fig.S1: Fig.S1_code.R & data_Fig.S1.xlsx
 4. Fig.S2: Fig.S2.R & data_FigS2.xlsx
 5. Fig.S3: Fig.S3.R & data_FigS3.xlsx & Plant_tree.treefile 
@@ -22,7 +22,7 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * MaxNo._Cspp.ID: ID of MaxNo._Cspp.
    * No._study_Cspp._peryear: the number of PSF studies per year for different MaxNo._Cspp.
    * Percentage : the proportion of No._study_Cspp._peryear to total studies (466 PSF experiments)
-### Data-specific information for: data_Fig3.xlsx
+### Data-specific information for: data_Fig.3 & Table S2 S3 S4.xlsx
 1. The "Note" sheet:
    * SpeciesID: conditioning species ID
    * Species_abbrev: abbreviation for conditioning species 
