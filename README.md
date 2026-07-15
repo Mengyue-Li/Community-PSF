@@ -20,19 +20,19 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * remark: sample classification: CK, conditioning community ID, conditioning species richness 
    * Richness_con: sample classification: conditioning species richness 
    * TG_Pot_res: total biomass of responding community
-   * Pc_averageAG_res: Aboveground biomass of responding species Pc *Paspalum conjugatum*
-   * Aa_averageAG_res: Aboveground biomass of responding species Aa *Achyranthes aspera*
-   * Sv_averageAG_res: Aboveground biomass of responding species Sv *Setaria viridis*
-   * St_averageAG_res: Aboveground biomass of responding species St *Senna tora*
-   * Ah_averageAG_res: Aboveground biomass of responding species Ah *Amaranthus hybridus*
-   * Soc_averageAG_res: Aboveground biomass of responding species Soc *Senna occidentalis*
+   * Pc_averageAG_res: aboveground biomass of responding species Pc *Paspalum conjugatum*
+   * Aa_averageAG_res: aboveground biomass of responding species Aa *Achyranthes aspera*
+   * Sv_averageAG_res: aboveground biomass of responding species Sv *Setaria viridis*
+   * St_averageAG_res: aboveground biomass of responding species St *Senna tora*
+   * Ah_averageAG_res: aboveground biomass of responding species Ah *Amaranthus hybridus*
+   * Soc_averageAG_res: aboveground biomass of responding species Soc *Senna occidentalis*
 2. The "data_regress" sheet:
    * Pot: rsponding species ID
-   * Alive_all_conditioning_plants: Pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing    biomass (i.e., any mortality) were scored as 'NO'.
-   * Composition_con: Composition of conditioning community
+   * Alive_all_conditioning_plants: pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing    biomass (i.e., any mortality) were scored as 'NO'.
+   * Composition_con: composition of conditioning community
    * Richness_con: species richness of conditioning community
-   * Species: The abbreviation of conditioning plant species
-   * Species_full: The Latin name for conditioning plant species
+   * Species: the abbreviation of conditioning plant species
+   * Species_full: the Latin name for conditioning plant species
    * ActualPSF: Observed community-level PSFs
    * RichnessPSF: Predicted community-level PSF values based on the richness hypothesis
    * BiomassRatioPSF: predicted community-level PSF values based on the biomass-ratio hypotheses
@@ -42,7 +42,7 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * SpeciesID: conditioning species ID
    * The Latin name for conditioning plant species 
 4. The "pot_data" sheet:
-   * Pot: rsponding species ID
+   * Pot: rsponding pot ID
    * Alive_all_conditioning_plants: Pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing    biomass (i.e., any mortality) were scored as 'NO'.
    * Composition_con: Composition of conditioning community
    * Richness_con: species richness of conditioning community
@@ -53,16 +53,43 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * St_average_res: aboveground biomass of the response species *Senna tora*
    * Ah_average_res: aboveground biomass of the response species *Amaranthus hybridus*
    * Soc_average_res: aboveground biomass of the response species *Senna occidentalis*
-
-* Pc_AG, Aa_AG, Sv_AG, St_AG, Ah_AG, Soc_AG: aboveground biomass of the responding species *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
-   * Pc_PSF, Aa_PSF, Sv_PSF, St_PSF, Ah_PSF, Soc_PSF: species-specific effect of the responding species *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
-   * Pc_Phylo_Dist, Aa_Phylo_Dist, Sv_Phylo_Dist, St_Phylo_Dist, Ah_Phylo_Dist, Soc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
- 
-
-### Data-specific information for: S1.xlsx
+   * Pc_con：*Paspalum conjugatum* presence in both the conditioning and responding phases (binary variable)  
+   * Aa_con：*Achyranthes aspera* presence in both the conditioning and responding phases (binary variable)  
+   * Sv_con：*Setaria viridis* presence in both the conditioning and responding phases (binary variable)  
+   * St_con：*Senna tora* presence in both the conditioning and responding phases (binary variable)  
+   * Ah_con：*Amaranthus hybridus* presence in both the conditioning and responding phases (binary variable)  
+   * Soc_con：*Senna occidentalis* presence in both the conditioning and responding phases (binary variable)  
+   * ActualPSF: Observed community-level PSFs
+   * RichnessPSF: Predicted community-level PSF values based on the richness hypothesis
+   * BiomassRatioPSF: predicted community-level PSF values based on the biomass-ratio hypothese
+   * ActualPSF_Pc：observed species-specific PSFs of *Paspalum conjugatum*
+   * RichnessPSF_Pc：richness predicted species-specific PSFs of *Paspalum conjugatum*
+   * BiomassRatioPSF_Pc：biomass-ratio predicted species-specific PSFs of *Paspalum conjugatum*
+   * ActualPSF_Aa：observed species-specific PSFs of *Achyranthes aspera*
+   * RichnessPSF_Aa：richness predicted species-specific PSFs of *Achyranthes aspera*
+   * BiomassRatioPSF_Aa：biomass-ratio predicted species-specific PSFs of *Achyranthes aspera*
+   * ActualPSF_Sv：observed species-specific PSFs of *Setaria viridis*
+   * RichnessPSF_Sv：richness predicted species-specific PSFs of *Setaria viridis*
+   * BiomassRatioPSF_Sv：biomass-ratio predicted species-specific PSFs of *Setaria viridis*
+   * ActualPSF_St：observed species-specific PSFs of *Senna tora*
+   * RichnessPSF_St：richness predicted species-specific PSFs of *Senna tora*
+   * BiomassRatioPSF_St：biomass-ratio predicted species-specific PSFs of *Senna tora*
+   * ActualPSF_Ah：observed species-specific PSFs of *Amaranthus hybridus*
+   * RichnessPSF_Ah：richness predicted species-specific PSFs of *Amaranthus hybridus*
+   * BiomassRatioPSF_Ah：biomass-ratio predicted species-specific PSFs of *Amaranthus hybridus*
+   * ActualPSF_Soc：observed species-specific PSFs of *Senna occidentalis*
+   * RichnessPSF_Soc：richness predicted species-specific PSFs of *Senna occidentalis*
+   * BiomassRatioPSF_Soc：biomass-ratio predicted species-specific PSFs of*Senna occidentalis*
+   * Pc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Paspalum conjugatum*
+   * Aa_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Achyranthes aspera*
+   * Sv_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Setaria viridis*
+   * St_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Senna tora*
+   * Ah_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Amaranthus hybridus*
+   * Soc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for*Senna occidentalis*
+### Data-specific information for: FigS1.xlsx
 1. The "FigS1" sheet: abundance of conditioning species
-   * Pot_ID: sample ID
-   *  Sor-Cs: abundance of conditioning species plants
+   * Pot_ID: pot IDs under different conditioning species richness
+   * Sor-Cs: abundance of conditioning species plants
 ### Data-specific information for: FigS2.xlsx
 1. The "AG_con" sheet:
    * Pot_con: conditioning community ID (/pot)
@@ -75,12 +102,11 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * Pot_con: conditioning community ID (/pot)
    * SpeciesID: conditioning species ID
    * Species_con: abbreviation for conditioning species plants
-   *  Group: monocultures
-   *  AG_sp_con: total aboveground biomass for plant monocultures
+   * Group: monocultures
+   * AG_sp_con: total aboveground biomass for plant monocultures
 ### Data-specific information for: Plant_tree.treefile
 Description: Phylogenetic relationship of all experimental species in the plant-soil feedback experiment.
 
- 
 # System Requirements
 ## Hardware Requirements
 R package requires only a standard computer with enough RAM to support the in-memory operations.
@@ -264,139 +290,164 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 ~~~
 ## Note: 
 The dataset stored in this repository is same to the dataset in figshare( ).
-Running each line of code on a recommended computer takes about 1-5 seconds. A notable exception is Step 4 in the "#### explanations - Modified to only include the three R² values requested" section of Fig. 3’s code, which takes 5-10 minutes.
-### Instructions to run on data: example-“ Step 4” code
+Running each line of code on a recommended computer takes about 1-5 seconds. A notable exception is Step 4 in the "#### explanations - Modified to only include the three R² values requested" section of Fig. 2’s code, which takes 5-10 minutes.
+### Instructions to run on data: example-“Part 4---Random forest analysis (using only actual experimental pot data)” code
 ~~~
-#----------------------------------------------
-# Step 4: Run bootstrap iterations (using only RandomForest)
-#----------------------------------------------
-# Identify indices for stratified sampling
-id_lv1 <- which(df.rf$Lv == 1)
-id_lvh <- which(df.rf$Lv > 1)
-n_lv1 <- length(id_lv1)
-n_lvh <- length(id_lvh)
+##################################################################################################################
+#####                                                                                                        ##### 
+#####               Part 4---Random forest analysis (using only actual experimental pot data)                #####
+#####                                                                                                        #####  
+##################################################################################################################
+# ------------------------------------------------------------------------------
+#  Step1: – Random forest analysis
+# ------------------------------------------------------------------------------
+set.seed(123)
+ 
+# filter out the duplicates - each pot should only be used once in the analysis
+df.rf <- df[df$remark %in% levels_rich, ] 
+df.rf <- merge(df.rf, pot_predictions[, c("Pot", "pred_RichnessPSF_Pot", "pred_BiomassRatioPSF_Pot")], 
+               by = "Pot", all.x = TRUE) # Merge predicted values
+rownames(df.rf) <- df.rf$Row.names
+df.rf$Row.names <- NULL
 
-# Progress tracker
-cat("Starting bootstrap iterations...\n")
-prog_interval <- ceiling(n_iter/10)
+# Define random forest model formulas
+fml_richness <- formula(TG_Pot_res ~ Richness_con)   # Only richness
+fml_identity <- formula(paste("TG_Pot_res ~ Richness_con +", paste(stressors, collapse = " + ")))  # Richness + species identity
+fml_Effect_size <- formula(paste("TG_Pot_res ~ Richness_con +", paste(stressors, collapse = " + "), 
+                                 "+ pred_RichnessPSF_Pot + pred_BiomassRatioPSF_Pot"))  # Richness + identity + effect size
+n_tree <- 1000  # Number of trees per forest
+n_iter_rf <- 1000  # Bootstrap iterations for RF
+cv_prop <- 0.7  # Training set proportion
 
-for (i in 1:n_iter) {
-  # Print progress
-  if (i %% prog_interval == 0) {
-    cat(sprintf("Completed %d%% (%d/%d iterations)\n", 
-                round(i/n_iter*100), i, n_iter))
-  }
-  
-  #----------------------------------------------
-  # Standard RandomForest with train/test split
-  #----------------------------------------------
+# Number of predictors in each model
+n_pred_richness <- length(all.vars(fml_richness)) - 1
+n_pred_identity <- length(all.vars(fml_identity)) - 1
+n_pred_Effect_size <- length(all.vars(fml_Effect_size)) - 1
+
+# Data frame to store results
+results_rf <- data.frame(Iteration = rep(1:n_iter_rf, each = 3),
+                         Model = rep(c("Species_richness", "Species_identity", "Effect_size"), n_iter_rf),
+                         R2_RF = NA, stringsAsFactors = FALSE)
+
+# Split samples by richness level (for stratified bootstrap)
+id_lv1 <- which(df.rf$Richness_con == 1)
+id_lvh <- which(df.rf$Richness_con != 1)
+n_lv1 <- length(id_lv1); n_lv1     #********************* 140
+n_lvh <- length(id_lvh); n_lvh      #********************* 144
+
+prog_interval <- ceiling(n_iter_rf/10)
+for (i in 1:n_iter_rf) {
+  if (i %% prog_interval == 0) cat(sprintf("Completed %d%% (%d/%d iterations)\n", round(i/n_iter_rf*100), i, n_iter_rf))
   tryCatch({
-    # Create a stratified bootstrap sample
-    bs_indices <- c(
-      sample(id_lv1, ceiling(0.5*n_lv1), replace = TRUE),
-      sample(id_lvh, ceiling(0.5*n_lvh), replace = TRUE)
-    )
+    # Stratified bootstrap sampling (preserve proportion of richness 1 and >1)
+    bs_indices <- c(sample(id_lv1, ceiling(0.5*n_lv1), replace = TRUE),
+                    sample(id_lvh, ceiling(0.5*n_lvh), replace = TRUE))
     bs_data <- df.rf[bs_indices, ]
+    train_idx <- sample(nrow(bs_data), round(cv_prop * nrow(bs_data)))
+    train_data <- bs_data[train_idx, ]
+    test_data <- bs_data[-train_idx, ]
     
-    # Train/test split
-    train_indices <- sample(nrow(bs_data), round(cv_prop * nrow(bs_data)))
-    train_data <- bs_data[train_indices, ]
-    test_data <- bs_data[-train_indices, ]
+    # Train random forest models
+    model_richness <- randomForest(fml_richness, data = train_data, ntree = n_tree, mtry = min(2, n_pred_richness))
+    model_identity <- randomForest(fml_identity, data = train_data, ntree = n_tree, mtry = min(3, n_pred_identity))
+    model_Effect_size <- randomForest(fml_Effect_size, data = train_data, ntree = n_tree, mtry = min(5, n_pred_Effect_size))
     
-    # Fit the three models
-    model_Lv <- randomForest(fml_Lv, data = train_data, 
-                             ntree = n_tree, mtry = min(2, n_pred_Lv))
+    # Predictions
+    pred_richness <- predict(model_richness, newdata = test_data)
+    pred_identity <- predict(model_identity, newdata = test_data)
+    pred_Effect_size <- predict(model_Effect_size, newdata = test_data)
     
-    model_LvID <- randomForest(fml_LvID, data = train_data, 
-                               ntree = n_tree, mtry = min(3, n_pred_LvID))
+    # Calculate R² (squared correlation between predicted and observed)
+    r2_richness <- cor(pred_richness, test_data$TG_Pot_res)^2
+    r2_identity <- cor(pred_identity, test_data$TG_Pot_res)^2
+    r2_Effect_size <- cor(pred_Effect_size, test_data$TG_Pot_res)^2
     
-    model_Full <- randomForest(fml_Full, data = train_data, 
-                               ntree = n_tree, mtry = min(5, n_pred_Full))
-    
-    # Make predictions
-    pred_Lv <- predict(model_Lv, newdata = test_data)
-    pred_LvID <- predict(model_LvID, newdata = test_data)
-    pred_Full <- predict(model_Full, newdata = test_data)
-    
-    # Calculate R² (squared correlation)
-    r2_Lv <- cor(pred_Lv, test_data[[response_var]])^2
-    r2_LvID <- cor(pred_LvID, test_data[[response_var]])^2
-    r2_Full <- cor(pred_Full, test_data[[response_var]])^2
-    
-    # Store R² values
     idx <- (i-1)*3 + 1:3
-    results_rf$R2_RF[idx] <- c(r2_Lv, r2_LvID, r2_Full)
-    
-  }, error = function(e) {
-    cat("Error in RF iteration", i, ":", conditionMessage(e), "\n")
-  })
+    results_rf$R2_RF[idx] <- c(r2_richness, r2_identity, r2_Effect_size)
+  }, error = function(e) cat("Error in iteration", i, ":", e$message, "\n"))
 }
+
+results_rf$Model <- factor(results_rf$Model, levels = c("Species_richness", "Species_identity", "Effect_size"))
+rf_summary <- results_rf %>%
+  group_by(Model) %>%
+  summarize(CI.low = quantile(R2_RF, 0.025, na.rm = TRUE),
+            Mean = mean(R2_RF, na.rm = TRUE),
+            Median = median(R2_RF, na.rm = TRUE),
+            CI.high = quantile(R2_RF, 0.975, na.rm = TRUE),
+            SD = sd(R2_RF, na.rm = TRUE))
+print(rf_summary)
 ~~~
 ### Expected output
 
 ~~~
-#----------------------------------------------
-> # Step 4: Run bootstrap iterations (using only RandomForest)
-> #----------------------------------------------
-> # Identify indices for stratified sampling
-> id_lv1 <- which(df.rf$Lv == 1)
-> id_lvh <- which(df.rf$Lv > 1)
-> n_lv1 <- length(id_lv1)
-> n_lvh <- length(id_lvh)
-> # Progress tracker
-> cat("Starting bootstrap iterations...\n")
-Starting bootstrap iterations...
-> prog_interval <- ceiling(n_iter/10)
-> for (i in 1:n_iter) {
-+   # Print progress
-+   if (i %% prog_interval == 0) {
-+     cat(sprintf("Completed %d%% (%d/%d iterations)\n", 
-+                 round(i/n_iter*100), i, n_iter))
-+   }
-+   
-+   #----------------------------------------------
-+   # Standard RandomForest with train/test split
-+   #----------------------------------------------
+> ##################################################################################################################
+> #####                                                                                                        ##### 
+> #####               Part 4---Random forest analysis (using only actual experimental pot data)                #####
+> #####                                                                                                        #####  
+> ##################################################################################################################
+> # ------------------------------------------------------------------------------
+> #  Step1: – Random forest analysis
+> # ------------------------------------------------------------------------------
+> set.seed(123)
+> # filter out the duplicates - each pot should only be used once in the analysis
+> df.rf <- df[df$remark %in% levels_rich, ] 
+> df.rf <- merge(df.rf, pot_predictions[, c("Pot", "pred_RichnessPSF_Pot", "pred_BiomassRatioPSF_Pot")], 
++                by = "Pot", all.x = TRUE) # Merge predicted values
+> rownames(df.rf) <- df.rf$Row.names
+> df.rf$Row.names <- NULL
+> # Define random forest model formulas
+> fml_richness <- formula(TG_Pot_res ~ Richness_con)   # Only richness
+> fml_identity <- formula(paste("TG_Pot_res ~ Richness_con +", paste(stressors, collapse = " + ")))  # Richness + species identity
+> fml_Effect_size <- formula(paste("TG_Pot_res ~ Richness_con +", paste(stressors, collapse = " + "), 
++                                  "+ pred_RichnessPSF_Pot + pred_BiomassRatioPSF_Pot"))  # Richness + identity + effect size
+> n_tree <- 1000  # Number of trees per forest
+> n_iter_rf <- 1000  # Bootstrap iterations for RF
+> cv_prop <- 0.7  # Training set proportion
+> # Number of predictors in each model
+> n_pred_richness <- length(all.vars(fml_richness)) - 1
+> n_pred_identity <- length(all.vars(fml_identity)) - 1
+> n_pred_Effect_size <- length(all.vars(fml_Effect_size)) - 1
+> # Data frame to store results
+> results_rf <- data.frame(Iteration = rep(1:n_iter_rf, each = 3),
++                          Model = rep(c("Species_richness", "Species_identity", "Effect_size"), n_iter_rf),
++                          R2_RF = NA, stringsAsFactors = FALSE)
+> # Split samples by richness level (for stratified bootstrap)
+> id_lv1 <- which(df.rf$Richness_con == 1)
+> id_lvh <- which(df.rf$Richness_con != 1)
+> n_lv1 <- length(id_lv1); n_lv1     #********************* 140
+[1] 140
+> n_lvh <- length(id_lvh); n_lvh      #********************* 144
+[1] 144
+> prog_interval <- ceiling(n_iter_rf/10)
+> for (i in 1:n_iter_rf) {
++   if (i %% prog_interval == 0) cat(sprintf("Completed %d%% (%d/%d iterations)\n", round(i/n_iter_rf*100), i, n_iter_rf))
 +   tryCatch({
-+     # Create a stratified bootstrap sample
-+     bs_indices <- c(
-+       sample(id_lv1, ceiling(0.5*n_lv1), replace = TRUE),
-+       sample(id_lvh, ceiling(0.5*n_lvh), replace = TRUE)
-+     )
++     # Stratified bootstrap sampling (preserve proportion of richness 1 and >1)
++     bs_indices <- c(sample(id_lv1, ceiling(0.5*n_lv1), replace = TRUE),
++                     sample(id_lvh, ceiling(0.5*n_lvh), replace = TRUE))
 +     bs_data <- df.rf[bs_indices, ]
++     train_idx <- sample(nrow(bs_data), round(cv_prop * nrow(bs_data)))
++     train_data <- bs_data[train_idx, ]
++     test_data <- bs_data[-train_idx, ]
 +     
-+     # Train/test split
-+     train_indices <- sample(nrow(bs_data), round(cv_prop * nrow(bs_data)))
-+     train_data <- bs_data[train_indices, ]
-+     test_data <- bs_data[-train_indices, ]
++     # Train random forest models
++     model_richness <- randomForest(fml_richness, data = train_data, ntree = n_tree, mtry = min(2, n_pred_richness))
++     model_identity <- randomForest(fml_identity, data = train_data, ntree = n_tree, mtry = min(3, n_pred_identity))
++     model_Effect_size <- randomForest(fml_Effect_size, data = train_data, ntree = n_tree, mtry = min(5, n_pred_Effect_size))
 +     
-+     # Fit the three models
-+     model_Lv <- randomForest(fml_Lv, data = train_data, 
-+                              ntree = n_tree, mtry = min(2, n_pred_Lv))
++     # Predictions
++     pred_richness <- predict(model_richness, newdata = test_data)
++     pred_identity <- predict(model_identity, newdata = test_data)
++     pred_Effect_size <- predict(model_Effect_size, newdata = test_data)
 +     
-+     model_LvID <- randomForest(fml_LvID, data = train_data, 
-+                                ntree = n_tree, mtry = min(3, n_pred_LvID))
++     # Calculate R² (squared correlation between predicted and observed)
++     r2_richness <- cor(pred_richness, test_data$TG_Pot_res)^2
++     r2_identity <- cor(pred_identity, test_data$TG_Pot_res)^2
++     r2_Effect_size <- cor(pred_Effect_size, test_data$TG_Pot_res)^2
 +     
-+     model_Full <- randomForest(fml_Full, data = train_data, 
-+                                ntree = n_tree, mtry = min(5, n_pred_Full))
-+     
-+     # Make predictions
-+     pred_Lv <- predict(model_Lv, newdata = test_data)
-+     pred_LvID <- predict(model_LvID, newdata = test_data)
-+     pred_Full <- predict(model_Full, newdata = test_data)
-+     
-+     # Calculate R² (squared correlation)
-+     r2_Lv <- cor(pred_Lv, test_data[[response_var]])^2
-+     r2_LvID <- cor(pred_LvID, test_data[[response_var]])^2
-+     r2_Full <- cor(pred_Full, test_data[[response_var]])^2
-+     
-+     # Store R² values
 +     idx <- (i-1)*3 + 1:3
-+     results_rf$R2_RF[idx] <- c(r2_Lv, r2_LvID, r2_Full)
-+     
-+   }, error = function(e) {
-+     cat("Error in RF iteration", i, ":", conditionMessage(e), "\n")
-+   })
++     results_rf$R2_RF[idx] <- c(r2_richness, r2_identity, r2_Effect_size)
++   }, error = function(e) cat("Error in iteration", i, ":", e$message, "\n"))
 + }
 Completed 10% (100/1000 iterations)
 Completed 20% (200/1000 iterations)
@@ -408,6 +459,21 @@ Completed 70% (700/1000 iterations)
 Completed 80% (800/1000 iterations)
 Completed 90% (900/1000 iterations)
 Completed 100% (1000/1000 iterations)
+> results_rf$Model <- factor(results_rf$Model, levels = c("Species_richness", "Species_identity", "Effect_size"))
+> rf_summary <- results_rf %>%
++   group_by(Model) %>%
++   summarize(CI.low = quantile(R2_RF, 0.025, na.rm = TRUE),
++             Mean = mean(R2_RF, na.rm = TRUE),
++             Median = median(R2_RF, na.rm = TRUE),
++             CI.high = quantile(R2_RF, 0.975, na.rm = TRUE),
++             SD = sd(R2_RF, na.rm = TRUE))
+> print(rf_summary)
+# A tibble: 3 × 6
+  Model               CI.low   Mean Median CI.high     SD
+  <fct>                <dbl>  <dbl>  <dbl>   <dbl>  <dbl>
+1 Species_richness 0.0000197 0.0326 0.0176   0.156 0.0420
+2 Species_identity 0.00200   0.144  0.123    0.416 0.112 
+3 Effect_size      0.00452   0.162  0.144    0.426 0.115 
 ~~~
 # License
 This project is covered under the GNU GENERAL PUBLIC LICENSE Version 2 (GPL-2).
