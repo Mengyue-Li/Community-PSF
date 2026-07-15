@@ -8,21 +8,12 @@ This script contains all the data analysis and visualization code of Fig.1, Fig.
 ## Data  
 This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig.S2,  Fig.S3.
 ## File overview
-1. Fig.1: Fig1_code.R, data_Fig.1.xlsx
-2. Fig.3 & Table S2 S3 S4: Fig.3 & Table S2 S3 S4.R, data_Fig.3 & Table S2 S3 S4.xlsx
-3. Fig.S1: Fig.S1_code.R, data_Fig.S1.xlsx
-4. Fig.S2: Fig.S2.R, data_FigS2.xlsx
-5. Fig.S3: Fig.S3.R, data_FigS3.xlsx, Plant_tree.treefile 
-### Data-specific information for: data_Fig.1.xlsx
-1. The "bar" sheet:
-   * MaxNo._Cspp.: the maximum number of conditioning plant species per experimental unit across these studies
-   * 1993-2025: the number of PSF studies 
-2. The "pie" sheet: 
-   * MaxNo._Cspp.: the maximum number of conditioning plant species per experimental unit across these studies
-   * MaxNo._Cspp.ID: ID of MaxNo._Cspp.
-   * No._study_Cspp._peryear: the number of PSF studies per year for different MaxNo._Cspp.
-   * Percentage : the proportion of No._study_Cspp._peryear to total studies (466 PSF experiments)
-### Data-specific information for: data_Fig.3 & Table S2 S3 S4.xlsx
+1. Fig.2 & Table S1-S3: Fig.2 & TableS1-S3.R, Fig2 & S3 & TableS1-6.xlsx
+2. Fig.S3 & TableS4-S6: Fig.S3 & TableS4-S6.R, Fig2 & S3 & TableS1-6.xlsx, Plant_tree.treefile
+3. Fig.S1: FigS1_code.R, FigS1.xlsx
+4. Fig.S2: FigS2.R, FigS2.xlsx
+
+### Data-specific information for: Fig2 & S3 & TableS1-6.xlsx
 1. The "Note" sheet:
    * SpeciesID: conditioning species ID
    * Species_abbrev: abbreviation for conditioning species 
@@ -146,74 +137,127 @@ The package should take approximately 50-60 seconds to install with vignettes on
 #####                                                                        ##### 
 #####           Part1---effect of home vs away:PSF                           #####
 #####                                                                        #####  
-###################################################################################
-setwd('D:/2025.10.4-NPH/0-Code-alive-1216/code-0108-R1/Fig.3 & Table S2 S3 S4') 
+##################################################################################
 
-#--------------------------------------
-### Table S2
-#--------------------------------------
-data = read.xlsx("data_Fig3.xlsx",sheet="homeaway_raw"); data[1:6,1:12]
+setwd('D:/2025.10.4-NPH/1-0330/Evan-0624/lu-0705/新建文件夹/Code-0715/Fig.2 & TableS1-S3') 
+
+#-------------------------------------------------------------------------------------------- 
+### Table S1 ---   responding community aboveground biomass & responding community PSFs
+#-------------------------------------------------------------------------------------------- 
+data = read.xlsx("Fig2 & S3 & TableS1-6.xlsx",sheet="pot_data"); data[1:6,1:12]
 data <- data %>% slice(-(1:5)); data[1:6,1:12]
 data$Richness_con = as.factor(data$Richness_con)
 
 # Fit lm model with TG_res
-mod_full1 <- lm(TG_res ~ Richness_con * (B_con + C_con + F_con + T_con + V_con), data = data)
+mod_full1 <- lm(TG_res ~ Richness_con * (Aa_con + Sv_con + St_con + Ah_con + Soc_con), data = data)
 anova(mod_full1)-> mod_full1_result; mod_full1_result
 p1 <- mod_full1_result$Pr;p1 
 p.adjust(p1, "BH")
 #p.adjust(p1, "bonferroni")
+
+# Fit lm model with PSF
+mod_full2 <- lm(ActualPSF_Pot ~ Richness_con * (Aa_con + Sv_con + St_con + Ah_con + Soc_con), data = data)
+anova(mod_full2)-> mod_full2_result; mod_full2_result
+p2 <- mod_full2_result$Pr;p2 
+p.adjust(p2, "BH")
+#p.adjust(p2, "bonferroni")
 ~~~
 ## Expected output
 ~~~
-> setwd('D:/2025.10.4-NPH/0-Code-alive-1216/code-0108-R1/Fig.3 & Table S2 S3 S4') 
-> #--------------------------------------
-> ### Table S2
-> #--------------------------------------
-> data = read.xlsx("data_Fig3.xlsx",sheet="homeaway_raw"); data[1:6,1:12]
-  pot Pot_res      Pot_con Richness_con AG_con TG_res       PSFs c_con B_con C_con F_con T_con
-1   1    CK_1 na (sterile)           NA     NA  87.54         NA    NO    NO    NO    NO    NO
-2   2    CK_2 na (sterile)           NA     NA  92.14         NA    NO    NO    NO    NO    NO
-3   3    CK_3 na (sterile)           NA     NA 100.32         NA    NO    NO    NO    NO    NO
-4   4    CK_4 na (sterile)           NA     NA  80.18         NA    NO    NO    NO    NO    NO
-5   5    CK_5 na (sterile)           NA     NA  74.82         NA    NO    NO    NO    NO    NO
-6   6   1_1_1        1_1_1            1   8.63  68.32 -0.2417056    NO    NO    NO    NO    NO
+##################################################################################
+#####                                                                        ##### 
+#####           Part1---effect of home vs away:PSF                           #####
+#####                                                                        #####  
+##################################################################################
+> setwd('D:/2025.10.4-NPH/1-0330/Evan-0624/lu-0705/新建文件夹/Code-0715/Fig.2 & TableS1-S3') 
+> #-------------------------------------------------------------------------------------------- 
+> ### Table S1 ---   responding community aboveground biomass & responding community PSFs
+> #-------------------------------------------------------------------------------------------- 
+> data = read.xlsx("Fig2 & S3 & TableS1-6.xlsx",sheet="pot_data"); data[1:6,1:12]
+    Pot Alive_all.conditioning.plants Composition_con Richness_con AG_con AG_res BG_res TG_res
+1  <NA>                          <NA>            <NA>           NA     NA  74.83  12.71  87.54
+2  <NA>                          <NA>            <NA>           NA     NA  77.92  14.22  92.14
+3  <NA>                          <NA>            <NA>           NA     NA  85.38  14.94 100.32
+4  <NA>                          <NA>            <NA>           NA     NA  69.58  10.60  80.18
+5  <NA>                          <NA>            <NA>           NA     NA  63.83  10.69  74.52
+6 1_1_1                           YES             Sor            1   8.63  58.04  10.28  68.32
+  Pc_average_res Aa_average_res Sv_average_res St_average_res
+1          5.815          0.255         17.050          1.150
+2          2.265          0.080         24.320          1.175
+3          4.950          0.930         26.530          1.410
+4          3.230          0.175         14.715          1.130
+5          3.915          0.315         10.245          2.070
+6          0.410          0.000         26.175          0.495
 > data <- data %>% slice(-(1:5)); data[1:6,1:12]
-  pot Pot_res Pot_con Richness_con AG_con TG_res       PSFs c_con B_con C_con F_con T_con
-1   6   1_1_1   1_1_1            1   8.63  68.32 -0.2417056    NO    NO    NO    NO    NO
-2   7   1_1_2   1_1_2            1  12.22  65.21 -0.2882953    NO    NO    NO    NO    NO
-3   8   1_1_3   1_1_3            1   7.02  76.33 -0.1308421    NO    NO    NO    NO    NO
-4   9   1_1_4   1_1_4            1  11.03  61.24 -0.3511075    NO    NO    NO    NO    NO
-5  10   1_1_5   1_1_5            1  14.74  59.51 -0.3797638    NO    NO    NO    NO    NO
-6  11   1_2_1   1_2_1            1  11.02  68.15 -0.2441970    NO   YES    NO    NO    NO
+    Pot Alive_all.conditioning.plants Composition_con Richness_con AG_con AG_res BG_res TG_res
+1 1_1_1                           YES             Sor            1  8.630  58.04  10.28  68.32
+2 1_1_2                           YES             Sor            1 12.215  55.15  10.06  65.21
+3 1_1_3                           YES             Sor            1  7.024  63.96  12.37  76.33
+4 1_1_4                           YES             Sor            1 11.021  49.75  11.49  61.24
+5 1_1_5                           YES             Sor            1 14.738  53.41   6.10  59.51
+6 1_2_1                           YES              Aa            1 11.013  57.97  10.18  68.15
+  Pc_average_res Aa_average_res Sv_average_res St_average_res
+1          0.410          0.000         26.175          0.495
+2          1.145          0.055         18.260          4.435
+3          1.330          0.050         29.000          0.680
+4          2.170          0.025         15.625          1.955
+5          0.280          0.075         18.600          1.620
+6          0.265          0.125         18.020          7.585
 > data$Richness_con = as.factor(data$Richness_con)
 > # Fit lm model with TG_res
-> mod_full1 <- lm(TG_res ~ Richness_con * (B_con + C_con + F_con + T_con + V_con), data = data)
+> mod_full1 <- lm(TG_res ~ Richness_con * (Aa_con + Sv_con + St_con + Ah_con + Soc_con), data = data)
 > anova(mod_full1)-> mod_full1_result; mod_full1_result
 Analysis of Variance Table
 
 Response: TG_res
-                    Df  Sum Sq Mean Sq F value  Pr(>F)  
-Richness_con         4   607.6  151.89  1.2643 0.28454  
-B_con                1    18.2   18.18  0.1514 0.69757  
-C_con                1   449.8  449.76  3.7436 0.05412 .
-F_con                1   103.9  103.94  0.8652 0.35317  
-T_con                1   123.9  123.92  1.0315 0.31078  
-V_con                1     9.2    9.19  0.0765 0.78236  
-Richness_con:B_con   4   150.3   37.59  0.3129 0.86926  
-Richness_con:C_con   4   506.4  126.60  1.0537 0.38003  
-Richness_con:F_con   4   158.8   39.71  0.3305 0.85732  
-Richness_con:T_con   4   457.6  114.40  0.9522 0.43438  
-Richness_con:V_con   4   257.2   64.31  0.5353 0.70993  
-Residuals          254 30515.8  120.14                  
+                      Df  Sum Sq Mean Sq F value  Pr(>F)  
+Richness_con           4   664.9  166.22  1.3891 0.23813  
+Aa_con                 1     8.2    8.19  0.0685 0.79378  
+Sv_con                 1   523.0  523.04  4.3711 0.03755 *
+St_con                 1   197.7  197.73  1.6524 0.19980  
+Ah_con                 1   125.2  125.24  1.0466 0.30726  
+Soc_con                1     4.9    4.94  0.0413 0.83910  
+Richness_con:Aa_con    4   236.2   59.05  0.4935 0.74055  
+Richness_con:Sv_con    4   491.6  122.91  1.0272 0.39371  
+Richness_con:St_con    4   247.9   61.98  0.5179 0.72261  
+Richness_con:Ah_con    4   454.5  113.63  0.9496 0.43586  
+Richness_con:Soc_con   4   234.3   58.59  0.4896 0.74337  
+Residuals            254 30393.0  119.66                  
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 > p1 <- mod_full1_result$Pr;p1 
- [1] 0.28454201 0.69756845 0.05412107 0.35317423 0.31078445 0.78236394 0.86925594 0.38002853 0.85732088
-[10] 0.43438274 0.70992651         NA
+ [1] 0.23813017 0.79377615 0.03754687 0.19979947 0.30725677 0.83909649 0.74054825 0.39371391 0.72261087
+[10] 0.43586449 0.74337200         NA
 > p.adjust(p1, "BH")
- [1] 0.7963684 0.8692559 0.5953317 0.7963684 0.7963684 0.8692559 0.8692559 0.7963684 0.8692559 0.7963684
-[11] 0.8692559        NA
-#p.adjust(p1, "bonferroni")
+ [1] 0.7990849 0.8390965 0.4130156 0.7990849 0.7990849 0.8390965 0.8390965 0.7990849 0.8390965 0.7990849
+[11] 0.8390965        NA
+> # Fit lm model with PSF
+> mod_full2 <- lm(ActualPSF_Pot ~ Richness_con * (Aa_con + Sv_con + St_con + Ah_con + Soc_con), data = data)
+> anova(mod_full2)-> mod_full2_result; mod_full2_result
+Analysis of Variance Table
+
+Response: ActualPSF_Pot
+                      Df Sum Sq  Mean Sq F value  Pr(>F)  
+Richness_con           4 0.1320 0.033010  1.2119 0.30620  
+Aa_con                 1 0.0008 0.000756  0.0278 0.86779  
+Sv_con                 1 0.1275 0.127488  4.6804 0.03144 *
+St_con                 1 0.0441 0.044118  1.6197 0.20430  
+Ah_con                 1 0.0289 0.028923  1.0618 0.30377  
+Soc_con                1 0.0009 0.000859  0.0315 0.85922  
+Richness_con:Aa_con    4 0.0471 0.011770  0.4321 0.78537  
+Richness_con:Sv_con    4 0.1605 0.040133  1.4734 0.21071  
+Richness_con:St_con    4 0.0695 0.017382  0.6381 0.63574  
+Richness_con:Ah_con    4 0.1364 0.034097  1.2518 0.28958  
+Richness_con:Soc_con   4 0.0439 0.010963  0.4025 0.80678  
+Residuals            254 6.9186 0.027239                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> p2 <- mod_full2_result$Pr;p2 
+ [1] 0.30620227 0.86778938 0.03144185 0.20429785 0.30377487 0.85922423 0.78537251 0.21070849 0.63574279
+[10] 0.28958309 0.80678060         NA
+> p.adjust(p2, "BH")
+ [1] 0.5613708 0.8677894 0.3458604 0.5613708 0.5613708 0.8677894 0.8677894 0.5613708 0.8677894 0.5613708
+[11] 0.8677894        NA
 ~~~
 ## Note: 
 The dataset stored in this repository is same to the dataset in figshare( ).
