@@ -42,46 +42,41 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * SpeciesID: conditioning species ID
    * The Latin name for conditioning plant species 
 4. The "pot_data" sheet:
+   * Pot: rsponding species ID
+   * Alive_all_conditioning_plants: Pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing    biomass (i.e., any mortality) were scored as 'NO'.
+   * Composition_con: Composition of conditioning community
+   * Richness_con: species richness of conditioning community
+   * AG_con: Aboveground biomass of conditioning community
+   * Pc_average_res: aboveground biomass of the response species *Paspalum conjugatum* 
+   * Aa_average_res: aboveground biomass of the response species *Achyranthes aspera*
+   * Sv_average_res: aboveground biomass of the response species *Setaria viridis*
+   * St_average_res: aboveground biomass of the response species *Senna tora*
+   * Ah_average_res: aboveground biomass of the response species *Amaranthus hybridus*
+   * Soc_average_res: aboveground biomass of the response species *Senna occidentalis*
 
-
+* Pc_AG, Aa_AG, Sv_AG, St_AG, Ah_AG, Soc_AG: aboveground biomass of the responding species *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
+   * Pc_PSF, Aa_PSF, Sv_PSF, St_PSF, Ah_PSF, Soc_PSF: species-specific effect of the responding species *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
+   * Pc_Phylo_Dist, Aa_Phylo_Dist, Sv_Phylo_Dist, St_Phylo_Dist, Ah_Phylo_Dist, Soc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
+ 
 
 ### Data-specific information for: S1.xlsx
 1. The "FigS1" sheet: abundance of conditioning species
-   * Tube number: sample ID
+   * Pot_ID: sample ID
+   *  Sor-Cs: abundance of conditioning species plants
 ### Data-specific information for: FigS2.xlsx
-1. The "Note" sheet:
-   * SpeciesID: conditioning species ID
-   * Species_abbrev: abbreviation for conditioning species plants
-2. The "AG_con" sheet:
+1. The "AG_con" sheet:
    * Pot_con: conditioning community ID (/pot)
    * SpeciesID: conditioning species ID
    * Species_con: abbreviation for conditioning species plants
    * AG_sp_con: aboveground biomass of conditioning species plants
    * AG_ind_con: mean aboveground biomass of individual conditioning species plants
    * Group: monocultures versus. mixtures
-### Data-specific information for: FigS3.xlsx
-1. The "Respond_AG" sheet:
-   * Pot_res: responding community ID (/pot)
-   * Paspalum_conjugatum: aboveground biomass of the response species *Paspalum conjugatum* 
-   * Achyranthes_aspera: aboveground biomass of the response species *Achyranthes aspera*
-   * Setaria_viridis: aboveground biomass of the response species *Setaria viridis*
-   * Senna_tora: aboveground biomass of the response species *Senna tora*
-   * Amaranthus_hybridus: aboveground biomass of the response species *Amaranthus hybridus*
-   * Senna_occidentalis: aboveground biomass of the response species *Senna occidentalis*
-2. The "Condition_AGraw" sheet: 
+1. The "mono-data" sheet:
    * Pot_con: conditioning community ID (/pot)
-3. The "species_specific_PSF" sheet: aboveground biomass of conditioning species: data in wide format
-   * Pot_res: responding community ID (/pot)
-   * Pot_con: conditioning community ID (/pot)
-   * Richness_con: species richness of conditioning community
-   * Pc_AG, Aa_AG, Sv_AG, St_AG, Ah_AG, Soc_AG: aboveground biomass of the responding species *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
-   * Pc_PSF, Aa_PSF, Sv_PSF, St_PSF, Ah_PSF, Soc_PSF: species-specific effect of the responding species *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
-   * Pc_Phylo_Dist, Aa_Phylo_Dist, Sv_Phylo_Dist, St_Phylo_Dist, Ah_Phylo_Dist, Soc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Paspalum conjugatum*,*Achyranthes aspera*,*Setaria viridis*, *Senna tora*, *Amaranthus hybridus*, *Senna occidentalis*
-4. The "all_species" sheet:
-   * Tube number: sample ID
-   * Species_res: abbreviation for responding species plants 
-   * Species_PSF: species-specific effect of each responding species (all responding species were considered together)
-   * Species_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for each response species (all responding species were considered together)
+   * SpeciesID: conditioning species ID
+   * Species_con: abbreviation for conditioning species plants
+   *  Group: monocultures
+   *  AG_sp_con: total aboveground biomass for plant monocultures
 ### Data-specific information for: Plant_tree.treefile
 Description: Phylogenetic relationship of all experimental species in the plant-soil feedback experiment.
 
