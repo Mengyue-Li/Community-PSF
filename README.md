@@ -14,29 +14,37 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
 4. Fig.S2: FigS2.R, FigS2.xlsx
 
 ### Data-specific information for: Fig2 & S3 & TableS1-6.xlsx
-1. The "Note" sheet:
-   * SpeciesID: conditioning species ID
-   * Species_abbrev: abbreviation for conditioning species 
-2. The "homeaway_raw" sheet:
-   * Tube number: sample ID
-   * Pot_res: responding community ID (/pot)
-   * Pot_con: conditioning community ID (/pot)
-   * Richness_con: species richness of conditioning community
-   * AG_con: aboveground biomass of conditioning community
-   * TG_res: total biomass of responding community
-   * PSFs: the natural logarithm ratio of biomass of the responding communities in conditioned soil and that grown in sterilized soil (average of five)
-   * c_con: individual species (c, *Paspalum conjugatum*) presence in both the conditioning and responding phases (binary variable)
-   * B_con: individual species (B, *Achyranthes aspera*) presence in both the conditioning and responding phases (binary variable)
-   * C_con: individual species (C, *Setaria viridis*) presence in both the conditioning and responding phases (binary variable)
-   * F_con: individual species (F, *Senna tora*) presence in both the conditioning and responding phases (binary variable)
-   * T_con: individual species (T, *Amaranthus hybridus*) presence in both the conditioning and responding phases (binary variable)
-   * V_con: individual species (V, *Senna occidentalis*) presence in both the conditioning and responding phases (binary variable) 
-3. The "PSF_raw" sheet:
-   * Tube number: sample ID
-   * A-b: aboveground biomass of conditioning species plants
+1. The "Fig3_data" sheet:
+   * Pot: rsponding species ID
+   * Sor-Cs: aboveground biomass of conditioning species plants
    * remark: sample classification: CK, conditioning community ID, conditioning species richness 
-   * Lv: sample classification: conditioning species richness 
-   * TG: total biomass of responding community
+   * Richness_con: sample classification: conditioning species richness 
+   * TG_Pot_res: total biomass of responding community
+   * Pc_averageAG_res: Aboveground biomass of responding species Pc *Paspalum conjugatum*
+   * Aa_averageAG_res: Aboveground biomass of responding species Aa *Achyranthes aspera*
+   * Sv_averageAG_res: Aboveground biomass of responding species Sv *Setaria viridis*
+   * St_averageAG_res: Aboveground biomass of responding species St *Senna tora*
+   * Ah_averageAG_res: Aboveground biomass of responding species Ah *Amaranthus hybridus*
+   * Soc_averageAG_res: Aboveground biomass of responding species Soc *Senna occidentalis*
+2. The "data_regress" sheet:
+   * Pot: rsponding species ID
+   * Alive_all_conditioning_plants: Pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing    biomass (i.e., any mortality) were scored as 'NO'.
+   * Composition_con: Composition of conditioning community
+   * Richness_con: species richness of conditioning community
+   * Species: The abbreviation of conditioning plant species
+   * Species_full: The Latin name for conditioning plant species
+   * ActualPSF: Observed community-level PSFs
+   * RichnessPSF: Predicted community-level PSF values based on the richness hypothesis
+   * BiomassRatioPSF: predicted community-level PSF values based on the biomass-ratio hypotheses
+   * Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for each response species (each responding species were considered together)
+   * Species_con: individual species (c, *Paspalum conjugatum*, *Achyranthes aspera*, *Setaria viridis*, *Senna tora*, *Senna occidentalis*) presence in both the conditioning and responding phases (binary variable)  
+3. The "Species_AG_con" sheet:
+   * SpeciesID: conditioning species ID
+   * The Latin name for conditioning plant species 
+4. The "pot_data" sheet:
+
+
+
 ### Data-specific information for: S1.xlsx
 1. The "FigS1" sheet: abundance of conditioning species
    * Tube number: sample ID
