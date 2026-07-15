@@ -37,10 +37,10 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * remark: sample classification: CK, conditioning community ID, conditioning species richness 
    * Lv: sample classification: conditioning species richness 
    * TG: total biomass of responding community
-### Data-specific information for: data_FigS1.xlsx
+### Data-specific information for: S1.xlsx
 1. The "FigS1" sheet: abundance of conditioning species
    * Tube number: sample ID
-### Data-specific information for: data_FigS2.xlsx
+### Data-specific information for: FigS2.xlsx
 1. The "Note" sheet:
    * SpeciesID: conditioning species ID
    * Species_abbrev: abbreviation for conditioning species plants
@@ -51,7 +51,7 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * AG_sp_con: aboveground biomass of conditioning species plants
    * AG_ind_con: mean aboveground biomass of individual conditioning species plants
    * Group: monocultures versus. mixtures
-### Data-specific information for: data_FigS3.xlsx
+### Data-specific information for: FigS3.xlsx
 1. The "Respond_AG" sheet:
    * Pot_res: responding community ID (/pot)
    * Paspalum_conjugatum: aboveground biomass of the response species *Paspalum conjugatum* 
