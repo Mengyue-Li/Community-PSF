@@ -4,17 +4,16 @@ The following files allow one to reproduce analyses in the manuscript entitled "
 
 # Repo Contents
 ## Code: R code
-This script contains all the data analysis and visualization code of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig.S2,  Fig.S3.
+This script contains all the data analysis and visualization code of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
 ## Data  
-This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig.S2,  Fig.S3.
+This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
 ## File overview
-1. Fig.2 & Table S1-S3: Fig.2 & TableS1-S3.R, Fig2 & S3 & TableS1-6.xlsx
-2. Fig.S1: FigS1_code.R, FigS1.xlsx
-3. Fig.S2: FigS2.R, FigS2.xlsx
-4. Fig.S3 & TableS4-S6: Fig.S3 & TableS4-S6.R, Fig2 & S3 & TableS1-6.xlsx, Plant_tree.treefile
+1. Fig2-3 & TableS1-6.: Fig2-3 & TableS1-6.R, data-Fig2-3 & TableS1-6.xlsx, Plant_tree.treefile
+2. Fig.S1: Fig.S1.R, data-Fig.S1.xlsx
+3. Fig.S2: Fig.S2.R, data-Fig.S2.xlsx
 
-### Data-specific information for: Fig2 & S3 & TableS1-6.xlsx
-1. The "Fig3_data" sheet:
+### Data-specific information for: data-Fig2-3 & TableS1-6.xlsx
+1. The "Fig2_data" sheet:
    * Pot: rsponding species ID
    * Sor-Cs: aboveground biomass of conditioning species plants
    * remark: sample classification: CK, conditioning community ID, conditioning species richness 
@@ -86,22 +85,22 @@ This script contains all the data of Fig.1, Fig.3 & Table S2 S3 S4, Fig.S1,  Fig
    * St_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Senna tora*
    * Ah_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Amaranthus hybridus*
    * Soc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for*Senna occidentalis*
-### Data-specific information for: FigS1.xlsx
+### Data-specific information for: data-Fig.S1.xlsx
 1. The "FigS1" sheet: abundance of conditioning species
    * Pot_ID: pot IDs under different conditioning species richness
    * Sor-Cs: abundance of conditioning species plants
-### Data-specific information for: FigS2.xlsx
+### Data-specific information for: data-Fig.S2.xlsx
 1. The "AG_con" sheet:
-   * Pot_con: conditioning community ID (/pot)
+   * Pot: conditioning community ID (/pot)
    * SpeciesID: conditioning species ID
-   * Species_con: abbreviation for conditioning species plants
+   * Species: abbreviation for conditioning species plants
    * AG_sp_con: aboveground biomass of conditioning species plants
    * AG_ind_con: mean aboveground biomass of individual conditioning species plants
    * Group: monocultures versus. mixtures
 1. The "mono-data" sheet:
-   * Pot_con: conditioning community ID (/pot)
+   * Pot: conditioning community ID (/pot)
    * SpeciesID: conditioning species ID
-   * Species_con: abbreviation for conditioning species plants
+   * Species: abbreviation for conditioning species plants
    * Group: monocultures
    * AG_sp_con: total aboveground biomass for plant monocultures
 ### Data-specific information for: Plant_tree.treefile
@@ -147,7 +146,7 @@ The package should take approximately 40-60 seconds to install with vignettes on
 ## Package Installation
 Users should install the following packages prior to library.
 ~~~
-install.packages(c('readxl', 'openxlsx', 'ggplot2', 'ggpubr', 'ggridges', 'ggepi', 'ggrepel', 'ggspatial', 'ggfortify', 'ggforce', 'ggbeeswarm', 'ggmisc', 'ggsci', 'glmmTMB', 'dplyr', 'tidry', 'tidyverse', 'RColorBrewer', 'randomForest', 'party', 'picante', 'caret', 'export', 'car', 'ape', 'forcats', 'vegan', 'sf', patchwork', 'pheatmap', 'reshape2','cowplot', 'multcomp', 'DHARMa',  'emmeans', 'broom.mixed', 'MuMIn'))
+install.packages(c('readxl', 'openxlsx', 'ggplot2', 'ggpubr', 'ggridges', 'ggepi', 'ggrepel', 'ggspatial', 'ggfortify', 'ggforce', 'ggbeeswarm', 'ggmisc', 'ggsci', 'glmmTMB', 'dplyr', 'tidry', 'tidyverse', 'RColorBrewer', 'randomForest', 'party', 'picante', 'caret', 'export', 'car', 'ape', 'forcats', 'vegan', 'sf', patchwork', 'pheatmap', 'reshape2','cowplot', 'multcomp', 'DHARMa',  'emmeans', 'broom.mixed', 'MuMIn', 'multcompView', 'multcomp'))
 ~~~
 
 Note: ggepi & patchwork can be installed via devtools 
@@ -168,12 +167,12 @@ The package should take approximately 50-60 seconds to install with vignettes on
 #####                                                                        #####  
 ##################################################################################
 
-setwd('D:/2025.10.4-NPH/1-0330/Evan-0624/lu-0705/新建文件夹/Code-0715/Fig.2 & TableS1-S3') 
+setwd('D:/2025.10.4-NPH/1-0330/1-Revised manuscript 2026/Code-0715/Fig2-3 & TableS1-6')  
 
 #-------------------------------------------------------------------------------------------- 
 ### Table S1 ---   responding community aboveground biomass & responding community PSFs
 #-------------------------------------------------------------------------------------------- 
-data = read.xlsx("Fig2 & S3 & TableS1-6.xlsx",sheet="pot_data"); data[1:6,1:12]
+data = read.xlsx("data-Fig2-3 & TableS1-6.xlsx",sheet="pot_data"); data[1:6,1:12]
 data <- data %>% slice(-(1:5)); data[1:6,1:12]
 data$Richness_con = as.factor(data$Richness_con)
 
@@ -198,11 +197,11 @@ p.adjust(p2, "BH")
 #####           Part1---effect of home vs away:PSF                           #####
 #####                                                                        #####  
 ##################################################################################
-> setwd('D:/2025.10.4-NPH/1-0330/Evan-0624/lu-0705/新建文件夹/Code-0715/Fig.2 & TableS1-S3') 
+setwd('D:/2025.10.4-NPH/1-0330/1-Revised manuscript 2026/Code-0715/Fig2-3 & TableS1-6') 
 > #-------------------------------------------------------------------------------------------- 
 > ### Table S1 ---   responding community aboveground biomass & responding community PSFs
 > #-------------------------------------------------------------------------------------------- 
-> data = read.xlsx("Fig2 & S3 & TableS1-6.xlsx",sheet="pot_data"); data[1:6,1:12]
+>data = read.xlsx("data-Fig2-3 & TableS1-6.xlsx",sheet="pot_data"); data[1:6,1:12]
     Pot Alive_all.conditioning.plants Composition_con Richness_con AG_con AG_res BG_res TG_res
 1  <NA>                          <NA>            <NA>           NA     NA  74.83  12.71  87.54
 2  <NA>                          <NA>            <NA>           NA     NA  77.92  14.22  92.14
