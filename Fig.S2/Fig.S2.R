@@ -26,7 +26,7 @@ mytheme = theme( panel.background = element_rect(fill='white', colour='black'),l
 #####                                  main part                                      #####
 ###########################################################################################
 
-setwd('D:/2025.10.4-NPH/1-0330/1-Revised manuscript 2026/Code-0715/Fig.S2') 
+setwd('D:/NPH/1-Revised manuscript 2026/Fig.S2') 
 
 #--------------------------------------
 ### Step 1: data 
