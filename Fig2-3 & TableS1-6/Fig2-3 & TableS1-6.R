@@ -54,7 +54,7 @@ mytheme = theme( panel.background = element_rect(fill='white', colour='black'),l
 #####                                                                        #####  
 ##################################################################################
 
-setwd('D:/2025.10.4-NPH/1-0330/1-Revised manuscript 2026/Code-0715/Fig2-3 & TableS1-6') 
+setwd('D:/NPH/1-Revised manuscript 2026/Fig2-3 & TableS1-6') 
 
 #-------------------------------------------------------------------------------------------- 
 ### Table S1 --- responding community aboveground biomass & responding community PSFs
