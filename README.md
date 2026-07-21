@@ -32,7 +32,7 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
    * Richness_con: species richness of conditioning community
    * Species: the abbreviation of conditioning plant species
    * Species_full: the Latin name for conditioning plant species
-   * ActualPSF: Observed community-level PSFs
+   * ObservedPSF: Observed community-level PSFs
    * RichnessPSF: Predicted community-level PSF values based on the richness hypothesis
    * BiomassRatioPSF: predicted community-level PSF values based on the biomass-ratio hypotheses
    * Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for each response species (each responding species were considered together)
@@ -42,7 +42,7 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
    * The Latin name for conditioning plant species 
 4. The "pot_data" sheet:
    * Pot: rsponding pot ID
-   * Alive_all_conditioning_plants: Pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing    biomass (i.e., any mortality) were scored as 'NO'.
+   * Alive_all_conditioning_plants: Pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing biomass (i.e., any mortality) were scored as 'NO'.
    * Composition_con: Composition of conditioning community
    * Richness_con: species richness of conditioning community
    * AG_con: Aboveground biomass of conditioning community
@@ -58,25 +58,25 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
    * St_con：*Senna tora* presence in both the conditioning and responding phases (binary variable)  
    * Ah_con：*Amaranthus hybridus* presence in both the conditioning and responding phases (binary variable)  
    * Soc_con：*Senna occidentalis* presence in both the conditioning and responding phases (binary variable)  
-   * ActualPSF: Observed community-level PSFs
+   * ObservedPSF: Observed community-level PSFs
    * RichnessPSF: Predicted community-level PSF values based on the richness hypothesis
    * BiomassRatioPSF: predicted community-level PSF values based on the biomass-ratio hypothese
-   * ActualPSF_Pc：observed species-specific PSFs of *Paspalum conjugatum*
+   * ObservedPSF_Pc：observed species-specific PSFs of *Paspalum conjugatum*
    * RichnessPSF_Pc：richness predicted species-specific PSFs of *Paspalum conjugatum*
    * BiomassRatioPSF_Pc：biomass-ratio predicted species-specific PSFs of *Paspalum conjugatum*
-   * ActualPSF_Aa：observed species-specific PSFs of *Achyranthes aspera*
+   * ObservedPSF_Aa：observed species-specific PSFs of *Achyranthes aspera*
    * RichnessPSF_Aa：richness predicted species-specific PSFs of *Achyranthes aspera*
    * BiomassRatioPSF_Aa：biomass-ratio predicted species-specific PSFs of *Achyranthes aspera*
-   * ActualPSF_Sv：observed species-specific PSFs of *Setaria viridis*
+   * ObservedPSF_Sv：observed species-specific PSFs of *Setaria viridis*
    * RichnessPSF_Sv：richness predicted species-specific PSFs of *Setaria viridis*
    * BiomassRatioPSF_Sv：biomass-ratio predicted species-specific PSFs of *Setaria viridis*
-   * ActualPSF_St：observed species-specific PSFs of *Senna tora*
+   * ObservedPSF_St：observed species-specific PSFs of *Senna tora*
    * RichnessPSF_St：richness predicted species-specific PSFs of *Senna tora*
    * BiomassRatioPSF_St：biomass-ratio predicted species-specific PSFs of *Senna tora*
-   * ActualPSF_Ah：observed species-specific PSFs of *Amaranthus hybridus*
+   * ObservedPSF_Ah：observed species-specific PSFs of *Amaranthus hybridus*
    * RichnessPSF_Ah：richness predicted species-specific PSFs of *Amaranthus hybridus*
    * BiomassRatioPSF_Ah：biomass-ratio predicted species-specific PSFs of *Amaranthus hybridus*
-   * ActualPSF_Soc：observed species-specific PSFs of *Senna occidentalis*
+   * ObservedPSF_Soc：observed species-specific PSFs of *Senna occidentalis*
    * RichnessPSF_Soc：richness predicted species-specific PSFs of *Senna occidentalis*
    * BiomassRatioPSF_Soc：biomass-ratio predicted species-specific PSFs of*Senna occidentalis*
    * Pc_Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for *Paspalum conjugatum*
