@@ -92,14 +92,12 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
 ### Data-specific information for: data-Fig.S2.xlsx
 1. The "AG_con" sheet:
    * Pot: conditioning community ID (/pot)
-   * SpeciesID: conditioning species ID
    * Species: abbreviation for conditioning species plants
    * AG_sp_con: aboveground biomass of conditioning species plants
    * AG_ind_con: mean aboveground biomass of individual conditioning species plants
    * Group: monocultures versus. mixtures
 1. The "mono-data" sheet:
    * Pot: conditioning community ID (/pot)
-   * SpeciesID: conditioning species ID
    * Species: abbreviation for conditioning species plants
    * Group: monocultures
    * AG_sp_con: total aboveground biomass for plant monocultures
