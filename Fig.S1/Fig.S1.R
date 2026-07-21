@@ -5,7 +5,7 @@
 library(openxlsx)
 library(pheatmap)
 
-setwd('D:/2025.10.4-NPH/1-0330/1-Revised manuscript 2026/Code-0715/Fig.S1')
+setwd('D:/NPH/1-Revised manuscript 2026/Fig.S1')
 
 data1 = read.xlsx("data-Fig.S1.xlsx", sheet = "FigS1", rowNames = T, colNames = T)
 head(data1)
