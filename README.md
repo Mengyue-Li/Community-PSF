@@ -39,9 +39,9 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
    * Species_con: individual species (*Paspalum conjugatum*, *Achyranthes aspera*, *Setaria viridis*, *Senna tora*, *Senna occidentalis*) presence in both the conditioning and responding phases (binary variable)  
 3. The "Species_AG_con" sheet:
    * Pot: the conditioning community ID (/pot)
-   * Sigesbeckia_orientalis-Cannabis_sativa: aboveground biomass of conditioning species plants
+   * Sigesbeckia_orientalis - Cannabis_sativa: aboveground biomass of conditioning species plants
 4. The "pot_data" sheet:
-   * Pot: community ID (/pot):the conditioning community consisted of 284 pots labeled 1_1_1 to 12_3_12. The responding community consisted of 284 pots labeled 1_1_1 to 12_3_12 and five control pots with sterilized soil (CK_1–CK_5).
+   * Pot: community ID (/pot): the conditioning community consisted of 284 pots labeled 1_1_1 to 12_3_12. The responding community consisted of 284 pots labeled 1_1_1 to 12_3_12 and five control pots with sterilized soil (CK_1–CK_5).
    * Alive_all_conditioning_plants: pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing biomass (i.e., any mortality) were scored as 'NO'.
    * Composition_con: composition of conditioning community
    * Richness_con: conditioning species richness
@@ -88,7 +88,7 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
 ### Data-specific information for: data-Fig.S1.xlsx
 1. The "FigS1" sheet: abundance of conditioning species
    * Pot_ID: pot IDs under different conditioning species richness
-   * Sor-Cs: abundance of conditioning species plants
+   * Sor - Cs: abundance of conditioning species plants
 ### Data-specific information for: data-Fig.S2.xlsx
 1. The "AG_con" sheet:
    * Pot: conditioning community ID (/pot)
@@ -102,7 +102,7 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
    * Group: monocultures
    * AG_mono_con: total aboveground biomass for plant monocultures
 ### Data-specific information for: Plant_tree.treefile
-Description: Phylogenetic relationship of all experimental species in the plant-soil feedback experiment.
+Description: phylogenetic relationship of all experimental species in the plant-soil feedback experiment.
 
 # System Requirements
 ## Hardware Requirements
@@ -144,7 +144,7 @@ The package should take approximately 40-60 seconds to install with vignettes on
 ## Package Installation
 Users should install the following packages prior to library.
 ~~~
-install.packages(c('readxl', 'openxlsx', 'ggplot2', 'ggpubr', 'ggridges', 'ggepi', 'ggrepel', 'ggspatial', 'ggfortify', 'ggforce', 'ggbeeswarm', 'ggmisc', 'ggsci', 'glmmTMB', 'dplyr', 'tidry', 'tidyverse', 'RColorBrewer', 'randomForest', 'party', 'picante', 'caret', 'export', 'car', 'ape', 'forcats', 'vegan', 'sf', patchwork', 'pheatmap', 'reshape2','cowplot', 'multcomp', 'DHARMa',  'emmeans', 'broom.mixed', 'MuMIn', 'multcompView', 'multcomp'))
+install.packages(c('readxl', 'openxlsx', 'ggplot2', 'ggpubr', 'ggridges', 'ggepi', 'ggrepel', 'ggspatial', 'ggfortify', 'ggforce', 'ggbeeswarm', 'ggmisc', 'ggsci', 'glmmTMB', 'dplyr', 'tidry', 'tidyverse', 'RColorBrewer', 'randomForest', 'party', 'picante', 'caret', 'export', 'car', 'agricolae', 'ape', 'forcats', 'vegan', 'sf', patchwork', 'pheatmap', 'reshape2','cowplot', 'multcomp', 'DHARMa',  'emmeans', 'broom.mixed', 'MuMIn', 'multcompView', 'multcomp'))
 ~~~
 
 Note: ggepi & patchwork can be installed via devtools 
@@ -192,7 +192,7 @@ p.adjust(p2, "BH")
 ~~~
 ##################################################################################
 #####                                                                        ##### 
-#####           Part1---effect of home vs away:PSF                           #####
+#####           Part1---effect of home vs away: PSF                          #####
 #####                                                                        #####  
 ##################################################################################
 setwd('D:/2025.10.4-NPH/1-0330/1-Revised manuscript 2026/Code-0715/Fig2-3 & TableS1-6') 
