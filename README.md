@@ -8,7 +8,7 @@ This script contains all the data analysis and visualization code of Fig2-3 & Ta
 ## Data  
 This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
 ## File overview
-1. Fig2-3 & TableS1-6.: Fig2-3 & TableS1-6.R, data-Fig2-3 & TableS1-6.xlsx, Plant_tree.treefile
+1. Fig2-3 & TableS1-6: Fig2-3 & TableS1-6.R, data-Fig2-3 & TableS1-6.xlsx, Plant_tree.treefile
 2. Fig.S1: Fig.S1.R, data-Fig.S1.xlsx
 3. Fig.S2: Fig.S2.R, data-Fig.S2.xlsx
 
