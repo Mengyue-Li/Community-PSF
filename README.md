@@ -14,10 +14,10 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
 
 ### Data-specific information for: data-Fig2-3 & TableS1-6.xlsx
 1. The "Fig2_data" sheet:
-   * Pot: rsponding species ID
+   * Pot: community ID (/pot):the conditioning community consisted of 284 pots labeled 1_1_1 to 12_3_12. The responding community consisted of 284 pots labeled 1_1_1 to 12_3_12 and five control pots with sterilized soil (CK_1–CK_5).
    * Sor-Cs: aboveground biomass of conditioning species plants
-   * remark: sample classification: CK, conditioning community ID, conditioning species richness 
-   * Richness_con: sample classification: conditioning species richness 
+   * remark: sample classification: CK, the abbreviation of conditioning plant species, conditioning species richness 
+   * Richness_con: conditioning species richness 
    * TG_Pot_res: total biomass of responding community
    * Pc_averageAG_res: aboveground biomass of responding species Pc *Paspalum conjugatum*
    * Aa_averageAG_res: aboveground biomass of responding species Aa *Achyranthes aspera*
@@ -26,26 +26,26 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
    * Ah_averageAG_res: aboveground biomass of responding species Ah *Amaranthus hybridus*
    * Soc_averageAG_res: aboveground biomass of responding species Soc *Senna occidentalis*
 2. The "data_regress" sheet:
-   * Pot: rsponding species ID
-   * Alive_all_conditioning_plants: pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing    biomass (i.e., any mortality) were scored as 'NO'.
+   * Pot: community ID (/pot) 
+   * Alive_all_conditioning_plants: pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing biomass (i.e., any mortality) were scored as 'NO'.
    * Composition_con: composition of conditioning community
-   * Richness_con: species richness of conditioning community
+   * Richness_con: conditioning species richness
    * Species: the abbreviation of conditioning plant species
    * Species_full: the Latin name for conditioning plant species
-   * ObservedPSF: Observed community-level PSFs
-   * RichnessPSF: Predicted community-level PSF values based on the richness hypothesis
+   * ObservedPSF: observed community-level PSFs
+   * RichnessPSF: predicted community-level PSF values based on the richness hypothesis
    * BiomassRatioPSF: predicted community-level PSF values based on the biomass-ratio hypotheses
    * Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for each response species (each responding species were considered together)
    * Species_con: individual species (c, *Paspalum conjugatum*, *Achyranthes aspera*, *Setaria viridis*, *Senna tora*, *Senna occidentalis*) presence in both the conditioning and responding phases (binary variable)  
 3. The "Species_AG_con" sheet:
-   * SpeciesID: conditioning species ID
-   * The Latin name for conditioning plant species 
+   * Pot: the conditioning community ID (/pot)
+   * Sigesbeckia_orientalis-Cannabis_sativa: aboveground biomass of conditioning species plants
 4. The "pot_data" sheet:
-   * Pot: rsponding pot ID
-   * Alive_all_conditioning_plants: Pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing biomass (i.e., any mortality) were scored as 'NO'.
-   * Composition_con: Composition of conditioning community
-   * Richness_con: species richness of conditioning community
-   * AG_con: Aboveground biomass of conditioning community
+   * Pot: community ID (/pot):the conditioning community consisted of 284 pots labeled 1_1_1 to 12_3_12. The responding community consisted of 284 pots labeled 1_1_1 to 12_3_12 and five control pots with sterilized soil (CK_1–CK_5).
+   * Alive_all_conditioning_plants: pots with complete survival of all 12 individuals were scored as 'YES'; pots with missing biomass (i.e., any mortality) were scored as 'NO'.
+   * Composition_con: composition of conditioning community
+   * Richness_con: conditioning species richness
+   * AG_con: aboveground biomass of conditioning community
    * Pc_average_res: aboveground biomass of the response species *Paspalum conjugatum* 
    * Aa_average_res: aboveground biomass of the response species *Achyranthes aspera*
    * Sv_average_res: aboveground biomass of the response species *Setaria viridis*
@@ -58,8 +58,8 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
    * St_con：*Senna tora* presence in both the conditioning and responding phases (binary variable)  
    * Ah_con：*Amaranthus hybridus* presence in both the conditioning and responding phases (binary variable)  
    * Soc_con：*Senna occidentalis* presence in both the conditioning and responding phases (binary variable)  
-   * ObservedPSF: Observed community-level PSFs
-   * RichnessPSF: Predicted community-level PSF values based on the richness hypothesis
+   * ObservedPSF: observed community-level PSFs
+   * RichnessPSF: predicted community-level PSF values based on the richness hypothesis
    * BiomassRatioPSF: predicted community-level PSF values based on the biomass-ratio hypothese
    * ObservedPSF_Pc：observed species-specific PSFs of *Paspalum conjugatum*
    * RichnessPSF_Pc：richness predicted species-specific PSFs of *Paspalum conjugatum*
@@ -100,7 +100,7 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
    * Pot: conditioning community ID (/pot)
    * Species: abbreviation for conditioning species plants
    * Group: monocultures
-   * AG_sp_con: total aboveground biomass for plant monocultures
+   * AG_mono_con: total aboveground biomass for plant monocultures
 ### Data-specific information for: Plant_tree.treefile
 Description: Phylogenetic relationship of all experimental species in the plant-soil feedback experiment.
 
@@ -165,7 +165,7 @@ The package should take approximately 50-60 seconds to install with vignettes on
 #####                                                                        #####  
 ##################################################################################
 
-setwd('D:/2025.10.4-NPH/1-0330/1-Revised manuscript 2026/Code-0715/Fig2-3 & TableS1-6')  
+setwd('D:/NPH/1-Revised manuscript 2026/Fig2-3 & TableS1-6')  
 
 #-------------------------------------------------------------------------------------------- 
 ### Table S1 ---   responding community aboveground biomass & responding community PSFs
