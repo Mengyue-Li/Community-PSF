@@ -36,7 +36,7 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
    * RichnessPSF: predicted community-level PSF values based on the richness hypothesis
    * BiomassRatioPSF: predicted community-level PSF values based on the biomass-ratio hypotheses
    * Phylo_Dist: the weighted phylogenetic distance to the conditioning communities for each response species (each responding species were considered together)
-   * Species_con: individual species (c, *Paspalum conjugatum*, *Achyranthes aspera*, *Setaria viridis*, *Senna tora*, *Senna occidentalis*) presence in both the conditioning and responding phases (binary variable)  
+   * Species_con: individual species (*Paspalum conjugatum*, *Achyranthes aspera*, *Setaria viridis*, *Senna tora*, *Senna occidentalis*) presence in both the conditioning and responding phases (binary variable)  
 3. The "Species_AG_con" sheet:
    * Pot: the conditioning community ID (/pot)
    * Sigesbeckia_orientalis-Cannabis_sativa: aboveground biomass of conditioning species plants
