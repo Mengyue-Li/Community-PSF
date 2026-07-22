@@ -14,7 +14,7 @@ This script contains all the data of Fig2-3 & TableS1-6, Fig.S1 and Fig.S2.
 
 ### Data-specific information for: data-Fig2-3 & TableS1-6.xlsx
 1. The "Fig2_data" sheet:
-   * Pot: community ID (/pot): the conditioning community consisted of 284 pots labeled 1_1_1 to 12_3_12. The responding community consisted of 284 pots labeled 1_1_1 to 12_3_12 and five control pots with sterilized soil (CK_1–CK_5).
+   * Pot: community ID (/pot): the conditioning community consisted of 284 pots labeled 1_1_1 to 12_3_12. The responding community consisted of 284 pots labeled 1_1_1 to 12_3_12 and five control pots with sterilized soil (CK_1 – CK_5).
    * Sor-Cs: aboveground biomass of conditioning species plants
    * remark: sample classification: CK, the abbreviation of conditioning plant species, conditioning species richness 
    * Richness_con: conditioning species richness 
